@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/midWhite"
+    tools:context=".ui.MainActivity">
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/optRoundCardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:navGraph="@navigation/nav_graph" />
+
+    <com.github.captain_miao.optroundcardview.OptRoundCardView
+        android:id="@+id/optRoundCardView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:optRoundCardBackgroundColor="@color/white"
+        app:optRoundCardCornerRadius="20dp"
+        app:optRoundCardElevation="16dp"
+        app:optRoundCardLeftBottomCorner="false"
+        app:optRoundCardRightBottomCorner="false"
+        app:optRoundCardUseCompatPadding="false"
+        app:optRoundContentPaddingBottom="0dp"
+        app:optRoundContentPaddingLeft="16dp"
+        app:optRoundContentPaddingRight="16dp"
+        app:optRoundContentPaddingTop="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="57dp">
+
+            <me.ibrahimsn.lib.SmoothBottomBar
+                android:id="@+id/smoothBottomBar"
+                android:layout_width="0dp"
+                android:layout_height="?attr/actionBarSize"
+                app:backgroundColor="@color/white"
+                app:iconSize="20dp"
+                app:iconTint="@color/accent"
+                app:indicatorColor="@color/lightBlack"
+                app:itemIconTint="@color/lightBlack"
+                app:itemTextColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/menu_main" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.github.captain_miao.optroundcardview.OptRoundCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

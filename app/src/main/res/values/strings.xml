@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Notes</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="courses">Courses</string>
+    <string name="show_all">Show all</string>
+    <string name="todos">To-dos</string>
+    <string name="notes">Notes</string>
+    <string name="settings_button">Settings button</string>
+    <string name="add_todo_button">Add todo button</string>
+    <string name="add_note_button">Add note button</string>
+    <string name="add_course_button">Add course button</string>
+    <string name="add_button">Add button</string>
+    <string name="course">Course</string>
+    <string name="options">options</string>
+    <string name="home">Home</string>
+    <string name="item">Item</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="profile">Profile</string>
+    <string name="add_course">Add Course</string>
+    <string name="edit_course">Edit Course</string>
+    <string name="delete_all_notes">Delete all notes</string>
+    <string name="delete_all_courses">Delete all courses</string>
+</resources>
