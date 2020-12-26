@@ -82,7 +82,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginTop="8dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="8dp"
                 app:contentPadding="8dp"
@@ -91,7 +91,14 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView5"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="1.0">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_todos"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:listitem="@layout/list_item_todos" />
+            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
@@ -130,79 +137,5 @@
         app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:itemCount="1"
         tools:listitem="@layout/list_item_notes" />
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.3"
-        android:background="@color/blur"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_todo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="@string/add_todo_button"
-        android:focusable="true"
-        android:visibility="gone"
-        app:fabSize="mini"
-        app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="360"
-        app:layout_constraintCircleRadius="120dp"
-        app:srcCompat="@drawable/ic_todo"
-        tools:layout_editor_absoluteX="78dp"
-        tools:layout_editor_absoluteY="560dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_note"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="@string/add_note_button"
-        android:focusable="true"
-        android:visibility="gone"
-        app:fabSize="mini"
-        app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="315"
-        app:layout_constraintCircleRadius="120dp"
-        app:srcCompat="@drawable/ic_add_note"
-        tools:layout_editor_absoluteX="259dp"
-        tools:layout_editor_absoluteY="410dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_add_course"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:contentDescription="@string/add_course_button"
-        android:focusable="true"
-        android:visibility="gone"
-        app:fabSize="mini"
-        app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="270"
-        app:layout_constraintCircleRadius="120dp"
-        app:srcCompat="@drawable/ic_menu_slideshow"
-        tools:layout_editor_absoluteX="188dp"
-        tools:layout_editor_absoluteY="546dp" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/add_button"
-        android:focusable="true"
-        android:src="@drawable/ic_add"
-        app:backgroundTintMode="add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

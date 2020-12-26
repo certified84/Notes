@@ -21,7 +21,9 @@ import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.CourseRecyclerAdapter;
 import com.certified.notes.adapters.NoteRecyclerAdapter;
+import com.certified.notes.adapters.TodoRecyclerAdapter;
 import com.certified.notes.model.Course;
+import com.certified.notes.model.Todo;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -30,10 +32,8 @@ import static android.text.TextUtils.isEmpty;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo;
-    private RecyclerView recyclerCourses, recyclerNotes;
+    private RecyclerView recyclerCourses, recyclerNotes, recyclerTodos;
     private MaterialButton tvShowAllNotes, tvShowAllCourses, tvShowAllTodos;
-    private View viewBlur;
     private NavController mNavController;
     private NotesViewModel mViewModel;
 
@@ -47,30 +47,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        fab = view.findViewById(R.id.fab);
-        fabAddCourse = view.findViewById(R.id.fab_add_course);
-        fabAddNote = view.findViewById(R.id.fab_add_note);
-        fabAddTodo = view.findViewById(R.id.fab_add_todo);
-
         recyclerCourses = view.findViewById(R.id.recycler_view_courses);
         recyclerNotes = view.findViewById(R.id.recycler_view_notes);
+        recyclerTodos = view.findViewById(R.id.recycler_view_todos);
 
         tvShowAllNotes = view.findViewById(R.id.btn_show_all_notes);
         tvShowAllCourses = view.findViewById(R.id.btn_show_all_courses);
         tvShowAllTodos = view.findViewById(R.id.btn_show_all_todos);
 
-        viewBlur = view.findViewById(R.id.view);
-
-        fab.setOnClickListener(this);
-        fabAddCourse.setOnClickListener(this);
-        fabAddNote.setOnClickListener(this);
-        fabAddTodo.setOnClickListener(this);
-
         tvShowAllNotes.setOnClickListener(this);
         tvShowAllCourses.setOnClickListener(this);
         tvShowAllTodos.setOnClickListener(this);
 
-        viewBlur.setOnClickListener(this);
         return view;
     }
 
@@ -87,6 +75,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void init() {
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager courseLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager todoLayoutManager = new LinearLayoutManager(getContext());
 
         NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter();
         mViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
@@ -101,68 +90,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
         recyclerCourses.setClipChildren(false);
+
+        TodoRecyclerAdapter todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
+        mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> todoRecyclerAdapter.submitList(todos));
+        recyclerTodos.setLayoutManager(todoLayoutManager);
+        recyclerTodos.setAdapter(todoRecyclerAdapter);
+        todoRecyclerAdapter.setOnTodoClickedListener(todo -> {
+            String todoContent = todo.getTodo();
+            boolean done = true;
+            if (!todo.isDone()) {
+                done = false;
+            }
+            Todo todo1 = new Todo(todoContent, done);
+            todo1.setId(todo.getId());
+            mViewModel.updateTodo(todo1);
+        });
     }
 
     @Override
     public void onClick(View v) {
 
         int id = v.getId();
-        if (id == R.id.fab) {
-            if (viewBlur.getVisibility() == View.VISIBLE) {
-                hideViews();
-            } else if (viewBlur.getVisibility() == View.GONE) {
-                viewBlur.setVisibility(View.VISIBLE);
-                fabAddCourse.setVisibility(View.VISIBLE);
-                fabAddNote.setVisibility(View.VISIBLE);
-                fabAddTodo.setVisibility(View.VISIBLE);
-            }
-        } else if (id == R.id.fab_add_course) {
-            hideViews();
-            launchCourseDialog();
-        } else if (id == R.id.view) {
-            hideViews();
-        } else if (id == R.id.btn_show_all_notes) {
+        if (id == R.id.btn_show_all_notes) {
             mNavController.navigate(R.id.notesFragment);
         } else if (id == R.id.btn_show_all_courses) {
             mNavController.navigate(R.id.coursesFragment);
         }
-    }
-
-    private void hideViews() {
-//        getActivity().get
-        viewBlur.setVisibility(View.GONE);
-        fabAddCourse.setVisibility(View.GONE);
-        fabAddNote.setVisibility(View.GONE);
-        fabAddTodo.setVisibility(View.GONE);
-    }
-
-    private void launchCourseDialog() {
-        LayoutInflater inflater = this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_new_course, null);
-
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setView(view);
-
-        EditText etCourseCode = view.findViewById(R.id.et_course_code);
-        EditText etCourseTitle = view.findViewById(R.id.et_course_title);
-        MaterialButton btnSave = view.findViewById(R.id.btn_save);
-        MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
-        TextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
-
-        tvCourseDialogTitle.setText(getString(R.string.add_course));
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
-        btnSave.setOnClickListener(v -> {
-            String courseCode = etCourseCode.getText().toString().trim();
-            String courseTitle = etCourseTitle.getText().toString().trim();
-            if (!isEmpty(courseCode) && !isEmpty(courseTitle)) {
-                Course course = new Course(courseCode, courseTitle);
-                mViewModel.insertCourse(course);
-                alertDialog.dismiss();
-            } else
-                Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
-        });
-
-        alertDialog.show();
     }
 }

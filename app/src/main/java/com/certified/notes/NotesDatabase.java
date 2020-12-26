@@ -15,7 +15,7 @@ import com.certified.notes.model.Todo;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Note.class, Course.class, Todo.class}, version = 1, exportSchema = false)
+@Database(entities = {Note.class, Course.class, Todo.class}, version = 2, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;

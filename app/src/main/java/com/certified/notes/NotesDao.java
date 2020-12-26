@@ -52,13 +52,13 @@ public interface NotesDao {
     @Query("DELETE FROM todo_table ")
     void deleteAllTodos();
 
-    @Query("SELECT * FROM note_table ORDER BY note_title DESC")
+    @Query("SELECT * FROM note_table ORDER BY note_title ASC")
     LiveData<List<Note>> getAllNotes();
 
-    @Query("SELECT * FROM course_table ORDER BY course_code DESC")
+    @Query("SELECT * FROM course_table ORDER BY course_code ASC")
     LiveData<List<Course>> getAllCourses();
 
-    @Query("SELECT * FROM todo_table ORDER BY id DESC")
+    @Query("SELECT * FROM todo_table ORDER BY id ASC")
     LiveData<List<Todo>> getAllTodos();
 
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")

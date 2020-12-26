@@ -63,4 +63,83 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.github.captain_miao.optroundcardview.OptRoundCardView>
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.3"
+        android:background="@color/blur"
+        android:elevation="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/optRoundCardView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_todo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="@string/add_todo_button"
+        android:focusable="true"
+        android:visibility="gone"
+        app:elevation="16dp"
+        app:fabSize="mini"
+        app:layout_constraintCircle="@id/fab"
+        app:layout_constraintCircleAngle="360"
+        app:layout_constraintCircleRadius="120dp"
+        app:srcCompat="@drawable/ic_todo"
+        tools:layout_editor_absoluteX="78dp"
+        tools:layout_editor_absoluteY="560dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_note"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="@string/add_note_button"
+        android:focusable="true"
+        android:visibility="gone"
+        app:elevation="16dp"
+        app:fabSize="mini"
+        app:layout_constraintCircle="@id/fab"
+        app:layout_constraintCircleAngle="315"
+        app:layout_constraintCircleRadius="120dp"
+        app:srcCompat="@drawable/ic_add_note"
+        tools:layout_editor_absoluteX="259dp"
+        tools:layout_editor_absoluteY="410dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_course"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:contentDescription="@string/add_course_button"
+        android:focusable="true"
+        android:visibility="gone"
+        app:elevation="16dp"
+        app:fabSize="mini"
+        app:layout_constraintCircle="@id/fab"
+        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleRadius="120dp"
+        app:srcCompat="@drawable/ic_menu_slideshow"
+        tools:layout_editor_absoluteX="188dp"
+        tools:layout_editor_absoluteY="546dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/add_button"
+        android:focusable="true"
+        android:src="@drawable/ic_add"
+        app:backgroundTintMode="add"
+        app:elevation="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

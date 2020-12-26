@@ -28,4 +28,9 @@
     <string name="edit_course">Edit Course</string>
     <string name="delete_all_notes">Delete all notes</string>
     <string name="delete_all_courses">Delete all courses</string>
+    <string name="add_todo">Add Todo</string>
+    <string name="todo">Todo</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="course_title">Course title</string>
 </resources>
