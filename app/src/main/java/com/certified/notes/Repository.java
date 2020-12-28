@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
@@ -20,6 +21,8 @@ public class Repository {
     private LiveData<List<Note>> allNotes;
     private LiveData<List<Course>> allCourses;
     private LiveData<List<Todo>> allTodos;
+    private LiveData<List<BookMark>> allBookMarks;
+    private LiveData<List<Integer>> allNoteIds;
 
     public Repository(Application application) {
         NotesDatabase database = NotesDatabase.getInstance(application);
@@ -27,6 +30,8 @@ public class Repository {
         allNotes = mNotesDao.getAllNotes();
         allCourses = mNotesDao.getAllCourses();
         allTodos = mNotesDao.getAllTodos();
+        allBookMarks = mNotesDao.getAllBookMarks();
+        allNoteIds = mNotesDao.getNoteIds();
     }
 
     public void insertNote(Note note) {
@@ -41,6 +46,10 @@ public class Repository {
         executor.execute(() -> mNotesDao.insertTodo(todo));
     }
 
+    public void insertBookMark(BookMark bookMark) {
+        executor.execute(() -> mNotesDao.insertBookMark(bookMark));
+    }
+
     public void updateNote(Note note) {
         executor.execute(() -> mNotesDao.updateNote(note));
     }
@@ -51,6 +60,10 @@ public class Repository {
 
     public void updateTodo(Todo todo) {
         executor.execute(() -> mNotesDao.updateTodo(todo));
+    }
+
+    public void updateBookMark(BookMark bookMark) {
+        executor.execute(() -> mNotesDao.updateBookMark(bookMark));
     }
 
     public void deleteNote(Note note) {
@@ -65,6 +78,10 @@ public class Repository {
         executor.execute(() -> mNotesDao.deleteTodo(todo));
     }
 
+    public void deleteBookMark(BookMark bookMark) {
+        executor.execute(() -> mNotesDao.deleteBookMark(bookMark));
+    }
+
     public void deleteAllNotes() {
         NotesDatabase.databaseWriteExecutor.execute(() -> mNotesDao.deleteAllNotes());
     }
@@ -77,6 +94,10 @@ public class Repository {
         NotesDatabase.databaseWriteExecutor.execute(() -> mNotesDao.deleteAllTodos());
     }
 
+    public void deleteAllBookMarks() {
+        NotesDatabase.databaseWriteExecutor.execute(() -> mNotesDao.deleteAllBookMarks());
+    }
+
     public LiveData<List<Note>> getAllNotes() {
         return allNotes;
     }
@@ -87,6 +108,18 @@ public class Repository {
 
     public LiveData<List<Todo>> getAllTodos() {
         return allTodos;
+    }
+
+    public LiveData<List<BookMark>> getAllBookMarks() {
+        return allBookMarks;
+    }
+
+    public LiveData<List<Integer>> getAllNoteIds() {
+        return allNoteIds;
+    }
+
+    public void deleteCompletedTodos() {
+        executor.execute(() -> mNotesDao.deleteCompletedTodos());
     }
 
     public String getCourseCode(String courseTitle) {

@@ -8,25 +8,25 @@
     android:elevation="0dp">
 
     <TextView
-        android:id="@+id/tv_course_dialog_title"
+        android:id="@+id/tv_note_dialog_title"
         style="@style/boldText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/et_course_code_layout"
+        app:layout_constraintBottom_toTopOf="@+id/spinner_courses"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Add Course" />
+        tools:text="Add Note" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_code_layout"
+        android:id="@+id/et_note_title_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:hint="Course code"
+        android:hint="@string/note_title"
         app:boxBackgroundColor="#FFFFFF"
         app:boxBackgroundMode="outline"
         app:boxCollapsedPaddingTop="4dp"
@@ -36,12 +36,12 @@
         app:boxCornerRadiusTopStart="5dp"
         app:boxStrokeColor="@color/accent"
         app:hintTextColor="@color/accent"
-        app:layout_constraintBottom_toTopOf="@+id/et_course_title_layout"
+        app:layout_constraintBottom_toTopOf="@+id/et_note_content_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_course_dialog_title">
+        app:layout_constraintStart_toStartOf="@+id/tv_note_dialog_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_code"
+            android:id="@+id/et_note_title"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -54,12 +54,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_title_layout"
+        android:id="@+id/et_note_content_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="8dp"
-        android:hint="@string/course_title"
+        android:hint="@string/note_content"
         app:boxBackgroundColor="#FFFFFF"
         app:boxBackgroundMode="outline"
         app:boxCollapsedPaddingTop="4dp"
@@ -72,10 +72,10 @@
         app:layout_constraintBottom_toTopOf="@+id/btn_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_course_code_layout">
+        app:layout_constraintStart_toStartOf="@+id/et_note_title_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_title"
+            android:id="@+id/et_note_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +96,7 @@
         android:text="Save"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/et_course_title_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/et_note_content_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
@@ -109,5 +109,14 @@
         app:layout_constraintBottom_toBottomOf="@+id/btn_save"
         app:layout_constraintEnd_toStartOf="@+id/btn_save"
         app:layout_constraintTop_toTopOf="@+id/btn_save" />
+
+    <Spinner
+        android:id="@+id/spinner_courses"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/et_note_title_layout"
+        app:layout_constraintEnd_toEndOf="@+id/et_note_title_layout"
+        app:layout_constraintStart_toStartOf="@+id/et_note_title_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

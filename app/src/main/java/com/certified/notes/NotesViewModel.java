@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
@@ -14,10 +15,13 @@ import java.util.List;
 
 public class NotesViewModel extends AndroidViewModel {
 
+    private Repository mRepository;
+
     private LiveData<List<Note>> allNotes;
     private LiveData<List<Course>> allCourses;
     private LiveData<List<Todo>> allTodos;
-    Repository mRepository;
+    private LiveData<List<BookMark>> allBookMarks;
+    private LiveData<List<Integer>> allNoteIds;
 
     public NotesViewModel(@NonNull Application application) {
         super(application);
@@ -25,6 +29,8 @@ public class NotesViewModel extends AndroidViewModel {
         allNotes = mRepository.getAllNotes();
         allCourses = mRepository.getAllCourses();
         allTodos = mRepository.getAllTodos();
+        allBookMarks = mRepository.getAllBookMarks();
+        allNoteIds = mRepository.getAllNoteIds();
     }
 
     public void insertNote(Note note) {
@@ -39,6 +45,10 @@ public class NotesViewModel extends AndroidViewModel {
         mRepository.insertTodo(todo);
     }
 
+    public void insertBookMark(BookMark bookMark) {
+        mRepository.insertBookMark(bookMark);
+    }
+
     public void updateNote(Note note) {
         mRepository.updateNote(note);
     }
@@ -49,6 +59,10 @@ public class NotesViewModel extends AndroidViewModel {
 
     public void updateTodo(Todo todo) {
         mRepository.updateTodo(todo);
+    }
+
+    public void updateBookMark(BookMark bookMark) {
+        mRepository.updateBookMark(bookMark);
     }
 
     public void deleteNote(Note note) {
@@ -63,6 +77,10 @@ public class NotesViewModel extends AndroidViewModel {
         mRepository.deleteTodo(todo);
     }
 
+    public void deleteBookMark(BookMark bookMark) {
+        mRepository.deleteBookMark(bookMark);
+    }
+
     public void deleteAllNotes() {
         mRepository.deleteAllNotes();
     }
@@ -75,6 +93,10 @@ public class NotesViewModel extends AndroidViewModel {
         mRepository.deleteAllTodos();
     }
 
+    public void deleteAllBookMarks() {
+        mRepository.deleteAllBookMarks();
+    }
+
     public LiveData<List<Note>> getAllNotes() {
         return allNotes;
     }
@@ -85,6 +107,18 @@ public class NotesViewModel extends AndroidViewModel {
 
     public LiveData<List<Todo>> getAllTodos() {
         return allTodos;
+    }
+
+    public LiveData<List<BookMark>> getAllBookMarks() {
+        return allBookMarks;
+    }
+
+    public LiveData<List<Integer>> getAllNoteIds() {
+        return allNoteIds;
+    }
+
+    public void deleteCompletedTodos() {
+        mRepository.deleteCompletedTodos();
     }
 
     public String getCourseCode(String courseTitle) {

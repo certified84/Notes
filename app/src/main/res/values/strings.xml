@@ -33,4 +33,12 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="course_title">Course title</string>
+    <string name="delete_completed_todos">Delete completed to-dos</string>
+    <string name="delete_all_todos">Delete all todos</string>
+    <string name="note_title">Note title</string>
+    <string name="note_content">Note content</string>
+    <string name="add_note">Add Note</string>
+    <string name="edit_note">Edit note</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

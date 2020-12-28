@@ -1,32 +1,23 @@
 package com.certified.notes.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
-import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Note;
-import com.like.LikeButton;
-import com.like.OnLikeListener;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Samson.
  */
 
-public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.ViewHolder> {
+public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
         @Override
@@ -41,21 +32,16 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
-
-    private LifecycleOwner mOwner;
-    private NotesViewModel mViewModel;
     private OnNoteClickedListener listener;
 
-    public NoteRecyclerAdapter(LifecycleOwner owner, NotesViewModel viewModel) {
+    public HomeNoteRecyclerAdapter() {
         super(DIFF_CALLBACK);
-        this.mOwner = owner;
-        this.mViewModel = viewModel;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_notes, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_notes_home, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -64,24 +50,6 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         Note currentNote = getItem(position);
         holder.mNoteContent.setText(currentNote.getContent());
         holder.mNoteTitle.setText(currentNote.getTitle());
-        holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                int noteId = currentNote.getId();
-                String courseCode = currentNote.getCourseCode();
-                String noteTitle = currentNote.getTitle();
-                String noteContent = currentNote.getContent();
-
-                BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                mViewModel.insertBookMark(bookMark);
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-
-            }
-        });
-        holder.checkIfBookMarked(currentNote.getId());
     }
 
     public Note getNoteAt(int position) {
@@ -100,13 +68,11 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
 
         public final TextView mNoteContent;
         public final TextView mNoteTitle;
-        public final LikeButton mLikeButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mNoteContent = itemView.findViewById(R.id.tv_note_content);
             mNoteTitle = itemView.findViewById(R.id.tv_note_title);
-            mLikeButton = itemView.findViewById(R.id.likeButton);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -114,16 +80,6 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
                     listener.onNoteClick(getItem(position));
                 }
             });
-        }
-
-        private void checkIfBookMarked(int noteId) {
-            List<Integer> noteIds = new ArrayList<>();
-            mViewModel.getAllNoteIds().observe(mOwner, ids -> {
-                noteIds.addAll(ids);
-            });
-            if (noteIds.contains(noteId)) {
-                mLikeButton.setLiked(true);
-            }
         }
     }
 }

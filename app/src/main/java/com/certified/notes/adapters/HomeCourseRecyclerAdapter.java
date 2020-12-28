@@ -13,14 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
-import com.google.android.material.snackbar.Snackbar;
 
 
 /**
  * Created by Samson.
  */
 
-public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAdapter.ViewHolder> {
+public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRecyclerAdapter.ViewHolder> {
 
     private onCourseClickedListener listener;
 
@@ -37,14 +36,14 @@ public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAda
         }
     };
 
-    public CourseRecyclerAdapter() {
+    public HomeCourseRecyclerAdapter() {
         super(DIFF_CALLBACK);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_courses, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_courses_home, parent, false);
         return new ViewHolder(itemView);
     }
 

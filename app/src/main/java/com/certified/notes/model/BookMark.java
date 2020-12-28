@@ -5,12 +5,14 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "note_table")
-public class Note {
+@Entity(tableName = "bookmark_table")
+public class BookMark {
 
-    //    Columns
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    @ColumnInfo(name = "note_id")
+    private int noteId;
 
     @NonNull
     @ColumnInfo(name = "course_code")
@@ -18,15 +20,16 @@ public class Note {
 
     @NonNull
     @ColumnInfo(name = "note_title")
-    private String title;
+    private String noteTitle;
 
     @ColumnInfo(name = "note_content")
-    private String content;
+    private String noteContent;
 
-    public Note(@NonNull String courseCode, String title, String content) {
+    public BookMark(int noteId, @NonNull String courseCode, @NonNull String noteTitle, String noteContent) {
+        this.noteId = noteId;
         this.courseCode = courseCode;
-        this.title = title;
-        this.content = content;
+        this.noteTitle = noteTitle;
+        this.noteContent = noteContent;
     }
 
     public int getId() {
@@ -37,15 +40,20 @@ public class Note {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
+    public int getNoteId() {
+        return noteId;
     }
 
     public String getCourseCode() {
         return courseCode;
+    }
+
+    @NonNull
+    public String getNoteTitle() {
+        return noteTitle;
+    }
+
+    public String getNoteContent() {
+        return noteContent;
     }
 }

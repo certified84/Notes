@@ -20,6 +20,7 @@ import androidx.navigation.NavController;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
@@ -73,7 +74,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     }
 
     private void init() {
-        GridLayoutManager courseLayoutManager = new GridLayoutManager(getContext(), GRID_SPAN_COUNT);
+        StaggeredGridLayoutManager courseLayoutManager = new StaggeredGridLayoutManager(GRID_SPAN_COUNT, LinearLayoutManager.VERTICAL);
 
         CourseRecyclerAdapter courseRecyclerAdapter = new CourseRecyclerAdapter();
         mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> courseRecyclerAdapter.submitList(courses));
@@ -103,10 +104,13 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                 String courseCode = etCourseCode.getText().toString().trim();
                 String courseTitle = etCourseTitle.getText().toString().trim();
                 if (!isEmpty(courseCode) && !isEmpty(courseTitle)) {
-                    Course course1 = new Course(courseCode, courseTitle);
-                    course1.setId(course.getId());
-                    mViewModel.updateCourse(course1);
-                    alertDialog.dismiss();
+                    if (!courseCode.equals(course.getCourseCode()) || !courseTitle.equals(course.getCourseTitle())) {
+                        Course course1 = new Course(courseCode, courseTitle);
+                        course1.setId(course.getId());
+                        mViewModel.updateCourse(course1);
+                        alertDialog.dismiss();
+                    } else
+                        Toast.makeText(getContext(), "Course not changed", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
             });

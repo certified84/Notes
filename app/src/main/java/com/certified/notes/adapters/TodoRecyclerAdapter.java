@@ -70,14 +70,15 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
                 builder.setMessage("This todo has been marked as done. Would you like to delete it ?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     mViewModel.deleteTodo(getItem(position));
-                    dialog.dismiss();
+                    dialog.cancel();
                 });
                 builder.setNegativeButton("No", (dialog, which) -> {
                     Todo todo1 = new Todo(todoContent, true);
                     todo1.setId(getItem(position).getId());
                     mViewModel.updateTodo(todo1);
-                    dialog.dismiss();
+                    dialog.cancel();
                 });
+                builder.setOnDismissListener(dialog -> holder.mCheckBox.setChecked(false));
                 AlertDialog dialog = builder.create();
                 dialog.show();
             } else {

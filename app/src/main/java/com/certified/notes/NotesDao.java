@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
@@ -25,6 +26,9 @@ public interface NotesDao {
     @Insert()
     void insertTodo(Todo todo);
 
+    @Insert()
+    void insertBookMark(BookMark bookMark);
+
     @Update
     void updateNote(Note note);
 
@@ -33,6 +37,9 @@ public interface NotesDao {
 
     @Update
     void updateTodo(Todo todo);
+
+    @Update
+    void updateBookMark(BookMark bookMark);
 
     @Delete
     void deleteNote(Note note);
@@ -43,6 +50,9 @@ public interface NotesDao {
     @Delete
     void deleteTodo(Todo todo);
 
+    @Delete
+    void deleteBookMark(BookMark bookMark);
+
     @Query("DELETE FROM note_table ")
     void deleteAllNotes();
 
@@ -51,6 +61,9 @@ public interface NotesDao {
 
     @Query("DELETE FROM todo_table ")
     void deleteAllTodos();
+
+    @Query("DELETE FROM bookmark_table ")
+    void deleteAllBookMarks();
 
     @Query("SELECT * FROM note_table ORDER BY note_title ASC")
     LiveData<List<Note>> getAllNotes();
@@ -61,6 +74,15 @@ public interface NotesDao {
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     LiveData<List<Todo>> getAllTodos();
 
+    @Query("SELECT * FROM bookmark_table ORDER BY id ASC")
+    LiveData<List<BookMark>> getAllBookMarks();
+
+    @Query("DELETE FROM todo_table WHERE done == 1")
+    void deleteCompletedTodos();
+
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")
     String getCourseCode(String courseTitle);
+
+    @Query("SELECT note_id FROM bookmark_table")
+    LiveData<List<Integer>> getNoteIds();
 }

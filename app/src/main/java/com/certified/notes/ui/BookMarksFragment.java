@@ -1,9 +1,16 @@
 package com.certified.notes.ui;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
+import com.certified.notes.adapters.BookMarkRecyclerAdapter;
 import com.certified.notes.adapters.NoteRecyclerAdapter;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
@@ -35,14 +35,14 @@ import java.util.ArrayList;
 
 import static android.text.TextUtils.isEmpty;
 
-public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
+public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
-    private RecyclerView recyclerNotes;
+    private RecyclerView recyclerBookMarks;
     private NavController mNavController;
     private NotesViewModel mViewModel;
-    private ImageView ivNotePopupMenu;
+    private ImageView ivBookMarkPopupMenu;
 
-    public NotesFragment() {
+    public BookMarksFragment() {
         // Required empty public constructor
     }
 
@@ -50,10 +50,10 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_notes, container, false);
+        View view = inflater.inflate(R.layout.fragment_book_marks, container, false);
 
-        recyclerNotes = view.findViewById(R.id.recycler_view_notes);
-        ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu);
+        recyclerBookMarks = view.findViewById(R.id.recycler_view_notes);
+        ivBookMarkPopupMenu = view.findViewById(R.id.iv_note_popup_menu);
 
         return view;
     }
@@ -63,7 +63,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         super.onViewCreated(view, savedInstanceState);
 
         mViewModel = new NotesViewModel(getActivity().getApplication());
-        ivNotePopupMenu.setOnClickListener(this::showPopupMenu);
+        ivBookMarkPopupMenu.setOnClickListener(this::showPopupMenu);
 
         init();
     }
@@ -78,14 +78,14 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     private void init() {
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
-        NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(getViewLifecycleOwner(), mViewModel);
-        mViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
-            noteRecyclerAdapter.submitList(notes);
+        BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter();
+        mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookmark -> {
+            bookMarkRecyclerAdapter.submitList(bookmark);
         });
-        recyclerNotes.setAdapter(noteRecyclerAdapter);
-        recyclerNotes.setLayoutManager(noteLayoutManager);
+        recyclerBookMarks.setAdapter(bookMarkRecyclerAdapter);
+        recyclerBookMarks.setLayoutManager(noteLayoutManager);
 
-        noteRecyclerAdapter.setOnNoteClickedListener(note -> {
+        bookMarkRecyclerAdapter.setOnBookMarkClickedListener(bookMark -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
@@ -116,8 +116,8 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             spinnerCourses.setAdapter(adapterCourses);
 
             tvNoteDialogTitle.setText(getString(R.string.edit_note));
-            etNoteTitle.setText(note.getTitle());
-            etNoteContent.setText(note.getContent());
+            etNoteTitle.setText(bookMark.getNoteTitle());
+            etNoteContent.setText(bookMark.getNoteContent());
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setOnClickListener(v -> {
@@ -127,9 +127,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                 String noteContent = etNoteContent.getText().toString().trim();
                 if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {
                     if (!courseTitle.equals("Select a course")) {
-                        if (!courseCode.equals(note.getCourseCode()) || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
+                        if (!courseCode.equals(bookMark.getCourseCode()) || !noteTitle.equals(bookMark.getNoteTitle()) || !noteContent.equals(bookMark.getNoteContent())) {
                             Note note1 = new Note(courseCode, noteTitle, noteContent);
-                            note1.setId(note.getId());
+                            note1.setId(bookMark.getId());
                             mViewModel.updateNote(note1);
                             alertDialog.dismiss();
                         } else
@@ -146,10 +146,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.delete_all_notes) {
-            mViewModel.deleteAllNotes();
-        }
-        return true;
+        return false;
     }
 }
