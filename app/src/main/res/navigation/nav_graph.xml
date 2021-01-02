@@ -20,8 +20,7 @@
         android:label="fragment_courses"
         tools:layout="@layout/fragment_courses" />
     <fragment
-        android:id="@+id/todosFragment"
-        android:name="com.certified.notes.ui.TodosFragment"
-        android:label="fragment_todos"
-        tools:layout="@layout/fragment_todos" />
+        android:id="@+id/bookMarksFragment"
+        android:name="com.certified.notes.ui.BookMarksFragment"
+        android:label="BookMarksFragment" />
 </navigation>

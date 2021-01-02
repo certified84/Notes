@@ -6,7 +6,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -25,7 +23,6 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.CourseRecyclerAdapter;
-import com.certified.notes.adapters.NoteRecyclerAdapter;
 import com.certified.notes.model.Course;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -123,8 +120,21 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.delete_all_courses) {
-            mViewModel.deleteAllCourses();
+            launchDeleteDialog();
         }
         return true;
+    }
+
+    private void launchDeleteDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle("Delete");
+        builder.setMessage(R.string.all_course_delete_dialog_message);
+        builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+            mViewModel.deleteAllCourses();
+            dialog1.dismiss();
+        });
+        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -56,4 +56,15 @@ public class BookMark {
     public String getNoteContent() {
         return noteContent;
     }
+
+    @Override
+    public String toString() {
+        return "BookMark{" +
+                "id = " + id +
+                ", noteId = " + noteId +
+                ", courseCode = '" + courseCode + '\'' +
+                ", noteTitle = '" + noteTitle + '\'' +
+                ", noteContent = '" + noteContent + '\'' +
+                '}';
+    }
 }

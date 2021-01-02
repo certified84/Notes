@@ -44,16 +44,14 @@
             android:layout_width="match_parent"
             android:layout_height="57dp">
 
-            <me.ibrahimsn.lib.SmoothBottomBar
+            <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/smoothBottomBar"
                 android:layout_width="0dp"
                 android:layout_height="?attr/actionBarSize"
                 app:backgroundColor="@color/white"
+                app:elevation="0dp"
                 app:iconSize="20dp"
-                app:iconTint="@color/accent"
-                app:indicatorColor="@color/lightBlack"
-                app:itemIconTint="@color/lightBlack"
-                app:itemTextColor="@color/white"
+                app:itemIconTint="@color/accent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -141,5 +139,38 @@
         app:elevation="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/fragment"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_fab_course_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_course"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/fab_add_course"
+        app:layout_constraintStart_toStartOf="@+id/fab_add_course"
+        app:layout_constraintTop_toBottomOf="@+id/fab_add_course" />
+
+    <TextView
+        android:id="@+id/tv_fab_note_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_note"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/fab_add_note"
+        app:layout_constraintStart_toStartOf="@+id/fab_add_note"
+        app:layout_constraintTop_toBottomOf="@+id/fab_add_note" />
+
+    <TextView
+        android:id="@+id/tv_fab_todo_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_todo"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/fab_add_todo"
+        app:layout_constraintStart_toStartOf="@+id/fab_add_todo"
+        app:layout_constraintTop_toBottomOf="@+id/fab_add_todo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

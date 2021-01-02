@@ -3,6 +3,7 @@ package com.certified.notes.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "note_table")
@@ -23,7 +24,7 @@ public class Note {
     @ColumnInfo(name = "note_content")
     private String content;
 
-    public Note(@NonNull String courseCode, String title, String content) {
+    public Note(@NonNull String courseCode, @NonNull String title, String content) {
         this.courseCode = courseCode;
         this.title = title;
         this.content = content;
@@ -47,5 +48,15 @@ public class Note {
 
     public String getCourseCode() {
         return courseCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", courseCode='" + courseCode + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                '}';
     }
 }

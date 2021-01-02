@@ -1,6 +1,7 @@
 package com.certified.notes.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,12 +16,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +31,7 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 
+import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
 import static android.text.TextUtils.isEmpty;
@@ -37,9 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo;
+    private TextView tvFabTodoTitle, tvFabNoteTitle, tvFabCourseTitle;
     private View viewBlur;
     private NavController mNavController;
-    private SmoothBottomBar mSmoothBottomBar;
+    private BottomNavigationView mSmoothBottomBar;
 
     private NotesViewModel mViewModel;
 
@@ -53,10 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNavController = Navigation.findNavController(this, R.id.fragment);
         mSmoothBottomBar = findViewById(R.id.smoothBottomBar);
 
+        NavigationUI.setupWithNavController(mSmoothBottomBar, mNavController);
+
         fab = findViewById(R.id.fab);
         fabAddCourse = findViewById(R.id.fab_add_course);
         fabAddNote = findViewById(R.id.fab_add_note);
         fabAddTodo = findViewById(R.id.fab_add_todo);
+
+        tvFabTodoTitle = findViewById(R.id.tv_fab_todo_title);
+        tvFabNoteTitle = findViewById(R.id.tv_fab_note_title);
+        tvFabCourseTitle = findViewById(R.id.tv_fab_course_title);
 
         viewBlur = findViewById(R.id.view);
 
@@ -66,27 +77,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddTodo.setOnClickListener(this);
 
         viewBlur.setOnClickListener(this);
+
+//        mSmoothBottomBar.setOnItemSelectedListener(i -> {
+//            if (i == R.id.bookMarksFragment) {
+//                Log.d(TAG, "onCreate: bookMarksFragment Clicked");
+//                mNavController.navigate(R.id.bookMarksFragment);
+//            } else if(i == R.id.homeFragment) {
+//                Log.d(TAG, "onCreate: homeFragment Clicked");
+//                mNavController.navigate(R.id.homeFragment);
+//            }
+//            return true;
+//        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        mSmoothBottomBar.setupWithNavController(menu, mNavController);
+//        mSmoothBottomBar.setupWithNavController(menu, mNavController);
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onClick(View v) {
@@ -96,10 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (viewBlur.getVisibility() == View.VISIBLE) {
                 hideViews();
             } else if (viewBlur.getVisibility() == View.GONE) {
-                viewBlur.setVisibility(View.VISIBLE);
-                fabAddCourse.setVisibility(View.VISIBLE);
-                fabAddNote.setVisibility(View.VISIBLE);
-                fabAddTodo.setVisibility(View.VISIBLE);
+                showViews();
             }
         } else if (id == R.id.fab_add_course) {
             hideViews();
@@ -115,11 +134,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void showViews() {
+        viewBlur.setVisibility(View.VISIBLE);
+        fabAddTodo.setVisibility(View.VISIBLE);
+        fabAddNote.setVisibility(View.VISIBLE);
+        fabAddCourse.setVisibility(View.VISIBLE);
+        tvFabTodoTitle.setVisibility(View.VISIBLE);
+        tvFabNoteTitle.setVisibility(View.VISIBLE);
+        tvFabCourseTitle.setVisibility(View.VISIBLE);
+    }
+
     private void hideViews() {
         viewBlur.setVisibility(View.GONE);
         fabAddCourse.setVisibility(View.GONE);
         fabAddNote.setVisibility(View.GONE);
         fabAddTodo.setVisibility(View.GONE);
+        tvFabTodoTitle.setVisibility(View.GONE);
+        tvFabNoteTitle.setVisibility(View.GONE);
+        tvFabCourseTitle.setVisibility(View.GONE);
     }
 
     private void launchCourseDialog() {
@@ -163,8 +195,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alertDialog.setView(view);
 
         EditText etTodo = view.findViewById(R.id.et_todo);
+        TextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
+
+        tvTodoDialogTitle.setText(R.string.add_todo);
 
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {

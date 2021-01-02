@@ -8,12 +8,16 @@ android {
 
     defaultConfig {
         applicationId "com.certified.notes"
-        minSdkVersion 22
+        minSdkVersion 20
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     buildTypes {
@@ -44,7 +48,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    //    Like button
+//    Like button
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
 //    Room persistence library

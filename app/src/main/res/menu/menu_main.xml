@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_todo"
         android:title="@string/todos" />
     <item
-        android:id="@+id/bookMarkFragment"
+        android:id="@+id/bookMarksFragment"
         android:icon="@drawable/heart_off"
         android:title="@string/bookmarks" />
     <item

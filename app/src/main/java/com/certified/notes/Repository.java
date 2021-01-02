@@ -19,7 +19,9 @@ public class Repository {
     public static final ExecutorService executor = Executors.newSingleThreadExecutor();
     private NotesDao mNotesDao;
     private LiveData<List<Note>> allNotes;
+    private LiveData<List<Note>> allHomeNotes;
     private LiveData<List<Course>> allCourses;
+    private LiveData<List<Course>> allHomeCourses;
     private LiveData<List<Todo>> allTodos;
     private LiveData<List<BookMark>> allBookMarks;
     private LiveData<List<Integer>> allNoteIds;
@@ -28,7 +30,9 @@ public class Repository {
         NotesDatabase database = NotesDatabase.getInstance(application);
         mNotesDao = database.mNotesDao();
         allNotes = mNotesDao.getAllNotes();
+        allHomeNotes = mNotesDao.getAllHomeNotes();
         allCourses = mNotesDao.getAllCourses();
+        allHomeCourses = mNotesDao.getAllHomeCourses();
         allTodos = mNotesDao.getAllTodos();
         allBookMarks = mNotesDao.getAllBookMarks();
         allNoteIds = mNotesDao.getNoteIds();
@@ -102,8 +106,16 @@ public class Repository {
         return allNotes;
     }
 
+    public LiveData<List<Note>> getAllHomeNotes() {
+        return allHomeNotes;
+    }
+
     public LiveData<List<Course>> getAllCourses() {
         return allCourses;
+    }
+
+    public LiveData<List<Course>> getAllHomeCourses() {
+        return allHomeCourses;
     }
 
     public LiveData<List<Todo>> getAllTodos() {
@@ -130,4 +142,30 @@ public class Repository {
             return "";
         }
     }
+
+    public void deleteBookMarkedNote(int noteId) {
+        try {
+            executor.submit(() -> mNotesDao.deleteBookMarkedNote(noteId)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public LiveData<List<BookMark>> getBookMarkAt(int noteId){
+        try {
+            return executor.submit(() -> mNotesDao.getBookMarkAt(noteId)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+//    private long seed = System.currentTimeMillis();
+//    val mItemList: LiveData<MutableList<Note>> = Transformations.map(mNotesDao.getAllHomeNotes()) {
+//        it.shuffled(Random(seed))
+//    }
+//    public LiveData<List<Note>> randomisedNotes() {
+//        Transformations.map(mNotesDao.getAllHomeNotes());
+//        return allHomeNotes.shu
+//    }
 }

@@ -38,7 +38,16 @@
     <string name="note_title">Note title</string>
     <string name="note_content">Note content</string>
     <string name="add_note">Add Note</string>
-    <string name="edit_note">Edit note</string>
+    <string name="edit_note">Edit Note</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_all_bookmarks">Delete all BookMarks</string>
+    <string name="delete">Delete</string>
+    <string name="all_bookmark_delete_dialog_message">Are you sure you want to delete all BookMarked Notes?\nThis action cannot be undone.</string>
+    <string name="all_course_delete_dialog_message">Are you sure you want to delete all Courses?\nThis action cannot be undone.</string>
+    <string name="all_note_delete_dialog_message">Are you sure you want to delete all Notes?\nThis action cannot be undone.</string>
+    <string name="note_delete_dialog_message">Are you sure you want to delete this Note?\nThis action cannot be undone.</string>
+    <string name="all_todo_delete_dialog_message">Are you sure you want to delete all To-dos?\nThis action cannot be undone.</string>
+    <string name="completed_todo_delete_dialog_message">Are you sure you want to delete all completed To-dos?\nThis action cannot be undone.</string>
+    <string name="edit_todo">Edit Todo</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -68,8 +69,14 @@ public interface NotesDao {
     @Query("SELECT * FROM note_table ORDER BY note_title ASC")
     LiveData<List<Note>> getAllNotes();
 
+    @Query("SELECT * FROM note_table ORDER BY note_title ASC LIMIT 2")
+    LiveData<List<Note>> getAllHomeNotes();
+
     @Query("SELECT * FROM course_table ORDER BY course_code ASC")
     LiveData<List<Course>> getAllCourses();
+
+    @Query("SELECT * FROM course_table ORDER BY course_code ASC LIMIT 2")
+    LiveData<List<Course>> getAllHomeCourses();
 
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     LiveData<List<Todo>> getAllTodos();
@@ -77,8 +84,14 @@ public interface NotesDao {
     @Query("SELECT * FROM bookmark_table ORDER BY id ASC")
     LiveData<List<BookMark>> getAllBookMarks();
 
+    @Query("DELETE FROM bookmark_table WHERE note_id = :noteId")
+    void deleteBookMarkedNote(int noteId);
+
     @Query("DELETE FROM todo_table WHERE done == 1")
     void deleteCompletedTodos();
+
+    @Query("SELECT * FROM bookmark_table WHERE note_id = :noteId")
+    LiveData<List<BookMark>> getBookMarkAt(int noteId);
 
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")
     String getCourseCode(String courseTitle);

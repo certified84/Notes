@@ -6,11 +6,15 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -20,12 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.BuildConfig;
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
-import com.certified.notes.adapters.CourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeCourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
 import com.certified.notes.adapters.TodoRecyclerAdapter;
 import com.certified.notes.model.Todo;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import static android.text.TextUtils.isEmpty;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -79,14 +85,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         LinearLayoutManager todoLayoutManager = new LinearLayoutManager(getContext());
 
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter();
-        mViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
+        mViewModel.getAllHomeNotes().observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
-        mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> courseRecyclerAdapter.submitList(courses));
+        mViewModel.getAllHomeCourses().observe(getViewLifecycleOwner(), courses -> courseRecyclerAdapter.submitList(courses));
         recyclerCourses.setLayoutManager(courseLayoutManager);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
@@ -97,14 +103,38 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerTodos.setLayoutManager(todoLayoutManager);
         recyclerTodos.setAdapter(todoRecyclerAdapter);
         todoRecyclerAdapter.setOnTodoClickedListener(todo -> {
-            String todoContent = todo.getTodo();
-            boolean done = true;
-            if (!todo.isDone()) {
-                done = false;
-            }
-            Todo todo1 = new Todo(todoContent, done);
-            todo1.setId(todo.getId());
-            mViewModel.updateTodo(todo1);
+            LayoutInflater inflater = this.getLayoutInflater();
+            View view = inflater.inflate(R.layout.dialog_new_todo, null);
+
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setView(view);
+
+            EditText etTodo = view.findViewById(R.id.et_todo);
+            TextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
+            MaterialButton btnSave = view.findViewById(R.id.btn_save);
+            MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
+
+            etTodo.setText(todo.getTodo());
+            tvTodoDialogTitle.setText(R.string.edit_todo);
+
+            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnSave.setOnClickListener(v -> {
+                String todoContent = etTodo.getText().toString().trim();
+                boolean done = todo.isDone();
+                if (!isEmpty(todoContent)) {
+                    if (!todoContent.equals(todo.getTodo())) {
+                        Todo todo1 = new Todo(todoContent, done);
+                        todo1.setId(todo.getId());
+                        mViewModel.updateTodo(todo1);
+                        alertDialog.dismiss();
+                    } else
+                        Toast.makeText(getContext(), "Todo not changed", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getContext(), "Add a todo", Toast.LENGTH_SHORT).show();
+            });
+            alertDialog.show();
         });
     }
 
@@ -128,11 +158,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     public boolean onMenuItemClick(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.delete_all_todos) {
-            mViewModel.deleteAllTodos();
+            launchDeleteDialog(id);
         } else if (id == R.id.delete_completed_todos) {
-            mViewModel.deleteCompletedTodos();
+            launchDeleteDialog(id);
         }
         return true;
+    }
+
+    private void launchDeleteDialog(int id) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle("Delete");
+        if (id == R.id.delete_completed_todos) {
+            builder.setMessage(R.string.completed_todo_delete_dialog_message);
+            builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+                mViewModel.deleteCompletedTodos();
+                dialog1.dismiss();
+            });
+        } else if (id == R.id.delete_all_todos) {
+            builder.setMessage(getString(R.string.all_todo_delete_dialog_message));
+            builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+                mViewModel.deleteAllTodos();
+                dialog1.dismiss();
+            });
+        }
+        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void enableStrictMode() {

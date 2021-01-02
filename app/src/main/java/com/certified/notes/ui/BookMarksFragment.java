@@ -1,15 +1,7 @@
 package com.certified.notes.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,16 +14,28 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.BookMarkRecyclerAdapter;
-import com.certified.notes.adapters.NoteRecyclerAdapter;
+import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
+import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -53,7 +57,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
         View view = inflater.inflate(R.layout.fragment_book_marks, container, false);
 
         recyclerBookMarks = view.findViewById(R.id.recycler_view_notes);
-        ivBookMarkPopupMenu = view.findViewById(R.id.iv_note_popup_menu);
+        ivBookMarkPopupMenu = view.findViewById(R.id.iv_bookmark_popup_menu);
 
         return view;
     }
@@ -68,17 +72,10 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
         init();
     }
 
-    private void showPopupMenu(View view) {
-        PopupMenu menu = new PopupMenu(getContext(), view);
-        menu.setOnMenuItemClickListener(this);
-        menu.inflate(R.menu.note_menu);
-        menu.show();
-    }
-
     private void init() {
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
-        BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter();
+        BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter(getContext(), mViewModel);
         mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookmark -> {
             bookMarkRecyclerAdapter.submitList(bookmark);
         });
@@ -121,6 +118,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setOnClickListener(v -> {
+                int noteId = bookMark.getNoteId();
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
                 String courseCode = mViewModel.getCourseCode(courseTitle);
                 String noteTitle = etNoteTitle.getText().toString().trim();
@@ -129,8 +127,12 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                     if (!courseTitle.equals("Select a course")) {
                         if (!courseCode.equals(bookMark.getCourseCode()) || !noteTitle.equals(bookMark.getNoteTitle()) || !noteContent.equals(bookMark.getNoteContent())) {
                             Note note1 = new Note(courseCode, noteTitle, noteContent);
-                            note1.setId(bookMark.getId());
+                            note1.setId(bookMark.getNoteId());
                             mViewModel.updateNote(note1);
+
+                            BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                            bookMark1.setId(bookMark.getId());
+                            mViewModel.updateBookMark(bookMark1);
                             alertDialog.dismiss();
                         } else
                             Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
@@ -144,8 +146,43 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
         });
     }
 
+    private void showPopupMenu(View view) {
+        PopupMenu menu = new PopupMenu(getContext(), view);
+        menu.setOnMenuItemClickListener(this);
+        menu.inflate(R.menu.bookmark_menu);
+        menu.show();
+    }
+
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        return false;
+        if (item.getItemId() == R.id.delete_all_bookmarks) {
+            launchDeleteDialog();
+        }
+        return true;
+    }
+
+    private void launchDeleteDialog() {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        builder.setTitle("Delete");
+        builder.setMessage(R.string.all_bookmark_delete_dialog_message);
+        builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+            mViewModel.deleteAllBookMarks();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+            SharedPreferences.Editor editor = preferences.edit();
+
+            Set<String> defValues = new HashSet<>();
+            defValues.add("-1");
+
+            Set<String> noteIds = new HashSet<>(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
+            noteIds.removeAll(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
+
+            editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds);
+            editor.apply();
+
+            dialog1.dismiss();
+        });
+        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

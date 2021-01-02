@@ -1,6 +1,8 @@
 package com.certified.notes.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,11 +19,12 @@ import com.certified.notes.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Note;
+import com.certified.notes.util.PreferenceKeys;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Samson.
@@ -42,14 +46,27 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         }
     };
 
+    private static final String TAG = "NoteRecyclerAdapter";
+    private Context mContext;
     private LifecycleOwner mOwner;
     private NotesViewModel mViewModel;
     private OnNoteClickedListener listener;
+    private SharedPreferences mPreferences;
+    private Set<String> mNoteIds;
+    private Set<String> mDefValues;
 
-    public NoteRecyclerAdapter(LifecycleOwner owner, NotesViewModel viewModel) {
+    public NoteRecyclerAdapter(Context context, LifecycleOwner owner, NotesViewModel viewModel) {
         super(DIFF_CALLBACK);
+        this.mContext = context;
         this.mOwner = owner;
         this.mViewModel = viewModel;
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
+
+        mDefValues = new HashSet<>();
+        mDefValues.add("-1");
+
+        mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues));
     }
 
     @NonNull
@@ -61,6 +78,8 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+
         Note currentNote = getItem(position);
         holder.mNoteContent.setText(currentNote.getContent());
         holder.mNoteTitle.setText(currentNote.getTitle());
@@ -74,14 +93,27 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
 
                 BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
                 mViewModel.insertBookMark(bookMark);
+
+                mNoteIds.add(String.valueOf(noteId));
+                editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+                editor.apply();
             }
 
             @Override
             public void unLiked(LikeButton likeButton) {
+                mViewModel.getBookMarkAt(currentNote.getId()).observe(mOwner, bookMarks -> {
+                    for (BookMark bookMark : bookMarks) {
+                        mViewModel.deleteBookMark(bookMark);
+                    }
 
+                    mNoteIds.remove(String.valueOf(currentNote.getId()));
+                    editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+                    editor.apply();
+                });
             }
         });
-        holder.checkIfBookMarked(currentNote.getId());
+
+        holder.checkIfBookMarked(currentNote.getId(), holder.mLikeButton);
     }
 
     public Note getNoteAt(int position) {
@@ -116,22 +148,14 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
             });
         }
 
-        private void checkIfBookMarked(int noteId) {
-            List<Integer> noteIds = new ArrayList<>();
-            mViewModel.getAllNoteIds().observe(mOwner, ids -> {
-                noteIds.addAll(ids);
-            });
-            if (noteIds.contains(noteId)) {
-                mLikeButton.setLiked(true);
+        private void checkIfBookMarked(int noteId, LikeButton likeButton) {
+            Set<String> defValues = new HashSet<>();
+            defValues.add("-1");
+            Set<String> noteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
+            if (noteIds.contains(String.valueOf(noteId))) {
+                likeButton.setLiked(true);
             }
+            Log.d(TAG, "checkIfBookMarked: " + noteIds);
         }
     }
 }
-
-
-
-
-
-
-
-
