@@ -24,6 +24,8 @@ public class NotesViewModel extends AndroidViewModel {
     private LiveData<List<Todo>> allTodos;
     private LiveData<List<BookMark>> allBookMarks;
     private LiveData<List<Integer>> allNoteIds;
+    private LiveData<List<Integer>> allCourseUnits;
+    private LiveData<List<Integer>> allCourseCreditPoints;
 
     public NotesViewModel(@NonNull Application application) {
         super(application);
@@ -35,6 +37,8 @@ public class NotesViewModel extends AndroidViewModel {
         allTodos = mRepository.getAllTodos();
         allBookMarks = mRepository.getAllBookMarks();
         allNoteIds = mRepository.getAllNoteIds();
+        allCourseUnits = mRepository.getAllCourseUnits();
+        allCourseCreditPoints = mRepository.getAllCourseCreditPoints();
     }
 
     public void insertNote(Note note) {
@@ -129,6 +133,14 @@ public class NotesViewModel extends AndroidViewModel {
         return allNoteIds;
     }
 
+    public LiveData<List<Integer>> getAllCourseUnits() {
+        return allCourseUnits;
+    }
+
+    public LiveData<List<Integer>> getAllCourseCreditPoints() {
+        return allCourseCreditPoints;
+    }
+
     public void deleteCompletedTodos() {
         mRepository.deleteCompletedTodos();
     }
@@ -137,11 +149,19 @@ public class NotesViewModel extends AndroidViewModel {
         return mRepository.getCourseCode(courseTitle);
     }
 
+    public String getCourseTitle(String courseCode) {
+        return mRepository.getCourseTitle(courseCode);
+    }
+
     public void deleteBookMarkedNote(int noteId) {
         mRepository.deleteBookMarkedNote(noteId);
     }
 
     public LiveData<List<BookMark>> getBookMarkAt(int noteId) {
         return mRepository.getBookMarkAt(noteId);
+    }
+
+    public LiveData<List<Note>> getNotesAt(String courseCode) {
+        return mRepository.getNotesAt(courseCode);
     }
 }

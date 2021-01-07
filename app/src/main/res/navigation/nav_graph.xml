@@ -23,4 +23,9 @@
         android:id="@+id/bookMarksFragment"
         android:name="com.certified.notes.ui.BookMarksFragment"
         android:label="BookMarksFragment" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.certified.notes.ui.ResultFragment"
+        android:label="fragment_result"
+        tools:layout="@layout/fragment_result" />
 </navigation>

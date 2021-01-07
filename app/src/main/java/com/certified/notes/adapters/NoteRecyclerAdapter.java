@@ -83,6 +83,7 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         Note currentNote = getItem(position);
         holder.mNoteContent.setText(currentNote.getContent());
         holder.mNoteTitle.setText(currentNote.getTitle());
+//        holder.mNoteTitle.setText(currentNote.getTitle());
         holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {

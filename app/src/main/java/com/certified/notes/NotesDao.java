@@ -27,8 +27,11 @@ public interface NotesDao {
     @Insert()
     void insertTodo(Todo todo);
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBookMark(BookMark bookMark);
+
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    void insertResult(Result result);
 
     @Update
     void updateNote(Note note);
@@ -93,9 +96,21 @@ public interface NotesDao {
     @Query("SELECT * FROM bookmark_table WHERE note_id = :noteId")
     LiveData<List<BookMark>> getBookMarkAt(int noteId);
 
+    @Query("SELECT * FROM note_table WHERE course_code = :course_code")
+    LiveData<List<Note>> getNotesAt(String course_code);
+
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")
     String getCourseCode(String courseTitle);
 
+    @Query("SELECT course_title FROM course_table WHERE course_code = :courseCode")
+    String getCourseTitle(String courseCode);
+
     @Query("SELECT note_id FROM bookmark_table")
     LiveData<List<Integer>> getNoteIds();
+
+    @Query("SELECT course_unit FROM course_table")
+    LiveData<List<Integer>> getCourseUnits();
+
+    @Query("SELECT course_credit_point FROM course_table")
+    LiveData<List<Integer>> getCourseCreditPoints();
 }

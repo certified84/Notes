@@ -42,12 +42,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="57dp">
+            android:layout_height="?attr/actionBarSize">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/smoothBottomBar"
                 android:layout_width="0dp"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="0dp"
                 app:backgroundColor="@color/white"
                 app:elevation="0dp"
                 app:iconSize="20dp"
@@ -56,6 +56,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:menu="@menu/menu_main" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -85,7 +86,7 @@
         app:elevation="16dp"
         app:fabSize="mini"
         app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="360"
+        app:layout_constraintCircleAngle="270"
         app:layout_constraintCircleRadius="120dp"
         app:srcCompat="@drawable/ic_todo"
         tools:layout_editor_absoluteX="78dp"
@@ -102,7 +103,7 @@
         app:elevation="16dp"
         app:fabSize="mini"
         app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="315"
+        app:layout_constraintCircleAngle="360"
         app:layout_constraintCircleRadius="120dp"
         app:srcCompat="@drawable/ic_add_note"
         tools:layout_editor_absoluteX="259dp"
@@ -119,7 +120,7 @@
         app:elevation="16dp"
         app:fabSize="mini"
         app:layout_constraintCircle="@id/fab"
-        app:layout_constraintCircleAngle="270"
+        app:layout_constraintCircleAngle="315"
         app:layout_constraintCircleRadius="120dp"
         app:srcCompat="@drawable/ic_menu_slideshow"
         tools:layout_editor_absoluteX="188dp"
@@ -134,7 +135,7 @@
         android:clickable="true"
         android:contentDescription="@string/add_button"
         android:focusable="true"
-        android:src="@drawable/ic_add"
+        app:srcCompat="@drawable/ic_add"
         app:backgroundTintMode="add"
         app:elevation="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/fragment"

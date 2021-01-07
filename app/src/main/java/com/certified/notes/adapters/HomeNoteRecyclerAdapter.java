@@ -32,17 +32,28 @@ public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerA
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
-    private OnNoteClickedListener listener;
 
-    public HomeNoteRecyclerAdapter() {
+    private OnNoteClickedListener listener;
+    private final int ID_NOT_SET = 0;
+    private int id;
+
+    public HomeNoteRecyclerAdapter(int id) {
         super(DIFF_CALLBACK);
+        this.id = id;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_notes_home, parent, false);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView;
+        if (id == ID_NOT_SET) {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_notes_home, parent, false);
+        } else {
+            itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_related_notes, parent, false);
+        }
         return new ViewHolder(itemView);
+//        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_notes_home, parent, false);
+//        return new ViewHolder(itemView);
     }
 
     @Override

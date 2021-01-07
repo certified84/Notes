@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -160,22 +162,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
+        builder.setTitle(R.string.add_course);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
         EditText etCourseTitle = view.findViewById(R.id.et_course_title);
+        NumberPicker picker = view.findViewById(R.id.numberPicker_course_unit);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
-        TextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
 
-        tvCourseDialogTitle.setText(getString(R.string.add_course));
+        picker.setMinValue(1);
+        picker.setOrientation(LinearLayout.HORIZONTAL);
+        picker.setMaxValue(4);
+
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseCode = etCourseCode.getText().toString().trim();
             String courseTitle = etCourseTitle.getText().toString().trim();
+            Integer courseUnit = picker.getValue();
+            int MARK_NOT_SET = 0;
+            int GRADE_POINT_NOT_SET = 0;
             if (!isEmpty(courseCode) && !isEmpty(courseTitle)) {
-                Course course = new Course(courseCode, courseTitle);
+                Course course = new Course(courseCode, courseTitle, courseUnit, MARK_NOT_SET, "F", GRADE_POINT_NOT_SET);
                 mViewModel.insertCourse(course);
                 alertDialog.dismiss();
             } else
@@ -191,15 +200,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
+        builder.setTitle(R.string.add_todo);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
         EditText etTodo = view.findViewById(R.id.et_todo);
-        TextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
-
-        tvTodoDialogTitle.setText(R.string.add_todo);
 
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
@@ -219,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = inflater.inflate(R.layout.dialog_new_note, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
+        builder.setBackground(getResources().getDrawable(R.drawable.alert_dialog_bg));
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 

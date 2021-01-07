@@ -1,7 +1,6 @@
 package com.certified.notes.ui;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -39,7 +37,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static android.text.TextUtils.isEmpty;
@@ -56,6 +53,8 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     private SharedPreferences.Editor mEditor;
     private Set<String> mDefValues;
     private Set<String> mNoteIds;
+    private MaterialAlertDialogBuilder mBuilder;
+    private AlertDialog mAlertDialog;
 
     public NotesFragment() {
         // Required empty public constructor
@@ -78,9 +77,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         super.onViewCreated(view, savedInstanceState);
 
         mViewModel = new NotesViewModel(getActivity().getApplication());
-        ivNotePopupMenu.setOnClickListener(this::showPopupMenu);
-
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+        mBuilder = new MaterialAlertDialogBuilder(getContext());
+        ivNotePopupMenu.setOnClickListener(this::showPopupMenu);
 
         mDefValues = new HashSet<>();
         mDefValues.add("-1");
@@ -111,10 +110,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-            builder.setBackground(getResources().getDrawable(R.drawable.alert_dialog_bg, null));
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setView(view);
+            mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+            mAlertDialog = mBuilder.create();
+            mAlertDialog.setView(view);
 
             Spinner spinnerCourses = view.findViewById(R.id.spinner_courses);
             EditText etNoteTitle = view.findViewById(R.id.et_note_title);
@@ -127,7 +125,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
 
             mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
-                courseList.add("Select a course");
+                courseList.add(getString(R.string.select_a_course));
+                courseList.add(getString(R.string.no_course));
+
                 for (Course course : courses) {
                     courseList.add(course.getCourseTitle());
                 }
@@ -140,8 +140,12 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             tvNoteDialogTitle.setText(getString(R.string.edit_note));
             etNoteTitle.setText(note.getTitle());
             etNoteContent.setText(note.getContent());
+            int coursePosition = adapterCourses.getPosition(mViewModel.getCourseTitle(note.getCourseCode()));
+            spinnerCourses.setSelection(coursePosition);
 
-            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            Log.d(TAG, "init: Course position: " + coursePosition + "\nSpinner selection: ");
+
+            btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
             btnSave.setOnClickListener(v -> {
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
                 String courseCode = mViewModel.getCourseCode(courseTitle);
@@ -155,11 +159,14 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                             mViewModel.updateNote(note1);
                             mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
                                 for (BookMark bookMark : bookMarks) {
-                                    mViewModel.updateBookMark(bookMark);
-                                    Log.d(TAG, "init: " + bookMark.toString());
+                                    int noteId = note1.getId();
+                                    BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                    bookMark1.setId(bookMark.getId());
+                                    mViewModel.updateBookMark(bookMark1);
+                                    Log.d(TAG, "init: " + bookMark1.toString());
                                 }
                             });
-                            alertDialog.dismiss();
+                            mAlertDialog.dismiss();
                         } else
                             Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                     } else
@@ -168,7 +175,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                     Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
             });
 
-            alertDialog.show();
+            mAlertDialog.show();
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -180,10 +187,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-                    builder.setTitle("Delete");
-                    builder.setMessage(R.string.note_delete_dialog_message);
-                    builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+                    mBuilder.setTitle("Delete");
+                    mBuilder.setMessage(R.string.note_delete_dialog_message);
+                    mBuilder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
                         mViewModel.deleteNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()));
                         mViewModel.deleteBookMarkedNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()).getId());
 
@@ -197,9 +203,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
                         dialog1.dismiss();
                     });
-                    builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    mBuilder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+                    mAlertDialog = mBuilder.create();
+                    mAlertDialog.show();
                 } else if (direction == ItemTouchHelper.RIGHT) {
                     Note note = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition());
                     int noteId = note.getId();
@@ -231,15 +237,15 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     }
 
     private void launchDeleteDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle("Delete");
-        builder.setMessage(R.string.all_note_delete_dialog_message);
-        builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+        mBuilder.setTitle(R.string.delete);
+        mBuilder.setMessage(R.string.all_note_delete_dialog_message);
+        mBuilder.setIcon(R.drawable.ic_baseline_delete_24);
+        mBuilder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllNotes();
             dialog1.dismiss();
         });
-        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        mBuilder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
+        mAlertDialog = mBuilder.create();
+        mAlertDialog.show();
     }
 }

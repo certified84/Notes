@@ -40,6 +40,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     private ImageView ivTodoPopupMenu;
     private NavController mNavController;
     private NotesViewModel mViewModel;
+    private final int ID_NOT_SET = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -84,7 +85,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         LinearLayoutManager courseLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager todoLayoutManager = new LinearLayoutManager(getContext());
 
-        HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter();
+        HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(ID_NOT_SET);
         mViewModel.getAllHomeNotes().observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
@@ -108,16 +109,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
             builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            builder.setTitle(R.string.edit_todo);
             AlertDialog alertDialog = builder.create();
             alertDialog.setView(view);
 
             EditText etTodo = view.findViewById(R.id.et_todo);
-            TextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
             MaterialButton btnSave = view.findViewById(R.id.btn_save);
             MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
 
             etTodo.setText(todo.getTodo());
-            tvTodoDialogTitle.setText(R.string.edit_todo);
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setOnClickListener(v -> {
@@ -167,21 +167,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
     private void launchDeleteDialog(int id) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setTitle("Delete");
+        builder.setTitle(R.string.delete);
+        builder.setIcon(R.drawable.ic_baseline_delete_24);
         if (id == R.id.delete_completed_todos) {
             builder.setMessage(R.string.completed_todo_delete_dialog_message);
-            builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+            builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
                 mViewModel.deleteCompletedTodos();
                 dialog1.dismiss();
             });
         } else if (id == R.id.delete_all_todos) {
             builder.setMessage(getString(R.string.all_todo_delete_dialog_message));
-            builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+            builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
                 mViewModel.deleteAllTodos();
                 dialog1.dismiss();
             });
         }
-        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+        builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
     }

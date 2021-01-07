@@ -6,9 +6,9 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/home" />
     <item
-        android:id="@+id/todoFragment"
+        android:id="@+id/resultFragment"
         android:icon="@drawable/ic_todo"
-        android:title="@string/todos" />
+        android:title="@string/result" />
     <item
         android:id="@+id/bookMarksFragment"
         android:icon="@drawable/heart_off"

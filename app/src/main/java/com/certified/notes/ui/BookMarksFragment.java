@@ -129,10 +129,13 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                             Note note1 = new Note(courseCode, noteTitle, noteContent);
                             note1.setId(bookMark.getNoteId());
                             mViewModel.updateNote(note1);
-
-                            BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                            bookMark1.setId(bookMark.getId());
-                            mViewModel.updateBookMark(bookMark1);
+                            mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                for (BookMark bookMark1 : bookMarks) {
+                                    BookMark bookMark2 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                    bookMark2.setId(bookMark1.getId());
+                                    mViewModel.updateBookMark(bookMark2);
+                                }
+                            });
                             alertDialog.dismiss();
                         } else
                             Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
@@ -165,7 +168,8 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setTitle("Delete");
         builder.setMessage(R.string.all_bookmark_delete_dialog_message);
-        builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+        builder.setIcon(R.drawable.ic_baseline_delete_24);
+        builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllBookMarks();
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
@@ -181,7 +185,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
             dialog1.dismiss();
         });
-        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+        builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
     }

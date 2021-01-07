@@ -32,7 +32,7 @@ public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyc
     private static final DiffUtil.ItemCallback<BookMark> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookMark>() {
         @Override
         public boolean areItemsTheSame(@NonNull BookMark oldItem, @NonNull BookMark newItem) {
-            return oldItem.getId() == newItem.getId();
+            return oldItem.getNoteId() == newItem.getNoteId();
         }
 
         @Override

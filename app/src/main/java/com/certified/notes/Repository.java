@@ -10,6 +10,7 @@ import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -25,6 +26,8 @@ public class Repository {
     private LiveData<List<Todo>> allTodos;
     private LiveData<List<BookMark>> allBookMarks;
     private LiveData<List<Integer>> allNoteIds;
+    private LiveData<List<Integer>> allCourseUnits;
+    private LiveData<List<Integer>> allCourseCreditPoints;
 
     public Repository(Application application) {
         NotesDatabase database = NotesDatabase.getInstance(application);
@@ -36,6 +39,8 @@ public class Repository {
         allTodos = mNotesDao.getAllTodos();
         allBookMarks = mNotesDao.getAllBookMarks();
         allNoteIds = mNotesDao.getNoteIds();
+        allCourseUnits = mNotesDao.getCourseUnits();
+        allCourseCreditPoints = mNotesDao.getCourseCreditPoints();
     }
 
     public void insertNote(Note note) {
@@ -130,6 +135,14 @@ public class Repository {
         return allNoteIds;
     }
 
+    public LiveData<List<Integer>> getAllCourseUnits() {
+        return allCourseUnits;
+    }
+
+    public LiveData<List<Integer>> getAllCourseCreditPoints() {
+        return allCourseCreditPoints;
+    }
+
     public void deleteCompletedTodos() {
         executor.execute(() -> mNotesDao.deleteCompletedTodos());
     }
@@ -137,6 +150,15 @@ public class Repository {
     public String getCourseCode(String courseTitle) {
         try {
             return executor.submit(() -> mNotesDao.getCourseCode(courseTitle)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String getCourseTitle(String courseCode) {
+        try {
+            return executor.submit(() -> mNotesDao.getCourseTitle(courseCode)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return "";
@@ -154,6 +176,15 @@ public class Repository {
     public LiveData<List<BookMark>> getBookMarkAt(int noteId){
         try {
             return executor.submit(() -> mNotesDao.getBookMarkAt(noteId)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LiveData<List<Note>> getNotesAt(String courseCode){
+        try {
+            return executor.submit(() -> mNotesDao.getNotesAt(courseCode)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return null;

@@ -37,12 +37,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'androidx.navigation:navigation-fragment:2.3.1'
-    implementation 'androidx.navigation:navigation-ui:2.3.1'
+    implementation 'androidx.navigation:navigation-fragment:2.3.2'
+    implementation 'androidx.navigation:navigation-ui:2.3.2'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.work:work-runtime:2.4.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -52,8 +53,8 @@ dependencies {
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
 //    Room persistence library
-    implementation "androidx.room:room-runtime:2.2.5"
-    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-runtime:2.2.6"
+    annotationProcessor "androidx.room:room-compiler:2.2.6"
 
 //    Paging
     implementation "androidx.paging:paging-runtime:2.1.2"
@@ -63,4 +64,10 @@ dependencies {
 
 //    round cardview
     implementation 'com.github.captain-miao:optroundcardview:1.0.0'
+
+//   lottie
+    implementation "com.airbnb.android:lottie:3.4.0"
+
+//    page indicator
+    implementation "com.romandanylyk:pageindicatorview:1.0.3@aar"
 }
