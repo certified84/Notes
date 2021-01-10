@@ -28,4 +28,9 @@
         android:name="com.certified.notes.ui.ResultFragment"
         android:label="fragment_result"
         tools:layout="@layout/fragment_result" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.certified.notes.ui.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

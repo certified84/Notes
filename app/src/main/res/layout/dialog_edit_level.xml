@@ -1,46 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:elevation="0dp">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_mark_layout"
+    <Spinner
+        android:id="@+id/spinner_level"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:hint="@string/mark"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxBackgroundMode="outline"
-        app:boxCollapsedPaddingTop="4dp"
-        app:boxCornerRadiusBottomEnd="5dp"
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:boxStrokeColor="@color/accent"
-        app:hintTextColor="@color/accent"
         app:layout_constraintBottom_toTopOf="@+id/btn_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_mark"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="number"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:textInputLayoutFocusedRectEnabled="false" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/btn_save"
@@ -51,7 +27,7 @@
         android:text="@string/save"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/et_course_mark_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/spinner_level" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"

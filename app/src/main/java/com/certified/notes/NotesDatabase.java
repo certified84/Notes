@@ -13,11 +13,12 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Result;
 import com.certified.notes.model.Todo;
+import com.certified.notes.model.User;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Note.class, Course.class, Todo.class, BookMark.class}, version = 1, exportSchema = false)
+@Database(entities = {Note.class, Course.class, Todo.class, BookMark.class, User.class}, version = 1, exportSchema = false)
 public abstract class NotesDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
@@ -57,6 +58,8 @@ public abstract class NotesDatabase extends RoomDatabase {
             Todo todo7 = new Todo("Make sure you pass the exam at the first try!!!", false);
             Todo todo8 = new Todo("Make sure to complete the To-dos above", false);
 
+            User user = new User("Enter name", "Enter school", "Enter department", "Select level");
+
             databaseWriteExecutor.execute(() -> {
                 NotesDao notesDao = instance.mNotesDao();
 
@@ -91,6 +94,8 @@ public abstract class NotesDatabase extends RoomDatabase {
                 notesDao.insertTodo(todo6);
                 notesDao.insertTodo(todo7);
                 notesDao.insertTodo(todo8);
+
+                notesDao.insertUser(user);
             });
         }
     };

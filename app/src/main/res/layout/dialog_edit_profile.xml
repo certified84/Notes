@@ -7,14 +7,14 @@
     android:elevation="0dp">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_mark_layout"
+        android:id="@+id/et_edit_profile_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:hint="@string/mark"
+        android:hint="@string/name"
         app:boxBackgroundColor="#FFFFFF"
         app:boxBackgroundMode="outline"
         app:boxCollapsedPaddingTop="4dp"
@@ -30,13 +30,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_mark"
+            android:id="@+id/et_edit_profile"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:inputType="number"
+            android:inputType="textPersonName"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             app:textInputLayoutFocusedRectEnabled="false" />
@@ -51,7 +51,7 @@
         android:text="@string/save"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/et_course_mark_layout" />
+        app:layout_constraintEnd_toEndOf="@+id/et_edit_profile_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"

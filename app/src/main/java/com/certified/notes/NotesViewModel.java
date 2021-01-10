@@ -10,6 +10,7 @@ import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.certified.notes.model.User;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class NotesViewModel extends AndroidViewModel {
     private LiveData<List<Integer>> allNoteIds;
     private LiveData<List<Integer>> allCourseUnits;
     private LiveData<List<Integer>> allCourseCreditPoints;
+    private LiveData<User> user;
 
     public NotesViewModel(@NonNull Application application) {
         super(application);
@@ -39,6 +41,7 @@ public class NotesViewModel extends AndroidViewModel {
         allNoteIds = mRepository.getAllNoteIds();
         allCourseUnits = mRepository.getAllCourseUnits();
         allCourseCreditPoints = mRepository.getAllCourseCreditPoints();
+        user = mRepository.getUser();
     }
 
     public void insertNote(Note note) {
@@ -71,6 +74,10 @@ public class NotesViewModel extends AndroidViewModel {
 
     public void updateBookMark(BookMark bookMark) {
         mRepository.updateBookMark(bookMark);
+    }
+
+    public void updateUser(User user) {
+        mRepository.updateUser(user);
     }
 
     public void deleteNote(Note note) {
@@ -139,6 +146,10 @@ public class NotesViewModel extends AndroidViewModel {
 
     public LiveData<List<Integer>> getAllCourseCreditPoints() {
         return allCourseCreditPoints;
+    }
+
+    public LiveData<User> getUser() {
+        return user;
     }
 
     public void deleteCompletedTodos() {

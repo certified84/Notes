@@ -139,7 +139,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         numberPickerCourseUnit.setMinValue(1);
         numberPickerCourseUnit.setMaxValue(4);
-        numberPickerCourseUnit.setOrientation(LinearLayout.HORIZONTAL);
+        numberPickerCourseUnit.setOrientation(LinearLayout.VERTICAL);
 
         etCourseCode.setText(course.getCourseCode());
         etCourseTitle.setText(course.getCourseTitle());

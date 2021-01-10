@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/homeFragment"
         android:icon="@drawable/ic_baseline_home_24"
-        android:title="@string/home" />
+        android:title="@string/home"
+        app:showAsAction="always" />
     <item
         android:id="@+id/resultFragment"
         android:icon="@drawable/ic_todo"
-        android:title="@string/result" />
+        android:title="@string/result"
+        app:showAsAction="always" />
     <item
         android:id="@+id/bookMarksFragment"
-        android:icon="@drawable/heart_off"
-        android:title="@string/bookmarks" />
+        android:icon="@drawable/ic_baseline_bookmark_24"
+        android:title="@string/bookmarks"
+        app:showAsAction="always" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="@string/profile" />
+        android:title="@string/profile"
+        app:showAsAction="always" />
 </menu>

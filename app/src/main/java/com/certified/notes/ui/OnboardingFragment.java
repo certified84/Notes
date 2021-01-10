@@ -69,11 +69,13 @@ public class OnboardingFragment extends Fragment {
 
     private void setUpSliderItem() {
         mSliderItems = new ArrayList<>();
-        mSliderItems.add(new SliderItem(R.raw.animation_todo, getString(R.string.view_pager_title),
-                getString(R.string.view_pager_description)));
-        mSliderItems.add(new SliderItem(R.raw.animation_note, getString(R.string.view_pager_title_1),
+        mSliderItems.add(new SliderItem(R.raw.animation_note, getString(R.string.view_pager_title_notes),
                 getString(R.string.view_pager_title_description_1)));
-        mSliderItems.add(new SliderItem(R.raw.animation_report, getString(R.string.view_pager_title_2),
+        mSliderItems.add(new SliderItem(R.raw.animation_course, getString(R.string.view_pager_title_course),
+                getString(R.string.view_pager_description)));
+        mSliderItems.add(new SliderItem(R.raw.animation_todo, getString(R.string.view_pager_title_todo),
+                getString(R.string.view_pager_description)));
+        mSliderItems.add(new SliderItem(R.raw.animation_report, getString(R.string.view_pager_title_report),
                 getString(R.string.view_pager_description_2)));
     }
 

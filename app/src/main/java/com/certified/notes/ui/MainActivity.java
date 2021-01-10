@@ -25,6 +25,7 @@ import com.certified.notes.R;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -42,11 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
 
-    private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo;
+    private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo, fabBottomAppBar;
     private TextView tvFabTodoTitle, tvFabNoteTitle, tvFabCourseTitle;
     private View viewBlur;
     private NavController mNavController;
     private BottomNavigationView mSmoothBottomBar;
+//    private BottomAppBar mBottomAppBar;
 
     private NotesViewModel mViewModel;
 
@@ -60,12 +62,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mNavController = Navigation.findNavController(this, R.id.fragment);
         mSmoothBottomBar = findViewById(R.id.smoothBottomBar);
 
+//        mBottomAppBar = findViewById(R.id.bottomAppBar);
+
         NavigationUI.setupWithNavController(mSmoothBottomBar, mNavController);
+//        NavigationUI.setupWithNavController(mBottomAppBar, mNavController);
 
         fab = findViewById(R.id.fab);
         fabAddCourse = findViewById(R.id.fab_add_course);
         fabAddNote = findViewById(R.id.fab_add_note);
         fabAddTodo = findViewById(R.id.fab_add_todo);
+        fabBottomAppBar = findViewById(R.id.floatingActionButton);
 
         tvFabTodoTitle = findViewById(R.id.tv_fab_todo_title);
         tvFabNoteTitle = findViewById(R.id.tv_fab_note_title);
@@ -77,19 +83,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddCourse.setOnClickListener(this);
         fabAddNote.setOnClickListener(this);
         fabAddTodo.setOnClickListener(this);
+        fabBottomAppBar.setOnClickListener(this);
 
         viewBlur.setOnClickListener(this);
-
-//        mSmoothBottomBar.setOnItemSelectedListener(i -> {
-//            if (i == R.id.bookMarksFragment) {
-//                Log.d(TAG, "onCreate: bookMarksFragment Clicked");
-//                mNavController.navigate(R.id.bookMarksFragment);
-//            } else if(i == R.id.homeFragment) {
-//                Log.d(TAG, "onCreate: homeFragment Clicked");
-//                mNavController.navigate(R.id.homeFragment);
-//            }
-//            return true;
-//        });
     }
 
     @Override
@@ -99,18 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        mSmoothBottomBar.setupWithNavController(menu, mNavController);
         return true;
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 
     @Override
     public void onClick(View v) {
@@ -133,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           launchNoteDialog();
         } else if (id == R.id.view) {
             hideViews();
+        } else if (id == R.id.floatingActionButton) {
+            if (viewBlur.getVisibility() == View.VISIBLE) {
+                hideViews();
+            } else
+                showViews();
         }
     }
 

@@ -64,12 +64,23 @@
     <string name="course_code">Course code</string>
     <string name="mark">Mark</string>
     <string name="get_started">Get Started</string>
-    <string name="view_pager_title_1">Jot down Notes</string>
+    <string name="view_pager_title_notes">Jot down Notes</string>
     <string name="view_pager_title_description_1">Jotting down notes is now much easier and faster like never before</string>
-    <string name="view_pager_title_2">Calculate your GPA</string>
+    <string name="view_pager_title_report">Calculate your GPA</string>
     <string name="view_pager_description_2">Apply to your preferred job that matches your skill</string>
-    <string name="view_pager_title">Save semester Courses</string>
+    <string name="view_pager_title_course">Save semester Courses</string>
     <string name="view_pager_description">Finding your dream job is now much easier and faster like never before</string>
     <string name="select_a_course">Select a course</string>
     <string name="no_course">No course</string>
+    <string name="view_pager_title_todo">Add To-dos</string>
+    <string name="name">Name</string>
+    <string name="school">School</string>
+    <string name="department">Department</string>
+    <string name="level">Level</string>
+    <string name="change_profile_image_button">Change profile image button</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_school">Enter school</string>
+    <string name="enter_department">Enter department</string>
+    <string name="enter_level">Enter level</string>
+    <string name="select_level">Select level</string>
 </resources>

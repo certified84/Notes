@@ -94,11 +94,3 @@ public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerA
         }
     }
 }
-
-
-
-
-
-
-
-

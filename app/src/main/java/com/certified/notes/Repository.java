@@ -8,6 +8,7 @@ import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.certified.notes.model.User;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -28,6 +29,7 @@ public class Repository {
     private LiveData<List<Integer>> allNoteIds;
     private LiveData<List<Integer>> allCourseUnits;
     private LiveData<List<Integer>> allCourseCreditPoints;
+    private LiveData<User> user;
 
     public Repository(Application application) {
         NotesDatabase database = NotesDatabase.getInstance(application);
@@ -41,6 +43,7 @@ public class Repository {
         allNoteIds = mNotesDao.getNoteIds();
         allCourseUnits = mNotesDao.getCourseUnits();
         allCourseCreditPoints = mNotesDao.getCourseCreditPoints();
+        user = mNotesDao.getUser();
     }
 
     public void insertNote(Note note) {
@@ -73,6 +76,10 @@ public class Repository {
 
     public void updateBookMark(BookMark bookMark) {
         executor.execute(() -> mNotesDao.updateBookMark(bookMark));
+    }
+
+    public void updateUser(User user) {
+        executor.execute(() -> mNotesDao.updateUser(user));
     }
 
     public void deleteNote(Note note) {
@@ -141,6 +148,10 @@ public class Repository {
 
     public LiveData<List<Integer>> getAllCourseCreditPoints() {
         return allCourseCreditPoints;
+    }
+
+    public LiveData<User> getUser() {
+        return user;
     }
 
     public void deleteCompletedTodos() {

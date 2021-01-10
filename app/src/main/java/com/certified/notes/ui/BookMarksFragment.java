@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.util.PreferenceKeys;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 

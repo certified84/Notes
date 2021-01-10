@@ -12,6 +12,7 @@ import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.certified.notes.model.User;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public interface NotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBookMark(BookMark bookMark);
 
+    @Insert
+    void insertUser(User user);
+
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)
 //    void insertResult(Result result);
 
@@ -44,6 +48,9 @@ public interface NotesDao {
 
     @Update
     void updateBookMark(BookMark bookMark);
+
+    @Update
+    void updateUser(User user);
 
     @Delete
     void deleteNote(Note note);
@@ -86,6 +93,9 @@ public interface NotesDao {
 
     @Query("SELECT * FROM bookmark_table ORDER BY id ASC")
     LiveData<List<BookMark>> getAllBookMarks();
+
+    @Query("SELECT * FROM user_table")
+    LiveData<User> getUser();
 
     @Query("DELETE FROM bookmark_table WHERE note_id = :noteId")
     void deleteBookMarkedNote(int noteId);
