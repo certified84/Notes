@@ -4,4 +4,5 @@ public class PreferenceKeys {
 
     public static final String NOTE_IDS = "note_ids";
     public static final String FIRST_TIME_LOGIN = "first_time_login";
+    public static final String DARK_MODE = "dark_mode";
 }

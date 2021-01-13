@@ -8,6 +8,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/et_course_mark_layout"
+        style="@style/Widgets.Notes.TextInputLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -15,15 +16,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:hint="@string/mark"
-        app:boxBackgroundColor="#FFFFFF"
-        app:boxBackgroundMode="outline"
         app:boxCollapsedPaddingTop="4dp"
         app:boxCornerRadiusBottomEnd="5dp"
         app:boxCornerRadiusBottomStart="5dp"
         app:boxCornerRadiusTopEnd="5dp"
         app:boxCornerRadiusTopStart="5dp"
-        app:boxStrokeColor="@color/accent"
-        app:hintTextColor="@color/accent"
         app:layout_constraintBottom_toTopOf="@+id/btn_save"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +28,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_course_mark"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            style="@style/Widget.Notes.TextInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -44,23 +41,21 @@
 
     <Button
         android:id="@+id/btn_save"
+        style="@style/Widget.Notes.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/accent"
         android:text="@string/save"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/et_course_mark_layout" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.Notes.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:text="@string/cancel"
-        android:textColor="@color/accent"
         app:layout_constraintBottom_toBottomOf="@+id/btn_save"
         app:layout_constraintEnd_toStartOf="@+id/btn_save"
         app:layout_constraintTop_toTopOf="@+id/btn_save" />

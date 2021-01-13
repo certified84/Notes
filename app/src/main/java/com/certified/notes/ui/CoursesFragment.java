@@ -30,6 +30,7 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textview.MaterialTextView;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -127,10 +128,10 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
         builder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg));
-        builder.setTitle(R.string.edit_course);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
+        MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
         EditText etCourseTitle = view.findViewById(R.id.et_course_title);
         NumberPicker numberPickerCourseUnit = view.findViewById(R.id.numberPicker_course_unit);
@@ -141,6 +142,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         numberPickerCourseUnit.setMaxValue(4);
         numberPickerCourseUnit.setOrientation(LinearLayout.VERTICAL);
 
+        tvCourseDialogTitle.setText(getString(R.string.edit_course));
         etCourseCode.setText(course.getCourseCode());
         etCourseTitle.setText(course.getCourseTitle());
         numberPickerCourseUnit.setValue(course.getCourseUnit());
@@ -213,6 +215,17 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         builder.setIcon(R.drawable.ic_baseline_delete_24);
         builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllCourses();
+//            mViewModel.deleteAllNotes();
+            mViewModel.getDeletableNotes("NIL").observe(getViewLifecycleOwner(), notes -> {
+                for (Note note : notes) {
+                    mViewModel.deleteNote(note);
+                }
+            });
+            mViewModel.getDeletableBookmarks("NIL").observe(getViewLifecycleOwner(), bookMarks -> {
+                for (BookMark bookMark : bookMarks) {
+                    mViewModel.deleteBookMark(bookMark);
+                }
+            });
             dialog1.dismiss();
         });
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());

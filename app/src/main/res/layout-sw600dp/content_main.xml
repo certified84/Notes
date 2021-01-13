@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/midWhite"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.MainActivity">
 
     <fragment
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:optRoundCardBackgroundColor="@color/white"
+        app:optRoundCardBackgroundColor="?attr/cardBackgroundColor"
         app:optRoundCardCornerRadius="20dp"
         app:optRoundCardElevation="16dp"
         app:optRoundCardLeftBottomCorner="false"
@@ -42,22 +42,23 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/smoothBottomBar"
+                style="@style/Widget.Notes.BottomNavigationView"
+                android:background="?attr/cardBackgroundColor"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:backgroundColor="@color/white"
+                android:layout_height="wrap_content"
                 app:elevation="0dp"
                 app:iconSize="32dp"
                 app:itemIconSize="30dp"
-                app:itemIconTint="@color/accent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
                 app:menu="@menu/menu_main" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -78,6 +79,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_todo"
+        style="@style/Widget.Notes.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -95,6 +97,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_note"
+        style="@style/Widget.Notes.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -112,6 +115,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_course"
+        style="@style/Widget.Notes.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -129,6 +133,7 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
+        style="@style/Widget.Notes.FloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"

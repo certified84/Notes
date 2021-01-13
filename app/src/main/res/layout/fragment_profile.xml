@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/midWhite"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.ProfileFragment">
 
     <ScrollView
@@ -13,32 +13,35 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/splash_logo"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
-                app:layout_constraintTop_toTopOf="@+id/guideline2" />
+                app:layout_constraintTop_toTopOf="@+id/guideline2"
+                tools:src="@drawable/splash_logo" />
 
             <ImageView
                 android:id="@+id/imageView4"
+                style="@style/Widget.Note.ImageView.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:contentDescription="@string/user_name_field"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_change_profile_picture"
-                app:srcCompat="@drawable/ic_baseline_person_24"
-                app:tint="@color/accent" />
+                app:srcCompat="@drawable/ic_baseline_person_24" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_summary_name"
+                style="@style/TextAppearance.Notes.SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -50,13 +53,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_name"
+                style="@style/TextAppearance.Notes.TitleText2.Profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/lightBlack"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/tv_summary_name"
@@ -85,16 +86,18 @@
 
             <ImageView
                 android:id="@+id/imageView5"
+                style="@style/Widget.Note.ImageView.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:contentDescription="@string/user_school_field"
                 app:layout_constraintStart_toStartOf="@+id/imageView4"
                 app:layout_constraintTop_toBottomOf="@+id/divider3"
-                app:srcCompat="@drawable/ic_baseline_school_24"
-                app:tint="@color/accent" />
+                app:srcCompat="@drawable/ic_baseline_school_24" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_summary_school"
+                style="@style/TextAppearance.Notes.SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/school"
@@ -105,13 +108,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_school"
+                style="@style/TextAppearance.Notes.TitleText2.Profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="2"
-                android:textColor="@color/lightBlack"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                 app:layout_constraintEnd_toEndOf="@+id/group_edit_school"
                 app:layout_constraintStart_toStartOf="@+id/tv_summary_school"
@@ -140,16 +141,17 @@
 
             <ImageView
                 android:id="@+id/imageView7"
+                style="@style/Widget.Note.ImageView.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 app:layout_constraintStart_toStartOf="@+id/imageView5"
                 app:layout_constraintTop_toBottomOf="@+id/divider4"
-                app:srcCompat="@drawable/ic_add_note"
-                app:tint="@color/accent" />
+                app:srcCompat="@drawable/ic_add_note" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_summary_department"
+                style="@style/TextAppearance.Notes.SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/department"
@@ -160,11 +162,11 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_department"
+                style="@style/TextAppearance.Notes.TitleText2.Profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/lightBlack"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView7"
@@ -197,16 +199,18 @@
 
             <ImageView
                 android:id="@+id/imageView8"
+                style="@style/Widget.Note.ImageView.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:contentDescription="@string/user_level_field"
                 app:layout_constraintStart_toStartOf="@+id/imageView7"
                 app:layout_constraintTop_toBottomOf="@+id/divider5"
-                app:srcCompat="@drawable/ic_baseline_bookmark_24"
-                app:tint="@color/accent" />
+                app:srcCompat="@drawable/ic_baseline_bookmark_24" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_summary_level"
+                style="@style/TextAppearance.Notes.SubtitleText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/level"
@@ -217,11 +221,9 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_level"
+                style="@style/TextAppearance.Notes.TitleText2.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/lightBlack"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                 app:layout_constraintStart_toStartOf="@+id/tv_summary_level"
                 app:layout_constraintTop_toBottomOf="@+id/tv_summary_level"
@@ -246,15 +248,16 @@
 
             <ImageView
                 android:id="@+id/iv_change_profile_picture"
+                style="@style/Widget.Note.ImageView.Profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:alpha="1"
                 android:contentDescription="@string/change_profile_image_button"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_image"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
                 app:layout_constraintTop_toBottomOf="@+id/profile_image"
-                app:srcCompat="@drawable/ic_baseline_photo_camera_24"
-                app:tint="@color/accent" />
+                app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline7"
@@ -269,6 +272,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.65" />
+
+            <ImageButton
+                android:id="@+id/btn_settings"
+                style="@style/Widget.Note.ImageView.Profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:alpha="1"
+                android:contentDescription="@string/settings_button"
+                android:tint="@color/accent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_settings" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

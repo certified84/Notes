@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.NotesFragment">
 
     <TextView
         android:id="@+id/textView"
-        style="@style/boldText"
+        style="@style/TextAppearance.Notes.TitleText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -30,14 +31,13 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_bookmark_popup_menu"
+        style="@style/Widget.Note.ImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/options"
-        android:src="@drawable/ic_more_vert"
-        android:tint="@color/black"
+        app:srcCompat="@drawable/ic_more_vert"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView"
-        app:srcCompat="@drawable/ic_more_vert" />
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginBottom="16dp"
-    android:background="@color/midWhite"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,12 +14,11 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_show_all_notes"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Notes.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:text="@string/show_all"
-            android:textColor="@color/accent"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +39,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView"
-            style="@style/boldText"
+            style="@style/TextAppearance.Notes.TitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -51,7 +50,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView3"
-            style="@style/boldText"
+            style="@style/TextAppearance.Notes.TitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -61,11 +60,10 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_show_all_courses"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.Notes.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/show_all"
-            android:textColor="@color/accent"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toEndOf="@+id/btn_show_all_notes"
@@ -87,7 +85,7 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/textView5"
-            style="@style/boldText"
+            style="@style/TextAppearance.Notes.TitleText2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -97,10 +95,10 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/iv_todo_popup_menu"
+            style="@style/Widget.Note.ImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/textView5"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/textView5"
@@ -111,6 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:cardBackgroundColor="?attr/cardBackgroundColor"
             app:cardCornerRadius="16dp"
             app:cardElevation="0dp"
             app:contentPadding="8dp"

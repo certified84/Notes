@@ -23,6 +23,7 @@ public class SplashFragment extends Fragment {
 
     private Handler mHandler;
     private NavController mNavController;
+    private SharedPreferences mPreferences;
 
     public SplashFragment() {
         // Required empty public constructor
@@ -40,13 +41,18 @@ public class SplashFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mNavController = Navigation.findNavController(view);
         mHandler = new Handler();
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         isFirstLogin();
+        isDarkModeEnabled();
+    }
+
+    private void isDarkModeEnabled() {
+        boolean isDarkModeEnabled = mPreferences.getBoolean(PreferenceKeys.DARK_MODE, false);
     }
 
     public void isFirstLogin() {
-        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        boolean isFirstLogin = preferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true);
+        boolean isFirstLogin = mPreferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true);
 
         if (isFirstLogin) {
             mHandler.postDelayed(() -> {

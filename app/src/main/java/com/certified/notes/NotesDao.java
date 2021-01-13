@@ -123,4 +123,10 @@ public interface NotesDao {
 
     @Query("SELECT course_credit_point FROM course_table")
     LiveData<List<Integer>> getCourseCreditPoints();
+
+    @Query("SELECT * FROM note_table WHERE course_code != :noCourse")
+    LiveData<List<Note>> getDeletableNotes(String noCourse);
+
+    @Query("SELECT * FROM bookmark_table WHERE course_code != :noCourse")
+    LiveData<List<BookMark>> getDeletableBookmarks(String noCourse);
 }

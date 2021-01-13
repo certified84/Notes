@@ -124,10 +124,9 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             ArrayList<String> courseList = new ArrayList<>();
             ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
 
+            courseList.add(getString(R.string.select_a_course));
+            courseList.add(getString(R.string.no_course));
             mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
-                courseList.add(getString(R.string.select_a_course));
-                courseList.add(getString(R.string.no_course));
-
                 for (Course course : courses) {
                     courseList.add(course.getCourseTitle());
                 }
@@ -140,7 +139,13 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             tvNoteDialogTitle.setText(getString(R.string.edit_note));
             etNoteTitle.setText(note.getTitle());
             etNoteContent.setText(note.getContent());
-            int coursePosition = adapterCourses.getPosition(mViewModel.getCourseTitle(note.getCourseCode()));
+            int coursePosition;
+            if (!note.getCourseCode().equals("NIL")) {
+                coursePosition = adapterCourses.getPosition(mViewModel.getCourseTitle(note.getCourseCode()));
+            } else {
+                coursePosition = 1;
+            }
+
             spinnerCourses.setSelection(coursePosition);
 
             Log.d(TAG, "init: Course position: " + coursePosition + "\nSpinner selection: ");

@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.ResultFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_result"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toTopOf="@+id/textView8"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +23,7 @@
 
     <Button
         android:id="@+id/btn_check_gpa"
+        style="@style/Widget.Notes.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -33,12 +34,12 @@
 
     <TextView
         android:id="@+id/textView2"
+        style="@style/TextAppearance.Notes.TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/courses"
-        android:textColor="@color/accent"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textView4"
         app:layout_constraintHorizontal_bias="0.5"
@@ -48,10 +49,10 @@
 
     <TextView
         android:id="@+id/textView4"
+        style="@style/TextAppearance.Notes.TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/units"
-        android:textColor="@color/accent"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/textView7"
         app:layout_constraintHorizontal_bias="0.5"
@@ -60,11 +61,11 @@
 
     <TextView
         android:id="@+id/textView7"
+        style="@style/TextAppearance.Notes.TitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="@string/marks"
-        android:textColor="@color/accent"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -73,6 +74,7 @@
 
     <TextView
         android:id="@+id/textView8"
+        style="@style/TextAppearance.Notes.SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -82,6 +84,7 @@
 
     <TextView
         android:id="@+id/tv_total_load_unit"
+        style="@style/TextAppearance.Notes.SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -91,6 +94,7 @@
 
     <TextView
         android:id="@+id/textView10"
+        style="@style/TextAppearance.Notes.SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/grade_point_average_gpa"
@@ -99,6 +103,7 @@
 
     <TextView
         android:id="@+id/tv_grade_point_average"
+        style="@style/TextAppearance.Notes.SubtitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="@+id/tv_total_load_unit"

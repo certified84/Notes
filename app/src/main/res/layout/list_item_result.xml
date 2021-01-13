@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="0dp"
     app:cardElevation="0dp"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
     app:cardUseCompatPadding="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,6 +15,7 @@
 
         <TextView
             android:id="@+id/tv_course_code"
+            style="@style/TextAppearance.Notes.SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -29,6 +31,7 @@
 
         <TextView
             android:id="@+id/tv_course_unit"
+            style="@style/TextAppearance.Notes.SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Course Unit"
@@ -40,6 +43,7 @@
 
         <TextView
             android:id="@+id/tv_course_mark"
+            style="@style/TextAppearance.Notes.SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Course Mark"
@@ -60,10 +64,11 @@
 
         <TextView
             android:id="@+id/tv_course_grade"
+            style="@style/TextAppearance.Notes.SubtitleText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="F"
+            tools:text="F"
             app:layout_constraintBottom_toBottomOf="@+id/tv_course_mark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_course_mark" />

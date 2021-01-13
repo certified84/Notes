@@ -2,17 +2,107 @@
     <!-- Base application theme. -->
     <style name="Theme.Notes" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/accent</item>
-        <item name="colorPrimaryVariant">#D93D15</item>
-        <item name="colorOnPrimary">@color/white</item>
-<!--        <item name="colorAccent"></item>-->
-        <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+<!--        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>-->
         <!-- Customize your theme here. -->
+
+        <item name="cardBackgroundColor">@color/cardBackgroundColor</item>
+        <item name="backgroundColor">@color/backgroundColor</item>
+        <item name="iconTint">@color/iconTint</item>
+    </style>
+
+    <style name="Theme.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="backgroundColor">@color/bottomNavViewBackgroundColor</item>
+        <item name="iconTint">@color/bottomNavViewIconTint</item>
+    </style>
+
+    <style name="Theme.Notes.SplashLogo" parent="">
+        <item name="tint">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.Notes.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.Notes.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="Widget.Notes.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorAccent</item>
+        <item name="tint">?attr/cardBackgroundColor</item>
+    </style>
+
+    <style name="Widget.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="backgroundColor">?attr/cardBackgroundColor</item>
+        <item name="itemIconTint">?attr/colorAccent</item>
+    </style>
+
+    <style name="TextAppearance.Notes.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:textColor">@color/textColorSubtitle</item>
+    </style>
+
+    <style name="Widgets.Notes.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextAppearance">@style/TextAppearance.Notes.TextInputLayout.HintText</item>
+        <item name="hintTextColor">@color/colorAccent</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxBackgroundMode">outline</item>
+        <!--        <item name="android:textColorHint">?attr/colorPrimaryDark</item>-->
+    </style>
+
+    <style name="Widget.Notes.TextInputEditText" parent="@style/Widget.AppCompat.EditText">
+        <item name="android:textColor">@color/textColorSubtitle</item>
+        <!--        <item name="android:textColorHint">?attr/colorPrimaryDark</item>-->
+    </style>
+
+    <style name="TextAppearance.Notes.TitleText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textColorTitle</item>
+    </style>
+
+    <style name="TextAppearance.Notes.TitleText1" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/textColorTitle</item>
+    </style>
+
+    <style name="TextAppearance.Notes.TitleText2" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Notes.TitleText2.Profile" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/lightBlack</item>
+    </style>
+
+    <style name="TextAppearance.Notes.TitleText2.Tablet" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextAppearance.Notes.SubtitleText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/textColorSubtitle</item>
+    </style>
+
+    <style name="Widget.Note.ImageView" parent="">
+        <item name="tint">@color/black</item>
+    </style>
+
+    <style name="Widget.Note.ImageView.Profile" parent="">
+        <item name="tint">?attr/colorAccent</item>
+    </style>
+
+    <style name="Widget.Note.ImageView.Todo" parent="">
+        <item name="tint">?attr/colorAccent</item>
     </style>
 
 <!--    <style name="Theme.Notes.NoActionBar">-->

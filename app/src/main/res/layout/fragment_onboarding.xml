@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.OnboardingFragment" >
 
     <androidx.viewpager2.widget.ViewPager2
@@ -19,6 +20,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_get_started"
+        style="@style/Widget.Notes.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -40,7 +42,7 @@
         app:piv_dynamicCount="true"
         app:piv_interactiveAnimation="true"
         app:piv_padding="6dp"
-        app:piv_selectedColor="@color/accent"
-        app:piv_unselectedColor="@android:color/darker_gray"
+        app:piv_selectedColor="?attr/colorAccent"
+        app:piv_unselectedColor="@color/colorPrimaryDarkTheme"
         app:piv_viewPager="@id/view_pager" />
 </androidx.constraintlayout.widget.ConstraintLayout>

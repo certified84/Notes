@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/cardBackgroundColor"
     app:cardElevation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +22,7 @@
 
         <TextView
             android:id="@+id/tv_todo"
+            style="@style/TextAppearance.Notes.SubtitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -37,6 +39,7 @@
 
         <ImageView
             android:id="@+id/imageView3"
+            style="@style/Widget.Note.ImageView.Todo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

@@ -105,7 +105,8 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
 
             mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
-                courseList.add("Select a course");
+                courseList.add(getString(R.string.select_a_course));
+                courseList.add(getString(R.string.no_course));
                 for (Course course : courses) {
                     courseList.add(course.getCourseTitle());
                 }
@@ -118,6 +119,14 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             tvNoteDialogTitle.setText(getString(R.string.edit_note));
             etNoteTitle.setText(bookMark.getNoteTitle());
             etNoteContent.setText(bookMark.getNoteContent());
+            int coursePosition;
+            if (!bookMark.getCourseCode().equals("NIL")) {
+                coursePosition = adapterCourses.getPosition(mViewModel.getCourseTitle(bookMark.getCourseCode()));
+            } else {
+                coursePosition = 1;
+            }
+
+            spinnerCourses.setSelection(coursePosition);
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setOnClickListener(v -> {

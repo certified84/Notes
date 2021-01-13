@@ -31,6 +31,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private static final String TAG = "MainActivity";
 
-    private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo, fabBottomAppBar;
+    private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo;
     private TextView tvFabTodoTitle, tvFabNoteTitle, tvFabCourseTitle;
     private View viewBlur;
     private NavController mNavController;
     private BottomNavigationView mSmoothBottomBar;
-//    private BottomAppBar mBottomAppBar;
 
     private NotesViewModel mViewModel;
 
@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddCourse = findViewById(R.id.fab_add_course);
         fabAddNote = findViewById(R.id.fab_add_note);
         fabAddTodo = findViewById(R.id.fab_add_todo);
-        fabBottomAppBar = findViewById(R.id.floatingActionButton);
 
         tvFabTodoTitle = findViewById(R.id.tv_fab_todo_title);
         tvFabNoteTitle = findViewById(R.id.tv_fab_note_title);
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddCourse.setOnClickListener(this);
         fabAddNote.setOnClickListener(this);
         fabAddTodo.setOnClickListener(this);
-        fabBottomAppBar.setOnClickListener(this);
 
         viewBlur.setOnClickListener(this);
     }
@@ -117,11 +115,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
           launchNoteDialog();
         } else if (id == R.id.view) {
             hideViews();
-        } else if (id == R.id.floatingActionButton) {
-            if (viewBlur.getVisibility() == View.VISIBLE) {
-                hideViews();
-            } else
-                showViews();
         }
     }
 
@@ -151,10 +144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
         builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
-        builder.setTitle(R.string.add_course);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
+        MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
         EditText etCourseTitle = view.findViewById(R.id.et_course_title);
         NumberPicker picker = view.findViewById(R.id.numberPicker_course_unit);
@@ -164,6 +157,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         picker.setMinValue(1);
         picker.setOrientation(LinearLayout.HORIZONTAL);
         picker.setMaxValue(4);
+
+        tvCourseDialogTitle.setText(getString(R.string.edit_course));
 
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
@@ -215,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = inflater.inflate(R.layout.dialog_new_note, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setBackground(getResources().getDrawable(R.drawable.alert_dialog_bg));
+        builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
@@ -230,7 +225,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courseList);
 
         mViewModel.getAllCourses().observe(this, courses -> {
-            courseList.add("Select a course");
+            courseList.add(getString(R.string.select_a_course));
+            courseList.add(getString(R.string.no_course));
             for (Course course : courses) {
                 courseList.add(course.getCourseTitle());
             }
@@ -244,7 +240,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseTitle = spinnerCourses.getSelectedItem().toString();
-            String courseCode = mViewModel.getCourseCode(courseTitle);
+            String courseCode;
+            if (!courseTitle.equals(getString(R.string.no_course))) {
+                courseCode = mViewModel.getCourseCode(courseTitle);
+            } else
+                courseCode = "NIL";
             String noteTitle = etNoteTitle.getText().toString().trim();
             String noteContent = etNoteContent.getText().toString().trim();
             if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {

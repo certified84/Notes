@@ -175,4 +175,12 @@ public class NotesViewModel extends AndroidViewModel {
     public LiveData<List<Note>> getNotesAt(String courseCode) {
         return mRepository.getNotesAt(courseCode);
     }
+
+    public LiveData<List<Note>> getDeletableNotes(String noCourse) {
+        return mRepository.getDeletableNotes(noCourse);
+    }
+
+    public LiveData<List<BookMark>> getDeletableBookmarks(String noCourse) {
+        return mRepository.getDeletableBookmarks(noCourse);
+    }
 }

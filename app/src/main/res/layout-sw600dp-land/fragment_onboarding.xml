@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     tools:context=".ui.OnboardingFragment">
 
     <androidx.viewpager2.widget.ViewPager2
@@ -19,8 +20,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_get_started"
+        style="@style/Widget.Notes.Button"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/get_started"
         app:layout_constraintBottom_toTopOf="@+id/indicator"

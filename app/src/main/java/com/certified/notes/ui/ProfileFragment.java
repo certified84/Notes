@@ -113,7 +113,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
 
-        mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+        mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         mBuilder.setTitle(getString(R.string.enter_name));
         mAlertDialog = mBuilder.create();
         mAlertDialog.setView(view);
@@ -155,7 +155,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
 
-        mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+        mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         mBuilder.setTitle(getString(R.string.enter_school));
         mAlertDialog = mBuilder.create();
         mAlertDialog.setView(view);
@@ -196,7 +196,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
 
-        mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+        mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         mBuilder.setTitle(getString(R.string.enter_department));
         mAlertDialog = mBuilder.create();
         mAlertDialog.setView(view);
@@ -236,7 +236,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_level, null);
 
-        mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+        mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         mBuilder.setTitle(getString(R.string.select_level));
         mAlertDialog = mBuilder.create();
         mAlertDialog.setView(view);

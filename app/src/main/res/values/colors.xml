@@ -6,9 +6,35 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="midWhite">#F8F8F8</color>
     <color name="accent">#FF3400</color>
     <color name="blur">#5E5E5E</color>
     <color name="lightBlack">#212121</color>
+
+<!--            Main Colors          -->
+    <color name="midWhite">#F8F8F8</color>
+    <color name="white">#FFFFFFFF</color>
+
+<!--    Light theme colors    -->
+    <color name="colorPrimary">#FF3400</color>
+    <color name="colorPrimaryDark">#E32E00</color>
+    <color name="colorAccent">@color/colorPrimary</color>
+    <color name="textColorTitle">@color/colorAccent</color>
+    <color name="textColorSubtitle">#777777</color>
+    <color name="backgroundColor">@color/midWhite</color>
+    <color name="cardBackgroundColor">@color/white</color>
+    <color name="iconTint">@color/colorAccent</color>
+    <color name="bottomNavViewBackgroundColor">@color/white</color>
+    <color name="bottomNavViewIconTint">@color/colorAccent</color>
+
+<!--    Dark theme colors     -->
+    <color name="colorPrimaryDarkTheme">#979797</color>
+    <color name="colorPrimaryDarkDarkTheme">#676767</color>
+    <color name="colorAccentDarkTheme">@color/white</color>
+    <color name="textColorTitleDarkTheme">@color/white</color>
+    <color name="textColorSubtitleDarkTheme">#D2D2D2</color>
+    <color name="backgroundColorDarkTheme">@color/colorPrimaryDarkDarkTheme</color>
+    <color name="cardBackgroundColorDarkTheme">@color/colorPrimaryDarkTheme</color>
+    <color name="iconTintDarkTheme">@color/colorPrimaryDarkDarkTheme</color>
+    <color name="bottomNavViewBackgroundColorDarkTheme">@color/colorPrimaryDarkTheme</color>
+    <color name="bottomNavViewIconTintDarkTheme">@color/white</color>
 </resources>

@@ -11,7 +11,6 @@ import com.certified.notes.model.Todo;
 import com.certified.notes.model.User;
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -196,6 +195,24 @@ public class Repository {
     public LiveData<List<Note>> getNotesAt(String courseCode){
         try {
             return executor.submit(() -> mNotesDao.getNotesAt(courseCode)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LiveData<List<Note>> getDeletableNotes(String noCourse) {
+        try {
+            return executor.submit(() -> mNotesDao.getDeletableNotes(noCourse)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LiveData<List<BookMark>> getDeletableBookmarks(String noCourse) {
+        try {
+            return executor.submit(() -> mNotesDao.getDeletableBookmarks(noCourse)).get();
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return null;
