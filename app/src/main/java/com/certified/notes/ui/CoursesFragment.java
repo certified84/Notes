@@ -127,7 +127,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         View view = inflater.inflate(R.layout.dialog_new_course, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg));
+        builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
@@ -193,7 +193,6 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
 //        builder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg));
-        builder.setTitle(R.string.related_notes);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 

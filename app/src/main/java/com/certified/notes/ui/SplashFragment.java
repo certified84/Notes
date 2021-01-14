@@ -44,11 +44,6 @@ public class SplashFragment extends Fragment {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         isFirstLogin();
-        isDarkModeEnabled();
-    }
-
-    private void isDarkModeEnabled() {
-        boolean isDarkModeEnabled = mPreferences.getBoolean(PreferenceKeys.DARK_MODE, false);
     }
 
     public void isFirstLogin() {

@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         picker.setOrientation(LinearLayout.HORIZONTAL);
         picker.setMaxValue(4);
 
-        tvCourseDialogTitle.setText(getString(R.string.edit_course));
+        tvCourseDialogTitle.setText(getString(R.string.add_course));
 
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {

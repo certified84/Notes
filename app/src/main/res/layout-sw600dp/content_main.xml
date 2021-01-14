@@ -68,7 +68,7 @@
         android:id="@+id/view"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.3"
+        android:alpha=".5"
         android:background="@color/blur"
         android:elevation="16dp"
         android:visibility="gone"
@@ -143,6 +143,7 @@
         android:focusable="true"
         app:backgroundTintMode="add"
         app:elevation="16dp"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="@+id/fragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_tablet_variation" />

@@ -12,6 +12,7 @@
         <item name="cardBackgroundColor">@color/cardBackgroundColorDarkTheme</item>
         <item name="backgroundColor">@color/backgroundColorDarkTheme</item>
         <item name="iconTint">@color/iconTintDarkTheme</item>
+        <item name="tabIconTint">@color/customAlertDialogBackgroundColorDarkTheme</item>
     </style>
 
     <style name="Theme.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
@@ -29,16 +30,17 @@
     </style>
 
     <style name="Widget.Notes.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/textColorSubtitleDarkTheme</item>
     </style>
 
     <style name="Widget.Notes.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/colorPrimaryDarkDarkTheme</item>
         <item name="tint">@color/white</item>
+<!--        <item name="fabSize">normal</item>-->
     </style>
 
     <style name="Widget.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
-<!--        <item name="background">?attr/cardBackgroundColor</item>-->
+        <!--        <item name="background">?attr/cardBackgroundColor</item>-->
         <item name="itemIconTint">@color/white</item>
     </style>
 
@@ -68,7 +70,7 @@
 
     <style name="TextAppearance.Notes.TitleText1" parent="Widget.MaterialComponents.TextView">
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorPrimaryDark</item>
+        <item name="android:textColor">?attr/colorAccent</item>
     </style>
 
     <style name="TextAppearance.Notes.TitleText2" parent="Widget.MaterialComponents.TextView">
@@ -90,7 +92,7 @@
     </style>
 
     <style name="TextAppearance.Notes.SubtitleText" parent="Widget.MaterialComponents.TextView">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/textColorSubtitleDarkTheme</item>
     </style>
 
     <style name="Widget.Note.ImageView" parent="">
@@ -98,12 +100,12 @@
     </style>
 
     <style name="Widget.Note.ImageView.Profile" parent="">
-        <item name="tint">@color/white</item>
+        <item name="tint">@color/iconTintDarkTheme</item>
         <item name="alpha">0.7</item>
     </style>
 
     <style name="Widget.Note.ImageView.Todo" parent="">
-        <item name="tint">?attr/colorPrimaryDark</item>
+        <item name="tint">@color/iconTintDarkTheme</item>
     </style>
 
     <!--    <style name="Theme.Notes.NoActionBar">-->

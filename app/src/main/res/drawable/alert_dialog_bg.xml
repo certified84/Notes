@@ -4,7 +4,7 @@
         <shape>
             <stroke android:color="?attr/colorPrimary"
                 android:width="2dp"/>
-            <solid android:color="?attr/colorPrimaryDark"/>
+            <solid android:color="?attr/tabIconTint"/>
             <corners android:radius="16dp"/>
         </shape>
     </item>

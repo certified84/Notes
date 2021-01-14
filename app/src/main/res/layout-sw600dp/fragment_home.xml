@@ -15,7 +15,6 @@
         android:layout_marginEnd="16dp"
         android:text="@string/show_all"
         android:textSize="24sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView" />
@@ -104,7 +103,9 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         app:cardBackgroundColor="?attr/cardBackgroundColor"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"

@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="accent">#FF3400</color>
-    <color name="blur">#5E5E5E</color>
+    <color name="blur">#0B131A</color>
     <color name="lightBlack">#212121</color>
 
 <!--            Main Colors          -->
@@ -25,16 +25,18 @@
     <color name="iconTint">@color/colorAccent</color>
     <color name="bottomNavViewBackgroundColor">@color/white</color>
     <color name="bottomNavViewIconTint">@color/colorAccent</color>
+    <color name="customAlertDialogBackgroundColor">@color/white</color>
 
 <!--    Dark theme colors     -->
-    <color name="colorPrimaryDarkTheme">#979797</color>
-    <color name="colorPrimaryDarkDarkTheme">#676767</color>
+    <color name="colorPrimaryDarkTheme">#232D37</color>
+    <color name="colorPrimaryDarkDarkTheme">#101D24</color>
     <color name="colorAccentDarkTheme">@color/white</color>
     <color name="textColorTitleDarkTheme">@color/white</color>
-    <color name="textColorSubtitleDarkTheme">#D2D2D2</color>
+    <color name="textColorSubtitleDarkTheme">#B7BBBD</color>
     <color name="backgroundColorDarkTheme">@color/colorPrimaryDarkDarkTheme</color>
     <color name="cardBackgroundColorDarkTheme">@color/colorPrimaryDarkTheme</color>
-    <color name="iconTintDarkTheme">@color/colorPrimaryDarkDarkTheme</color>
+    <color name="iconTintDarkTheme">#676767</color>
     <color name="bottomNavViewBackgroundColorDarkTheme">@color/colorPrimaryDarkTheme</color>
     <color name="bottomNavViewIconTintDarkTheme">@color/white</color>
+    <color name="customAlertDialogBackgroundColorDarkTheme">@color/colorPrimaryDarkDarkTheme</color>
 </resources>
