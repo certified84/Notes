@@ -64,7 +64,7 @@
         app:boxCornerRadiusBottomStart="5dp"
         app:boxCornerRadiusTopEnd="5dp"
         app:boxCornerRadiusTopStart="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/numberPicker_course_unit"
+        app:layout_constraintBottom_toTopOf="@+id/number_picker_course_unit"
         app:layout_constraintEnd_toEndOf="@+id/et_course_code_layout"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/et_course_code_layout">
@@ -83,7 +83,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <NumberPicker
-        android:id="@+id/numberPicker_course_unit"
+        android:id="@+id/number_picker_course_unit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -121,6 +121,6 @@
         android:layout_height="wrap_content"
         android:text="@string/course_unit"
         app:layout_constraintStart_toStartOf="@+id/et_course_title_layout"
-        app:layout_constraintTop_toTopOf="@+id/numberPicker_course_unit" />
+        app:layout_constraintTop_toTopOf="@+id/number_picker_course_unit" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

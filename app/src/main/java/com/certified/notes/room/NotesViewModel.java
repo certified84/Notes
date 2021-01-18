@@ -1,4 +1,4 @@
-package com.certified.notes;
+package com.certified.notes.room;
 
 import android.app.Application;
 
@@ -11,6 +11,7 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 import com.certified.notes.model.User;
+import com.certified.notes.util.Repository;
 
 import java.util.List;
 

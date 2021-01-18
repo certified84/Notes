@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.NotesViewModel;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.NoteRecyclerAdapter;
 import com.certified.notes.model.BookMark;
@@ -110,7 +110,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
-            mBuilder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
             mAlertDialog = mBuilder.create();
             mAlertDialog.setView(view);
 

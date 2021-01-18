@@ -1,6 +1,7 @@
 package com.certified.notes.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
@@ -35,9 +36,9 @@ public class StartActivity extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false);
         if (isDarkModeEnabled) {
-//            set theme to dark mode
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
-//            set theme to default
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
     }
 }

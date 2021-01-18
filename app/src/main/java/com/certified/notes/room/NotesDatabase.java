@@ -1,4 +1,4 @@
-package com.certified.notes;
+package com.certified.notes.room;
 
 import android.content.Context;
 
@@ -11,7 +11,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
-import com.certified.notes.model.Result;
 import com.certified.notes.model.Todo;
 import com.certified.notes.model.User;
 

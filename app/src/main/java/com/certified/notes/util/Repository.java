@@ -1,9 +1,11 @@
-package com.certified.notes;
+package com.certified.notes.util;
 
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.certified.notes.room.NotesDao;
+import com.certified.notes.room.NotesDatabase;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;

@@ -1,10 +1,9 @@
 package com.certified.notes.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -16,33 +15,29 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
-import com.certified.notes.NotesViewModel;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
-import com.google.android.material.bottomappbar.BottomAppBar;
+import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 
 import java.util.ArrayList;
 
-import me.ibrahimsn.lib.OnItemSelectedListener;
-import me.ibrahimsn.lib.SmoothBottomBar;
-
 import static android.text.TextUtils.isEmpty;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private static final String TAG = "MainActivity";
 
     private FloatingActionButton fab, fabAddNote, fabAddCourse, fabAddTodo;
     private TextView tvFabTodoTitle, tvFabNoteTitle, tvFabCourseTitle;
@@ -55,13 +50,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main);
+        setContentView(R.layout.activity_main);
 
         mViewModel = new NotesViewModel(getApplication());
-
         mNavController = Navigation.findNavController(this, R.id.fragment);
-        mSmoothBottomBar = findViewById(R.id.smoothBottomBar);
 
+        mSmoothBottomBar = findViewById(R.id.smoothBottomBar);
 //        mBottomAppBar = findViewById(R.id.bottomAppBar);
 
         NavigationUI.setupWithNavController(mSmoothBottomBar, mNavController);
@@ -84,6 +78,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddTodo.setOnClickListener(this);
 
         viewBlur.setOnClickListener(this);
+
+        isDarkModeEnabled();
+    }
+
+    private void isDarkModeEnabled() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false);
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     @Override
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
         EditText etCourseTitle = view.findViewById(R.id.et_course_title);
-        NumberPicker picker = view.findViewById(R.id.numberPicker_course_unit);
+        NumberPicker picker = view.findViewById(R.id.number_picker_course_unit);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
 

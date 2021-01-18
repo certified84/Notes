@@ -1,10 +1,12 @@
 package com.certified.notes.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -13,14 +15,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.preference.PreferenceManager;
 
-import com.certified.notes.NotesViewModel;
+import com.bumptech.glide.Glide;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.User;
+import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -31,6 +40,7 @@ import static android.text.TextUtils.isEmpty;
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private NotesViewModel mViewModel;
+    private NavController mNavController;
 
     private Group groupName, groupSchool, groupDepartment, groupLevel;
     private TextView tvName, tvSchool, tvDepartment, tvLevel;
@@ -38,6 +48,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ImageView btnChangeProfilePicture;
     private MaterialAlertDialogBuilder mBuilder;
     private AlertDialog mAlertDialog;
+    private ImageButton btnSettings;
+
+    private SwitchMaterial switchDarkMode;
 
     String userName, userSchool, userDepartment, userLevel;
 
@@ -51,8 +64,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mViewModel = new NotesViewModel(getActivity().getApplication());
-
         groupName = view.findViewById(R.id.group_edit_name);
         groupSchool = view.findViewById(R.id.group_edit_school);
         groupDepartment = view.findViewById(R.id.group_edit_department);
@@ -65,6 +76,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         profileImage = view.findViewById(R.id.profile_image);
         btnChangeProfilePicture = view.findViewById(R.id.iv_change_profile_picture);
+        btnSettings = view.findViewById(R.id.btn_settings);
+
+        switchDarkMode = view.findViewById(R.id.switch_dark_mode);
 
         return view;
     }
@@ -73,10 +87,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mViewModel = new NotesViewModel(getActivity().getApplication());
+        mNavController = Navigation.findNavController(view);
+
         groupName.setOnClickListener(this);
         groupSchool.setOnClickListener(this);
         groupDepartment.setOnClickListener(this);
         groupLevel.setOnClickListener(this);
+
+        btnSettings.setOnClickListener(this);
 
         mViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
@@ -89,6 +108,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 tvSchool.setText(userSchool);
                 tvDepartment.setText(userDepartment);
                 tvLevel.setText(userLevel);
+            }
+        });
+
+        Glide.with(getContext())
+                .load(R.drawable.ic_logo)
+                .into(profileImage);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        boolean nightMode = preferences.getBoolean(PreferenceKeys.DARK_MODE, false);
+        switchDarkMode.setChecked(nightMode);
+        switchDarkMode.setOnClickListener(v -> {
+            if (switchDarkMode.isChecked()) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(PreferenceKeys.DARK_MODE, true);
+                editor.apply();
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean(PreferenceKeys.DARK_MODE, false);
+                editor.apply();
+
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 
@@ -106,6 +148,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             launchDepartmentDialog();
         } else if (id == R.id.group_edit_level) {
             launchLevelDialog();
+        } else if (id == R.id.btn_settings) {
+            mNavController.navigate(R.id.settingsFragment);
         }
     }
 

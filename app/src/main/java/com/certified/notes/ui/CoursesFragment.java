@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.certified.notes.NotesViewModel;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.CourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
@@ -134,7 +134,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
         EditText etCourseTitle = view.findViewById(R.id.et_course_title);
-        NumberPicker numberPickerCourseUnit = view.findViewById(R.id.numberPicker_course_unit);
+        NumberPicker numberPickerCourseUnit = view.findViewById(R.id.number_picker_course_unit);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
 

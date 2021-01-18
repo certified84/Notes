@@ -1,4 +1,4 @@
-package com.certified.notes;
+package com.certified.notes.room;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

@@ -33,4 +33,8 @@
         android:name="com.certified.notes.ui.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.certified.notes.ui.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>
