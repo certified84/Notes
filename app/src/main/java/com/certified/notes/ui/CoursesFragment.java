@@ -21,13 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.CourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
+import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;

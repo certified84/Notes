@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,7 +63,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
             tvDescription = itemView.findViewById(R.id.tv_description);
         }
 
-        public void setItems(SliderItem sliderItem) {
+        public void setItems(@NonNull SliderItem sliderItem) {
             animationView.setRenderMode(RenderMode.SOFTWARE);
             animationView.setAnimation(sliderItem.getAnimation());
             tvTitle.setText(sliderItem.getTitle());

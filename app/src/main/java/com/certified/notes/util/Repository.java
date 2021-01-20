@@ -4,13 +4,13 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
-import com.certified.notes.room.NotesDao;
-import com.certified.notes.room.NotesDatabase;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 import com.certified.notes.model.User;
+import com.certified.notes.room.NotesDao;
+import com.certified.notes.room.NotesDatabase;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -185,7 +185,7 @@ public class Repository {
         }
     }
 
-    public LiveData<List<BookMark>> getBookMarkAt(int noteId){
+    public LiveData<List<BookMark>> getBookMarkAt(int noteId) {
         try {
             return executor.submit(() -> mNotesDao.getBookMarkAt(noteId)).get();
         } catch (ExecutionException | InterruptedException e) {
@@ -194,7 +194,7 @@ public class Repository {
         }
     }
 
-    public LiveData<List<Note>> getNotesAt(String courseCode){
+    public LiveData<List<Note>> getNotesAt(String courseCode) {
         try {
             return executor.submit(() -> mNotesDao.getNotesAt(courseCode)).get();
         } catch (ExecutionException | InterruptedException e) {

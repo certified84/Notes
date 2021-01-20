@@ -58,7 +58,7 @@
     </style>
 
     <style name="Widget.Notes.TextInputEditText" parent="@style/Widget.AppCompat.EditText">
-        <item name="android:textColor">@color/textColorSubtitle</item>
+        <item name="android:textColor">@color/black</item>
         <!--        <item name="android:textColorHint">?attr/colorPrimaryDark</item>-->
     </style>
 

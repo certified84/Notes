@@ -30,6 +30,12 @@ public class SplashFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -41,7 +47,6 @@ public class SplashFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mNavController = Navigation.findNavController(view);
         mHandler = new Handler();
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
 
         isFirstLogin();
     }
@@ -56,7 +61,7 @@ public class SplashFragment extends Fragment {
             }, 3000);
         } else {
             mHandler.postDelayed(() -> {
-                startActivity(new Intent(getContext(), MainActivity.class));
+                startActivity(new Intent(getContext(), MainActivityKt.class));
                 getActivity().finish();
             }, 3000);
         }

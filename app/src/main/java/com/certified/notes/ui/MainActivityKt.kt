@@ -4,15 +4,23 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils.isEmpty
 import android.view.View
-import android.widget.*
+import android.widget.EditText
+import android.widget.NumberPicker
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.preference.PreferenceManager
 import com.certified.notes.R
+import com.certified.notes.model.BookMark
+import com.certified.notes.model.BookMarkKt
 import com.certified.notes.model.Course
 import com.certified.notes.room.NotesViewModel
+import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -36,13 +44,16 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
 
-    private val builder = MaterialAlertDialogBuilder(this)
+    private lateinit var builder: MaterialAlertDialogBuilder
     private lateinit var alertDialog: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        isDarkModeEnabled()
+
+        builder = MaterialAlertDialogBuilder(this)
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
 
@@ -69,20 +80,30 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         viewBlur.setOnClickListener(this)
     }
 
-    override fun onClick(v: View?) {
-        val id: Int = v!!.id
+    private fun isDarkModeEnabled() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false)
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+    }
 
-        when {
-            id == R.id.fab -> {
+    override fun onClick(v: View?) {
+        when (v!!.id) {
+            R.id.fab -> {
                 if (viewBlur.visibility == View.VISIBLE)
                     hideViews()
                 else
                     showViews()
             }
-
-            id == R.id.fab_add_course -> {
+            R.id.fab_add_course -> {
                 hideViews()
                 launchCourseDialog()
+            }
+            R.id.view -> {
+                hideViews()
             }
         }
     }
@@ -129,7 +150,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
 
         tvCourseDialogTitle.text = getString(R.string.add_course)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
-        btnSave.setOnClickListener(View.OnClickListener {
+        btnSave.setOnClickListener {
             val courseCode: String = etCourseCode.text.toString()
             val courseTitle: String = etCourseTitle.text.toString()
             val courseUnit: Int = picker.value
@@ -141,6 +162,6 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
                 alertDialog.dismiss()
             } else
                 Toast.makeText(this, "All fields are required", Toast.LENGTH_LONG).show()
-        })
+        }
     }
 }

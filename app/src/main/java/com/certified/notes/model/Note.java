@@ -50,6 +50,7 @@ public class Note {
         return courseCode;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Note{" +

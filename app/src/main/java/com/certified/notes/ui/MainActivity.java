@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        isDarkModeEnabled();
+
         mViewModel = new NotesViewModel(getApplication());
         mNavController = Navigation.findNavController(this, R.id.fragment);
 
@@ -78,11 +80,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabAddTodo.setOnClickListener(this);
 
         viewBlur.setOnClickListener(this);
-
-        isDarkModeEnabled();
     }
 
-    private void isDarkModeEnabled() {
+    public void isDarkModeEnabled() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false);
         if (isDarkModeEnabled) {
