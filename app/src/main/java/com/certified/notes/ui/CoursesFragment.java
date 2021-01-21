@@ -148,6 +148,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         numberPickerCourseUnit.setValue(course.getCourseUnit());
 
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnSave.setText(R.string.update);
         btnSave.setOnClickListener(v -> {
             String courseCode = etCourseCode.getText().toString().trim();
             String courseTitle = etCourseTitle.getText().toString().trim();

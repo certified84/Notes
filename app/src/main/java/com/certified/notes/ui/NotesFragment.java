@@ -25,12 +25,12 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.NoteRecyclerAdapter;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -151,6 +151,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             Log.d(TAG, "init: Course position: " + coursePosition + "\nSpinner selection: ");
 
             btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+            btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
                 String courseCode = mViewModel.getCourseCode(courseTitle);
@@ -158,22 +159,41 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                 String noteContent = etNoteContent.getText().toString().trim();
                 if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {
                     if (!courseTitle.equals("Select a course")) {
-                        if (!courseCode.equals(note.getCourseCode()) || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
-                            Note note1 = new Note(courseCode, noteTitle, noteContent);
-                            note1.setId(note.getId());
-                            mViewModel.updateNote(note1);
-                            mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                for (BookMark bookMark : bookMarks) {
-                                    int noteId = note1.getId();
-                                    BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                                    bookMark1.setId(bookMark.getId());
-                                    mViewModel.updateBookMark(bookMark1);
-                                    Log.d(TAG, "init: " + bookMark1.toString());
-                                }
-                            });
-                            mAlertDialog.dismiss();
-                        } else
-                            Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
+                        if (!courseTitle.equals("No course")) {
+                            if (!courseCode.equals(note.getCourseCode()) || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
+                                Note note1 = new Note(courseCode, noteTitle, noteContent);
+                                note1.setId(note.getId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark : bookMarks) {
+                                        int noteId = note1.getId();
+                                        BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                        bookMark1.setId(bookMark.getId());
+                                        mViewModel.updateBookMark(bookMark1);
+                                        Log.d(TAG, "init: " + bookMark1.toString());
+                                    }
+                                });
+                                mAlertDialog.dismiss();
+                            } else
+                                Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (!note.getCourseCode().equals("NIL") || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
+                                Note note1 = new Note("NIL", noteTitle, noteContent);
+                                note1.setId(note.getId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark : bookMarks) {
+                                        int noteId = note1.getId();
+                                        BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
+                                        bookMark1.setId(bookMark.getId());
+                                        mViewModel.updateBookMark(bookMark1);
+                                        Log.d(TAG, "init: " + bookMark1.toString());
+                                    }
+                                });
+                                mAlertDialog.dismiss();
+                            } else
+                                Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
+                        }
                     } else
                         Toast.makeText(getContext(), "Select a course", Toast.LENGTH_SHORT).show();
                 } else

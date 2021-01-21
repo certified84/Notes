@@ -119,6 +119,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             etTodo.setText(todo.getTodo());
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String todoContent = etTodo.getText().toString().trim();
                 boolean done = todo.isDone();

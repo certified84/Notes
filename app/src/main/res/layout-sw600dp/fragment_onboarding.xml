@@ -39,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:piv_animationType="worm"
+        app:piv_count="4"
         app:piv_dynamicCount="true"
         app:piv_interactiveAnimation="true"
         app:piv_padding="6dp"

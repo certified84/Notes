@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
@@ -73,7 +74,7 @@ public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAda
             View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_edit_result, null);
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-            builder.setBackground(mContext.getResources().getDrawable(R.drawable.alert_dialog_bg, null));
+            builder.setBackground(mContext.getDrawable(R.drawable.alert_dialog_bg));
             builder.setTitle("Enter mark for " + course.getCourseCode());
 
             AlertDialog alertDialog = builder.create();
@@ -90,6 +91,7 @@ public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAda
 
             etCourseMark.setText(holder.mCourseMark.getText());
             btnCancel.setOnClickListener(v1 -> alertDialog.dismiss());
+            btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v2 -> {
                 String courseCode = course.getCourseCode();
                 String courseTitle = course.getCourseTitle();

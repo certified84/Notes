@@ -61,7 +61,7 @@ public class SplashFragment extends Fragment {
             }, 3000);
         } else {
             mHandler.postDelayed(() -> {
-                startActivity(new Intent(getContext(), MainActivityKt.class));
+                startActivity(new Intent(getContext(), MainActivity.class));
                 getActivity().finish();
             }, 3000);
         }

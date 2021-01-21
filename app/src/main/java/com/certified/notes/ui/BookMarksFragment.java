@@ -126,6 +126,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             spinnerCourses.setSelection(coursePosition);
 
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 int noteId = bookMark.getNoteId();
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
