@@ -1,6 +1,7 @@
 package com.certified.notes.ui;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,11 +22,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -117,8 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             hideViews();
             launchTodoDialog();
         } else if (id == R.id.fab_add_note) {
-          hideViews();
-          launchNoteDialog();
+            hideViews();
+            launchNoteDialog();
         } else if (id == R.id.view) {
             hideViews();
         }
@@ -189,7 +190,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         View view = inflater.inflate(R.layout.dialog_new_todo, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this);
-        builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setBackground(getDrawable(R.drawable.alert_dialog_bg));
+        }
         builder.setTitle(R.string.add_todo);
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
@@ -246,11 +249,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseTitle = spinnerCourses.getSelectedItem().toString();
-            String courseCode;
-            if (!courseTitle.equals(getString(R.string.no_course))) {
+            String courseCode = "NIL";
+            if (!courseTitle.equals(getString(R.string.no_course)))
                 courseCode = mViewModel.getCourseCode(courseTitle);
-            } else
-                courseCode = "NIL";
             String noteTitle = etNoteTitle.getText().toString().trim();
             String noteContent = etNoteContent.getText().toString().trim();
             if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {

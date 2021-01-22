@@ -101,4 +101,7 @@
     <string name="user_name_field">User name field</string>
     <string name="user_school_field">User school field</string>
     <string name="update">Update</string>
+    <string name="add_a_todo">Add a todo</string>
+    <string name="all_fields_are_required">All fields are required</string>
+    <string name="note_saved">Note saved</string>
 </resources>

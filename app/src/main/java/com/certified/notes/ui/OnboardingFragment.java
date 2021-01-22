@@ -62,8 +62,8 @@ public class OnboardingFragment extends Fragment {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(PreferenceKeys.FIRST_TIME_LOGIN, false);
             editor.apply();
-            startActivity(new Intent(getContext(), MainActivity.class));
-            getActivity().finish();
+            startActivity(new Intent(getContext(), MainActivityKt.class));
+            requireActivity().finish();
         });
     }
 

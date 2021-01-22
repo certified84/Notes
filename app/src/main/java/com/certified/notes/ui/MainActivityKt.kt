@@ -2,23 +2,21 @@ package com.certified.notes.ui
 
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils.isEmpty
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.NumberPicker
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
 import com.certified.notes.R
-import com.certified.notes.model.BookMark
-import com.certified.notes.model.BookMarkKt
 import com.certified.notes.model.Course
+import com.certified.notes.model.Note
+import com.certified.notes.model.Todo
 import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -46,6 +44,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var builder: MaterialAlertDialogBuilder
     private lateinit var alertDialog: AlertDialog
+    private lateinit var inflater: LayoutInflater
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,9 +52,10 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
 
         isDarkModeEnabled()
 
-        builder = MaterialAlertDialogBuilder(this)
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
+        builder = MaterialAlertDialogBuilder(this)
+        inflater = this.layoutInflater
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
 
@@ -90,8 +90,8 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        when (v!!.id) {
+    override fun onClick(v: View) {
+        when (v.id) {
             R.id.fab -> {
                 if (viewBlur.visibility == View.VISIBLE)
                     hideViews()
@@ -101,6 +101,14 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
             R.id.fab_add_course -> {
                 hideViews()
                 launchCourseDialog()
+            }
+            R.id.fab_add_todo -> {
+                hideViews()
+                launchTodoDialog()
+            }
+            R.id.fab_add_note -> {
+                hideViews()
+                launchNoteDialog()
             }
             R.id.view -> {
                 hideViews()
@@ -129,7 +137,6 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchCourseDialog() {
-        val inflater = this.layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_course, null)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
@@ -146,7 +153,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
 
         picker.minValue = 1
-        picker.maxValue = 2
+        picker.maxValue = 4
 
         tvCourseDialogTitle.text = getString(R.string.add_course)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
@@ -156,12 +163,94 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
             val courseUnit: Int = picker.value
             val MARK_NOT_SET = 0
             val GRADE_POINT_NOT_SET = 0
-            if (!isEmpty(courseCode) && !isEmpty(courseTitle)) {
+            if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
                 val course = Course(courseCode, courseTitle, courseUnit, MARK_NOT_SET, "F", GRADE_POINT_NOT_SET)
                 notesViewModel.insertCourse(course)
                 alertDialog.dismiss()
             } else
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
         }
+        alertDialog.show()
+    }
+
+    private fun launchTodoDialog() {
+        val view = inflater.inflate(R.layout.dialog_new_todo, null)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.background = getDrawable(R.drawable.alert_dialog_bg)
+        }
+        builder.setTitle(getString(R.string.add_todo))
+        alertDialog = builder.create()
+        alertDialog.setView(view)
+
+        val etTodo: EditText = view.findViewById(R.id.et_todo)
+        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
+        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
+
+        btnCancel.setOnClickListener { alertDialog.dismiss() }
+        btnSave.setOnClickListener { v ->
+            val todoContent: String = etTodo.text.toString()
+            if (todoContent.isNotEmpty()) {
+                val todo = Todo(todoContent, false)
+                notesViewModel.insertTodo(todo)
+                alertDialog.dismiss()
+            } else
+                Toast.makeText(this, getString(R.string.add_a_todo), Toast.LENGTH_LONG).show()
+        }
+        alertDialog.show()
+    }
+
+    private fun launchNoteDialog() {
+        val view = inflater.inflate(R.layout.dialog_new_note, null)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.background = getDrawable(R.drawable.alert_dialog_bg)
+        }
+        alertDialog = builder.create()
+        alertDialog.setView(view)
+
+        val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
+        val etNoteTitle: EditText = view.findViewById(R.id.et_note_title)
+        val etNoteContent: EditText = view.findViewById(R.id.et_note_content)
+        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
+        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
+        val tvNoteDialogTitle: TextView = view.findViewById(R.id.tv_note_dialog_title)
+
+        val courseList = arrayListOf<String>()
+        val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
+        courseList.add(getString(R.string.select_a_course))
+        courseList.add(getString(R.string.no_course))
+        notesViewModel.allCourses.observe(this, Observer { courses: List<Course> ->
+            for (course in courses) {
+                courseList.add(course.courseTitle)
+            }
+            adapterCourses.notifyDataSetChanged()
+        })
+
+        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerCourses.adapter = adapterCourses
+        tvNoteDialogTitle.text = getString(R.string.add_note)
+
+        btnCancel.setOnClickListener { alertDialog.dismiss() }
+        btnSave.setOnClickListener { v ->
+            val courseTitle = spinnerCourses.selectedItem.toString()
+            var courseCode = "NIL"
+            if (courseTitle != getString(R.string.no_course) || courseTitle != getString(R.string.select_a_course))
+                courseCode = notesViewModel.getCourseCode(courseTitle)
+            val noteTitle = etNoteTitle.text.toString()
+            val noteContent = etNoteContent.text.toString()
+
+            if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
+                if (courseTitle != getString(R.string.select_a_course)) {
+                    val note = Note(courseCode, noteTitle, noteContent)
+                    notesViewModel.insertNote(note)
+                    alertDialog.dismiss()
+                    Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
+                } else
+                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG).show()
+            } else
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
+        }
+        alertDialog.show()
     }
 }

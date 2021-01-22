@@ -26,7 +26,7 @@
 
     <style name="Widget.Notes.Button" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">@color/white</item>
-        <item name="backgroundTint">@color/colorPrimaryDarkDarkTheme</item>
+        <item name="backgroundTint">@color/colorPrimaryDarkTheme</item>
     </style>
 
     <style name="Widget.Notes.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
@@ -34,7 +34,7 @@
     </style>
 
     <style name="Widget.Notes.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
-        <item name="backgroundTint">@color/colorPrimaryDarkDarkTheme</item>
+        <item name="backgroundTint">@color/colorAccent</item>
         <item name="tint">@color/white</item>
 <!--        <item name="fabSize">normal</item>-->
     </style>
