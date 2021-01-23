@@ -1,5 +1,8 @@
 package com.certified.notes.model;
 
+import android.graphics.Bitmap;
+
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -18,11 +21,15 @@ public class User {
 
     private String level;
 
-    public User(String name, String school, String department, String level) {
+    @ColumnInfo(name = "profile_image")
+    private Bitmap profileImage;
+
+    public User(String name, String school, String department, String level, Bitmap profileImage) {
         this.name = name;
         this.school = school;
         this.department = department;
         this.level = level;
+        this.profileImage = profileImage;
     }
 
     public int getId() {
@@ -47,5 +54,9 @@ public class User {
 
     public String getLevel() {
         return level;
+    }
+
+    public Bitmap getProfileImage() {
+        return profileImage;
     }
 }

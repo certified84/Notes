@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.certified.notes.model.BookMark;
@@ -13,11 +14,13 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 import com.certified.notes.model.User;
+import com.certified.notes.util.Converters;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {Note.class, Course.class, Todo.class, BookMark.class, User.class}, version = 1, exportSchema = false)
+@TypeConverters(Converters.class)
 public abstract class NotesDatabase extends RoomDatabase {
 
     private static final int NUMBER_OF_THREADS = 4;
@@ -57,7 +60,7 @@ public abstract class NotesDatabase extends RoomDatabase {
             Todo todo7 = new Todo("Make sure you pass the exam at the first try!!!", false);
             Todo todo8 = new Todo("Make sure to complete the To-dos above", false);
 
-            User user = new User("Enter name", "Enter school", "Enter department", "Select level");
+            User user = new User("Enter name", "Enter school", "Enter department", "Select level", null);
 
             databaseWriteExecutor.execute(() -> {
                 NotesDao notesDao = instance.mNotesDao();

@@ -49,7 +49,7 @@ abstract class NotesDatabaseKt : RoomDatabase() {
                 val todo7 = Todo("Make sure you pass the exam at the first try!!!", false)
                 val todo8 = Todo("Make sure to complete the To-dos above", false)
 
-                val user = User("Enter name", "Enter school", "Enter department", "Select level")
+                val user = User("Enter name", "Enter school", "Enter department", "Select level", null)
 
                 databaseWriteExecutor.execute {
                     val notesDao = instance!!.mNotesDao()
