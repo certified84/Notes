@@ -1,5 +1,6 @@
 package com.certified.notes.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,7 +22,6 @@ import com.certified.notes.util.PreferenceKeys;
 
 public class SplashFragment extends Fragment {
 
-    private Handler mHandler;
     private NavController mNavController;
     private SharedPreferences mPreferences;
 
@@ -46,24 +46,23 @@ public class SplashFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mNavController = Navigation.findNavController(view);
-        mHandler = new Handler();
+        Handler handler = new Handler();
+        handler.postDelayed(this::isFirstLogin, 3000);
 
-        isFirstLogin();
     }
 
     public void isFirstLogin() {
         boolean isFirstLogin = mPreferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true);
 
         if (isFirstLogin) {
-            mHandler.postDelayed(() -> {
-                NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build();
-                mNavController.navigate(R.id.onboardingFragment, null, navOptions);
-            }, 3000);
+            NavOptions navOptions = new NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build();
+            mNavController.navigate(R.id.onboardingFragment, null, navOptions);
         } else {
-            mHandler.postDelayed(() -> {
-                startActivity(new Intent(getContext(), MainActivityKt.class));
+            Context context = getContext();
+            if (context != null) {
+                startActivity(new Intent(context, MainActivityKt.class));
                 requireActivity().finish();
-            }, 3000);
+            }
         }
     }
 }
