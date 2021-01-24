@@ -36,7 +36,11 @@
     <style name="Widget.Notes.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="backgroundTint">@color/colorAccent</item>
         <item name="tint">@color/white</item>
-<!--        <item name="fabSize">normal</item>-->
+    </style>
+
+    <style name="Widget.Notes.FloatingActionButton.Others" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">@color/colorPrimaryDarkTheme</item>
+        <item name="tint">@color/white</item>
     </style>
 
     <style name="Widget.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">

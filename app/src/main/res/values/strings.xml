@@ -104,4 +104,7 @@
     <string name="add_a_todo">Add a todo</string>
     <string name="all_fields_are_required">All fields are required</string>
     <string name="note_saved">Note saved</string>
+    <string name="darkmode">DarkMode</string>
+    <string name="nightmode">NightMode</string>
+    <string name="lightmode">LightMode</string>
 </resources>

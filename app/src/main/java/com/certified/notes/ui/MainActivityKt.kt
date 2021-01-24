@@ -218,9 +218,9 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
 
         val courseList = arrayListOf<String>()
         val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
-        courseList.add(getString(R.string.select_a_course))
-        courseList.add(getString(R.string.no_course))
         notesViewModel.allCourses.observe(this, Observer { courses: List<Course> ->
+            courseList.add(getString(R.string.select_a_course))
+            courseList.add(getString(R.string.no_course))
             for (course in courses) {
                 courseList.add(course.courseTitle)
             }
