@@ -38,6 +38,11 @@
         <item name="tint">?attr/cardBackgroundColor</item>
     </style>
 
+    <style name="Widget.Notes.FloatingActionButton.Others" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?attr/colorAccent</item>
+        <item name="tint">?attr/cardBackgroundColor</item>
+    </style>
+
     <style name="Widget.Notes.BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="backgroundColor">?attr/cardBackgroundColor</item>
         <item name="itemIconTint">?attr/colorAccent</item>

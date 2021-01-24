@@ -5,29 +5,23 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.Group;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -40,23 +34,24 @@ import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import kotlin.collections.UShortIterator;
 
 import static android.app.Activity.RESULT_OK;
 import static android.text.TextUtils.isEmpty;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
+    private static final int USER_ID = 0;
     String userName, userSchool, userDepartment, userLevel;
     Bitmap profileImageBitmap;
     private NotesViewModel mViewModel;
@@ -64,12 +59,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Group groupName, groupSchool, groupDepartment, groupLevel;
     private TextView tvName, tvSchool, tvDepartment, tvLevel;
     private CircleImageView profileImage;
-    private ImageView btnChangeProfilePicture;
+    private FloatingActionButton fabChangeProfilePicture, fabSettings;
     private MaterialAlertDialogBuilder mBuilder;
     private AlertDialog mAlertDialog;
-    private ImageButton btnSettings;
     private SwitchMaterial switchDarkMode;
     private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int PICK_IMAGE_CODE = 102;
 //    private static final String currentPhotoPath;
 
     public ProfileFragment() {
@@ -93,8 +88,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         tvLevel = view.findViewById(R.id.tv_level);
 
         profileImage = view.findViewById(R.id.profile_image);
-        btnChangeProfilePicture = view.findViewById(R.id.iv_change_profile_picture);
-        btnSettings = view.findViewById(R.id.btn_settings);
+        fabChangeProfilePicture = view.findViewById(R.id.fab_change_profile_picture);
+        fabSettings = view.findViewById(R.id.fab_settings);
 
         switchDarkMode = view.findViewById(R.id.switch_dark_mode);
 
@@ -116,7 +111,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         groupLevel.setOnClickListener(this);
 
         profileImage.setOnClickListener(this);
-        btnSettings.setOnClickListener(this);
+        fabChangeProfilePicture.setOnClickListener(this);
+        fabSettings.setOnClickListener(this);
 
         mViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
@@ -173,9 +169,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             launchDepartmentDialog();
         } else if (id == R.id.group_edit_level) {
             launchLevelDialog();
-        } else if (id == R.id.btn_settings) {
+        } else if (id == R.id.fab_settings) {
             mNavController.navigate(R.id.settingsFragment);
-        } else if (id == R.id.profile_image) {
+        } else if (id == R.id.profile_image || id == R.id.fab_change_profile_picture) {
             launchProfileImageDialog();
         }
     }
@@ -184,84 +180,54 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         CharSequence[] selection = new CharSequence[]{
 //                "View profile picture",
-                "Update profile picture",
+                "Take picture",
+                "Choose from gallery",
                 "Delete profile picture"
         };
         builder.setTitle("Options");
         builder.setSingleChoiceItems(selection, -1, (dialog, which) -> {
             switch (which) {
                 case 0:
-                    dispatchTakePictureIntent();
+                    launchCamera();
                     dialog.dismiss();
                     break;
                 case 1:
-//                    updateProfileImage
+                    chooseFromGallery();
                     dialog.dismiss();
                     break;
-//                case 2:
-////                    deleteProfileImage
-//                    dialog.dismiss();
-//                    break;
+                case 2:
+                    deleteProfileImage();
+                    dialog.dismiss();
+                    break;
             }
         });
         builder.show();
     }
 
-    String currentPhotoPath;
+    private void deleteProfileImage() {
+        User user = new User(userName, userSchool, userDepartment, userLevel, null);
+        user.setId(USER_ID);
+        mViewModel.updateUser(user);
+    }
 
-    private void dispatchTakePictureIntent() {
+    private void launchCamera() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
-            // display error state to the user
+            Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
         }
-//        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-//            // Create the File where the photo should go
-//            File photoFile = null;
-//            try {
-//                photoFile = createImageFile();
-//            } catch (IOException ex) {
-//                // Error occurred while creating the File
-//                Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
-//            }
-//            // Continue only if the File was successfully created
-//            if (photoFile != null) {
-//                Uri photoURI = FileProvider.getUriForFile(getContext(),
-//                        "com.certified.notes",
-//                        photoFile);
-//                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//            }
-//        }
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-//        String imageFileName = "JPEG_" + timeStamp + "_";
-        String imageFileName = "ProfileImage_" + timeStamp;
-        File storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-
-//        galleryAddPic();
-
-        return image;
-    }
-
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(currentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        requireActivity().sendBroadcast(mediaScanIntent);
+    public void chooseFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+//        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Select image"), PICK_IMAGE_CODE);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(getContext(), "An error occurred", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -278,12 +244,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             String level = tvLevel.getText().toString();
 
             User user = new User(name, school, department, level, profileImageBitmap);
-            user.setId(0);
+            user.setId(USER_ID);
             mViewModel.updateUser(user);
 
             Glide.with(requireContext())
                     .load(profileImageBitmap)
                     .into(profileImage);
+        } else if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                InputStream stream = getContext().getContentResolver().openInputStream(uri);
+                Bitmap bitmap = BitmapFactory.decodeStream(stream);
+                User user = new User(userName, userSchool, userDepartment, userLevel, bitmap);
+                user.setId(USER_ID);
+                mViewModel.updateUser(user);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -317,7 +294,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if (!name.equals(userName)) {
 
                     User user = new User(name, school, department, level, profileImageBitmap);
-                    user.setId(0);
+                    user.setId(USER_ID);
                     mViewModel.getUser().observe(getViewLifecycleOwner(), user1 -> {
                         Bitmap bitmap = user1.getProfileImage();
                     });
@@ -362,7 +339,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             if (!isEmpty(school)) {
                 if (!school.equals(userSchool)) {
                     User user = new User(name, school, department, level, profileImageBitmap);
-                    user.setId(0);
+                    user.setId(USER_ID);
 
                     mViewModel.updateUser(user);
                     tvSchool.setText(school);
@@ -405,7 +382,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             if (!isEmpty(department)) {
                 if (!department.equals(userDepartment)) {
                     User user = new User(name, school, department, level, profileImageBitmap);
-                    user.setId(0);
+                    user.setId(USER_ID);
 
                     mViewModel.updateUser(user);
                     tvDepartment.setText(department);
@@ -452,7 +429,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             if (!level.equals(getString(R.string.select_level))) {
                 if (!level.equals(userLevel)) {
                     User user = new User(name, school, department, level, profileImageBitmap);
-                    user.setId(0);
+                    user.setId(USER_ID);
 
                     mViewModel.updateUser(user);
                     tvLevel.setText(level);

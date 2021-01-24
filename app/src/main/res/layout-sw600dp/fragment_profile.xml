@@ -35,7 +35,7 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_change_profile_picture"
+                app:layout_constraintTop_toBottomOf="@+id/fab_change_profile_picture"
                 app:srcCompat="@drawable/ic_baseline_person_50" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -249,13 +249,14 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.3" />
 
-            <ImageView
-                android:id="@+id/iv_change_profile_picture"
-                style="@style/Widget.Note.ImageView.Profile"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_change_profile_picture"
+                style="@style/Widget.Notes.FloatingActionButton.Others"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:alpha="1"
+                android:clickable="true"
                 android:contentDescription="@string/change_profile_image_button"
+                android:focusable="true"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_image"
                 app:layout_constraintEnd_toEndOf="@+id/profile_image"
                 app:layout_constraintStart_toStartOf="@+id/profile_image"
@@ -276,16 +277,15 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.65" />
 
-            <ImageButton
-                android:id="@+id/btn_settings"
-                style="@style/Widget.Note.ImageView.Profile"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_settings"
+                style="@style/Widget.Notes.FloatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:alpha="1"
                 android:contentDescription="@string/settings_button"
-                android:tint="@color/accent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_settings_50" />

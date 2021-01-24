@@ -27,6 +27,21 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline2"
                 tools:src="@drawable/splash_logo" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_change_profile_picture"
+                style="@style/Widget.Notes.FloatingActionButton.Others"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="@string/change_profile_image_button"
+                android:focusable="true"
+                app:fabSize="mini"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                app:layout_constraintEnd_toEndOf="@+id/profile_image"
+                app:layout_constraintStart_toStartOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/profile_image"
+                app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
+
             <ImageView
                 android:id="@+id/imageView4"
                 style="@style/Widget.Note.ImageView.Profile"
@@ -36,7 +51,7 @@
                 android:layout_marginTop="16dp"
                 android:contentDescription="@string/user_name_field"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_change_profile_picture"
+                app:layout_constraintTop_toBottomOf="@+id/fab_change_profile_picture"
                 app:srcCompat="@drawable/ic_baseline_person_24" />
 
             <com.google.android.material.textview.MaterialTextView
@@ -246,19 +261,6 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_begin="131dp" />
 
-            <ImageView
-                android:id="@+id/iv_change_profile_picture"
-                style="@style/Widget.Note.ImageView.Profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="1"
-                android:contentDescription="@string/change_profile_image_button"
-                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
-                app:layout_constraintEnd_toEndOf="@+id/profile_image"
-                app:layout_constraintStart_toStartOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/profile_image"
-                app:srcCompat="@drawable/ic_baseline_photo_camera_24" />
-
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline7"
                 android:layout_width="wrap_content"
@@ -273,15 +275,16 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.65" />
 
-            <ImageButton
-                android:id="@+id/btn_settings"
-                style="@style/Widget.Note.ImageView.Profile"
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_settings"
+                style="@style/Widget.Notes.FloatingActionButton.Others"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:alpha="1"
                 android:contentDescription="@string/settings_button"
+                app:fabSize="mini"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_settings" />
@@ -290,9 +293,30 @@
                 android:id="@+id/switch_dark_mode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="DarkMode"
-                app:layout_constraintEnd_toEndOf="@+id/btn_settings"
-                app:layout_constraintTop_toBottomOf="@+id/btn_settings" />
+                app:layout_constraintBottom_toBottomOf="@+id/fab_settings"
+                app:layout_constraintStart_toEndOf="@+id/imageView9"
+                app:layout_constraintTop_toTopOf="@+id/fab_settings" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/nightmode"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_dark_mode"
+                app:layout_constraintStart_toEndOf="@+id/switch_dark_mode"
+                app:layout_constraintTop_toTopOf="@+id/switch_dark_mode"
+                app:srcCompat="@drawable/ic_baseline_dark_mode_24" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/lightmode"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_dark_mode"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/switch_dark_mode"
+                app:srcCompat="@drawable/ic_baseline_wb_sunny_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
