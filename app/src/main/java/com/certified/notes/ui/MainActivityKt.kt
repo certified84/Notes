@@ -234,9 +234,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener { v ->
             val courseTitle = spinnerCourses.selectedItem.toString()
-            var courseCode = "NIL"
-            if (courseTitle != getString(R.string.no_course) || courseTitle != getString(R.string.select_a_course))
-                courseCode = notesViewModel.getCourseCode(courseTitle)
+            val courseCode = if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(courseTitle)
             val noteTitle = etNoteTitle.text.toString()
             val noteContent = etNoteContent.text.toString()
 
