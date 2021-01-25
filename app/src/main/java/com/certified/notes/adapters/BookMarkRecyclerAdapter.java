@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.BookMark;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
@@ -44,8 +44,8 @@ public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyc
         }
     };
 
-    private Context mContext;
-    private NotesViewModel mViewModel;
+    private final Context mContext;
+    private final NotesViewModel mViewModel;
     private OnBookMarkClickedListener listener;
 
     public BookMarkRecyclerAdapter(Context context, NotesViewModel viewModel) {
@@ -84,7 +84,7 @@ public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyc
                 mViewModel.deleteBookMark(bookMark);
 
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
-                SharedPreferences .Editor editor = preferences.edit();
+                SharedPreferences.Editor editor = preferences.edit();
 
                 Set<String> defValues = new HashSet<>();
                 defValues.add("-1");

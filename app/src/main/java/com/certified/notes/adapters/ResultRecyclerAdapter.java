@@ -2,6 +2,7 @@ package com.certified.notes.adapters;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,9 @@ public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAda
             View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_edit_result, null);
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
-            builder.setBackground(mContext.getDrawable(R.drawable.alert_dialog_bg));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder.setBackground(mContext.getDrawable(R.drawable.alert_dialog_bg));
+            }
             builder.setTitle("Enter mark for " + course.getCourseCode());
 
             AlertDialog alertDialog = builder.create();

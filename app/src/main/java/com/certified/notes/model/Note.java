@@ -15,14 +15,14 @@ public class Note {
 
     @NonNull
     @ColumnInfo(name = "course_code")
-    private String courseCode;
+    private final String courseCode;
 
     @NonNull
     @ColumnInfo(name = "note_title")
-    private String title;
+    private final String title;
 
     @ColumnInfo(name = "note_content")
-    private String content;
+    private final String content;
 
     public Note(@NonNull String courseCode, @NonNull String title, String content) {
         this.courseCode = courseCode;

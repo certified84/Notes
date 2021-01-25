@@ -1,6 +1,7 @@
 package com.certified.notes.ui;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,12 +24,12 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.BookMarkRecyclerAdapter;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -76,18 +77,31 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
         BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter(getContext(), mViewModel);
-        mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookmark -> {
-            bookMarkRecyclerAdapter.submitList(bookmark);
-        });
+        mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookMarkRecyclerAdapter::submitList);
         recyclerBookMarks.setAdapter(bookMarkRecyclerAdapter);
         recyclerBookMarks.setLayoutManager(noteLayoutManager);
+
+        ArrayList<String> courseList = new ArrayList<>();
+        ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
+
+        courseList.add(getString(R.string.select_a_course));
+        courseList.add(getString(R.string.no_course));
+
+        mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
+            for (Course course : courses) {
+                courseList.add(course.getCourseTitle());
+            }
+            adapterCourses.notifyDataSetChanged();
+        });
 
         bookMarkRecyclerAdapter.setOnBookMarkClickedListener(bookMark -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            }
             AlertDialog alertDialog = builder.create();
             alertDialog.setView(view);
 
@@ -97,18 +111,6 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             MaterialButton btnSave = view.findViewById(R.id.btn_save);
             MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
             TextView tvNoteDialogTitle = view.findViewById(R.id.tv_note_dialog_title);
-
-            ArrayList<String> courseList = new ArrayList<>();
-            ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
-
-            mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
-                courseList.add(getString(R.string.select_a_course));
-                courseList.add(getString(R.string.no_course));
-                for (Course course : courses) {
-                    courseList.add(course.getCourseTitle());
-                }
-                adapterCourses.notifyDataSetChanged();
-            });
 
             adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerCourses.setAdapter(adapterCourses);
@@ -130,22 +132,39 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             btnSave.setOnClickListener(v -> {
                 int noteId = bookMark.getNoteId();
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
-                String courseCode = mViewModel.getCourseCode(courseTitle);
+                String courseCode;
+                if (courseTitle.equals(getString(R.string.no_course)))
+                    courseCode = "NIL";
+                else
+                    courseCode = mViewModel.getCourseCode(courseTitle);
                 String noteTitle = etNoteTitle.getText().toString().trim();
                 String noteContent = etNoteContent.getText().toString().trim();
                 if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {
                     if (!courseTitle.equals("Select a course")) {
                         if (!courseCode.equals(bookMark.getCourseCode()) || !noteTitle.equals(bookMark.getNoteTitle()) || !noteContent.equals(bookMark.getNoteContent())) {
-                            Note note1 = new Note(courseCode, noteTitle, noteContent);
-                            note1.setId(bookMark.getNoteId());
-                            mViewModel.updateNote(note1);
-                            mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                for (BookMark bookMark1 : bookMarks) {
-                                    BookMark bookMark2 = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                                    bookMark2.setId(bookMark1.getId());
-                                    mViewModel.updateBookMark(bookMark2);
-                                }
-                            });
+                            if (!courseTitle.equals(getString(R.string.no_course))) {
+                                Note note1 = new Note(courseCode, noteTitle, noteContent);
+                                note1.setId(bookMark.getNoteId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark1 : bookMarks) {
+                                        BookMark bookMark2 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                        bookMark2.setId(bookMark1.getId());
+                                        mViewModel.updateBookMark(bookMark2);
+                                    }
+                                });
+                            } else {
+                                Note note1 = new Note("NIL", noteTitle, noteContent);
+                                note1.setId(bookMark.getNoteId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark1 : bookMarks) {
+                                        BookMark bookMark2 = new BookMark(noteId, "NIL", noteTitle, noteContent);
+                                        bookMark2.setId(bookMark1.getId());
+                                        mViewModel.updateBookMark(bookMark2);
+                                    }
+                                });
+                            }
                             alertDialog.dismiss();
                         } else
                             Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();

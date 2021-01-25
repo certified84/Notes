@@ -1,5 +1,6 @@
 package com.certified.notes.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -21,12 +22,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.BuildConfig;
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.HomeCourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
 import com.certified.notes.adapters.TodoRecyclerAdapter;
 import com.certified.notes.model.Todo;
+import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -34,12 +35,12 @@ import static android.text.TextUtils.isEmpty;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
+    private final int ID_NOT_SET = 0;
     private RecyclerView recyclerCourses, recyclerNotes, recyclerTodos;
     private MaterialButton tvShowAllNotes, tvShowAllCourses;
     private ImageView ivTodoPopupMenu;
     private NavController mNavController;
     private NotesViewModel mViewModel;
-    private final int ID_NOT_SET = 0;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -107,7 +108,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             View view = inflater.inflate(R.layout.dialog_new_todo, null);
 
             MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            }
             builder.setTitle(R.string.edit_todo);
             AlertDialog alertDialog = builder.create();
             alertDialog.setView(view);
@@ -189,14 +192,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
     private void enableStrictMode() {
         if (BuildConfig.DEBUG) {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                    .detectAll()
-//                    .detectDiskReads()
-                    .detectDiskWrites()
-                    .detectResourceMismatches()
-//                    .penaltyLog()
-                    .penaltyFlashScreen()
-                    .build();
+            StrictMode.ThreadPolicy policy = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                policy = new StrictMode.ThreadPolicy.Builder()
+    //                    .detectAll()
+    //                    .detectDiskReads()
+                        .detectDiskWrites()
+                        .detectResourceMismatches()
+    //                    .penaltyLog()
+                        .penaltyFlashScreen()
+                        .build();
+            }
             StrictMode.setThreadPolicy(policy);
         }
     }

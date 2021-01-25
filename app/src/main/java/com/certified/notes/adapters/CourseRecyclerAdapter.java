@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
-import com.google.android.material.snackbar.Snackbar;
 
 
 /**
@@ -21,8 +20,6 @@ import com.google.android.material.snackbar.Snackbar;
  */
 
 public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAdapter.ViewHolder> {
-
-    private onCourseClickedListener listener;
 
     private static final DiffUtil.ItemCallback<Course> DIFF_CALLBACK = new DiffUtil.ItemCallback<Course>() {
         @Override
@@ -36,6 +33,7 @@ public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAda
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
+    private onCourseClickedListener listener;
 
     public CourseRecyclerAdapter() {
         super(DIFF_CALLBACK);
@@ -55,6 +53,14 @@ public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAda
         holder.mCourseCode.setText(course.getCourseCode());
     }
 
+    public void setOnCourseClickedListener(onCourseClickedListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onCourseClickedListener {
+        void onCourseClicked(Course course);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mCourseCode, mCourseTitle;
@@ -71,13 +77,5 @@ public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAda
                 }
             });
         }
-    }
-
-    public interface onCourseClickedListener {
-        void onCourseClicked(Course course);
-    }
-
-    public void setOnCourseClickedListener(onCourseClickedListener listener) {
-        this.listener = listener;
     }
 }

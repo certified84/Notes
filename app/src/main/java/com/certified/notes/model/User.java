@@ -2,6 +2,7 @@ package com.certified.notes.model;
 
 import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -13,16 +14,20 @@ public class User {
     @PrimaryKey
     private int id;
 
-    private String name;
+    @NonNull
+    private final String name;
 
-    private String school;
+    @NonNull
+    private final String school;
 
-    private String department;
+    @NonNull
+    private final String department;
 
-    private String level;
+    @NonNull
+    private final String level;
 
     @ColumnInfo(name = "profile_image")
-    private Bitmap profileImage;
+    private final Bitmap profileImage;
 
     public User(String name, String school, String department, String level, Bitmap profileImage) {
         this.name = name;

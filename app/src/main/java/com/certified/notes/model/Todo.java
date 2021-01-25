@@ -9,9 +9,9 @@ public class Todo {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String todo;
+    private final String todo;
 
-    private boolean done;
+    private final boolean done;
 
     public Todo(String todo, boolean done) {
         this.todo = todo;

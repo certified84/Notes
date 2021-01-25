@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.adapters.ResultRecyclerAdapter;
+import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class ResultFragment extends Fragment {
@@ -26,7 +26,6 @@ public class ResultFragment extends Fragment {
     private MaterialButton btnCheckGpa;
     private TextView tvTotalLoadUnit, tvGradePointAverage;
     private NotesViewModel mViewModel;
-    private LinearLayoutManager mResultLayoutManager;
     private ResultRecyclerAdapter mResultRecyclerAdapter;
 
     public ResultFragment() {
@@ -69,13 +68,13 @@ public class ResultFragment extends Fragment {
 
     private void init() {
         mViewModel = new NotesViewModel(getActivity().getApplication());
-        mResultLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager resultLayoutManager = new LinearLayoutManager(getContext());
         mResultRecyclerAdapter = new ResultRecyclerAdapter(mViewModel);
 
         mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> mResultRecyclerAdapter.submitList(courses));
 
         recyclerResults.setAdapter(mResultRecyclerAdapter);
-        recyclerResults.setLayoutManager(mResultLayoutManager);
+        recyclerResults.setLayoutManager(resultLayoutManager);
 
         mViewModel.getAllCourseUnits().observe(getViewLifecycleOwner(), courseUnits -> {
             int courseUnit = 0;

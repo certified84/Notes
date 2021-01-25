@@ -12,15 +12,15 @@ public class Result {
 
     @NonNull
     @ColumnInfo(name = "course_code")
-    private String courseCode;
+    private final String courseCode;
 
     @NonNull
     @ColumnInfo(name = "course_unit")
-    private Integer courseUnit;
+    private final Integer courseUnit;
 
     @NonNull
     @ColumnInfo(name = "course_mark")
-    private Integer courseMark;
+    private final Integer courseMark;
 
     public Result(@NonNull String courseCode, @NonNull Integer courseUnit, @NonNull Integer courseMark) {
         this.courseCode = courseCode;

@@ -188,7 +188,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
 
         btnCancel.setOnClickListener { alertDialog.dismiss() }
-        btnSave.setOnClickListener { v ->
+        btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
             if (todoContent.isNotEmpty()) {
                 val todo = Todo(todoContent, false)
@@ -232,7 +232,7 @@ class MainActivityKt : AppCompatActivity(), View.OnClickListener {
         tvNoteDialogTitle.text = getString(R.string.add_note)
 
         btnCancel.setOnClickListener { alertDialog.dismiss() }
-        btnSave.setOnClickListener { v ->
+        btnSave.setOnClickListener {
             val courseTitle = spinnerCourses.selectedItem.toString()
             val courseCode = if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(courseTitle)
             val noteTitle = etNoteTitle.text.toString()

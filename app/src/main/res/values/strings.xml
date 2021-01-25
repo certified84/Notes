@@ -34,6 +34,7 @@
     <string name="cancel">Cancel</string>
     <string name="course_title">Course title</string>
     <string name="delete_completed_todos">Delete completed to-dos</string>
+    <string name="delete_completed_todo">Delete completed to-do</string>
     <string name="delete_all_todos">Delete all todos</string>
     <string name="note_title">Note title</string>
     <string name="note_content">Note content</string>

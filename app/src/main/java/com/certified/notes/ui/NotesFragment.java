@@ -1,8 +1,8 @@
 package com.certified.notes.ui;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,8 +42,6 @@ import java.util.Set;
 import static android.text.TextUtils.isEmpty;
 
 public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
-
-    private static final String TAG = "NotesFragment";
 
     private RecyclerView recyclerNotes;
     private NavController mNavController;
@@ -100,17 +98,29 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
         NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(getContext(), getViewLifecycleOwner(), mViewModel);
-        mViewModel.getAllNotes().observe(getViewLifecycleOwner(), notes -> {
-            noteRecyclerAdapter.submitList(notes);
-        });
+        mViewModel.getAllNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
+
+        ArrayList<String> courseList = new ArrayList<>();
+        ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
+
+        courseList.add(getString(R.string.select_a_course));
+        courseList.add(getString(R.string.no_course));
+        mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
+            for (Course course : courses) {
+                courseList.add(course.getCourseTitle());
+            }
+            adapterCourses.notifyDataSetChanged();
+        });
 
         noteRecyclerAdapter.setOnNoteClickedListener(note -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
-            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            }
             mAlertDialog = mBuilder.create();
             mAlertDialog.setView(view);
 
@@ -120,18 +130,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             MaterialButton btnSave = view.findViewById(R.id.btn_save);
             MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
             TextView tvNoteDialogTitle = view.findViewById(R.id.tv_note_dialog_title);
-
-            ArrayList<String> courseList = new ArrayList<>();
-            ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
-
-            courseList.add(getString(R.string.select_a_course));
-            courseList.add(getString(R.string.no_course));
-            mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
-                for (Course course : courses) {
-                    courseList.add(course.getCourseTitle());
-                }
-                adapterCourses.notifyDataSetChanged();
-            });
 
             adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinnerCourses.setAdapter(adapterCourses);
@@ -148,13 +146,15 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
             spinnerCourses.setSelection(coursePosition);
 
-            Log.d(TAG, "init: Course position: " + coursePosition + "\nSpinner selection: ");
-
             btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
-                String courseCode = mViewModel.getCourseCode(courseTitle);
+                String courseCode;
+                if (courseTitle.equals(getString(R.string.no_course)))
+                    courseCode = "NIL";
+                else
+                    courseCode = mViewModel.getCourseCode(courseTitle);
                 String noteTitle = etNoteTitle.getText().toString().trim();
                 String noteContent = etNoteContent.getText().toString().trim();
                 if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {
@@ -170,7 +170,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
                                         mViewModel.updateBookMark(bookMark1);
-                                        Log.d(TAG, "init: " + bookMark1.toString());
                                     }
                                 });
                                 mAlertDialog.dismiss();
@@ -187,7 +186,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
                                         mViewModel.updateBookMark(bookMark1);
-                                        Log.d(TAG, "init: " + bookMark1.toString());
                                     }
                                 });
                                 mAlertDialog.dismiss();

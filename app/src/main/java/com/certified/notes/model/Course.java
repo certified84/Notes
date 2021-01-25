@@ -13,27 +13,27 @@ public class Course {
 
     @NonNull
     @ColumnInfo(name = "course_code")
-    private String courseCode;
+    private final String courseCode;
 
     @NonNull
     @ColumnInfo(name = "course_title")
-    private String courseTitle;
+    private final String courseTitle;
 
     @NonNull
     @ColumnInfo(name = "course_unit")
-    private Integer courseUnit;
+    private final Integer courseUnit;
 
     @NonNull
     @ColumnInfo(name = "course_mark")
-    private Integer courseMark;
+    private final Integer courseMark;
 
     @NonNull
     @ColumnInfo(name = "course_grade")
-    private String courseGrade;
+    private final String courseGrade;
 
     @NonNull
     @ColumnInfo(name = "course_grade_point")
-    private Integer courseGradePoint;
+    private final Integer courseGradePoint;
 
     @NonNull
     @ColumnInfo(name = "course_credit_point")

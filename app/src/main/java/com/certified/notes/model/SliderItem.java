@@ -2,9 +2,9 @@ package com.certified.notes.model;
 
 public class SliderItem {
 
-    private int animation;
-    private String title;
-    private String description;
+    private final int animation;
+    private final String title;
+    private final String description;
 
     public SliderItem(int animation, String title, String description) {
         this.animation = animation;

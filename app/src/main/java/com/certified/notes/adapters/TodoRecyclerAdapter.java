@@ -13,9 +13,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Todo;
+import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -38,9 +38,9 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
                     oldItem.isDone() == newItem.isDone();
         }
     };
+    private final NotesViewModel mViewModel;
+    private final Context mContext;
     private onTodoClickedListener listener;
-    private NotesViewModel mViewModel;
-    private Context mContext;
 
     public TodoRecyclerAdapter(Context context, NotesViewModel viewModel) {
         super(DIFF_CALLBACK);
@@ -65,6 +65,8 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
             String todoContent = holder.mTodo.getText().toString().trim();
             if (holder.mCheckBox.isChecked()) {
                 MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(mContext);
+                builder.setIcon(R.drawable.ic_baseline_delete_24);
+                builder.setTitle(R.string.delete_completed_todo);
                 builder.setMessage("This todo has been marked as done. Would you like to delete it ?");
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     mViewModel.deleteTodo(getItem(position));

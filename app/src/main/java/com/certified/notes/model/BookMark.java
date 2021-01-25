@@ -12,18 +12,18 @@ public class BookMark {
     private int id;
 
     @ColumnInfo(name = "note_id")
-    private int noteId;
+    private final int noteId;
 
     @NonNull
     @ColumnInfo(name = "course_code")
-    private String courseCode;
+    private final String courseCode;
 
     @NonNull
     @ColumnInfo(name = "note_title")
-    private String noteTitle;
+    private final String noteTitle;
 
     @ColumnInfo(name = "note_content")
-    private String noteContent;
+    private final String noteContent;
 
     public BookMark(int noteId, @NonNull String courseCode, @NonNull String noteTitle, String noteContent) {
         this.noteId = noteId;
