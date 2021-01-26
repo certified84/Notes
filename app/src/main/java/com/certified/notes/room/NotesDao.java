@@ -20,23 +20,20 @@ import java.util.List;
 @Dao
 public interface NotesDao {
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertNote(Note note);
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCourse(Course course);
 
-    @Insert()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTodo(Todo todo);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertBookMark(BookMark bookMark);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User user);
-
-//    @Insert(onConflict = OnConflictStrategy.REPLACE)
-//    void insertResult(Result result);
 
     @Update
     void updateNote(Note note);
@@ -130,4 +127,13 @@ public interface NotesDao {
 
     @Query("SELECT * FROM bookmark_table WHERE course_code != :noCourse")
     LiveData<List<BookMark>> getDeletableBookmarks(String noCourse);
+
+    @Query("SELECT * FROM note_table WHERE note_title LIKE :searchQuery OR note_content LIKE :searchQuery OR course_code LIKE :searchQuery ORDER BY note_title ASC")
+    LiveData<List<Note>> searchNotes(String searchQuery);
+
+    @Query("SELECT * FROM course_table WHERE course_code LIKE :searchQuery OR course_title LIKE :searchQuery ORDER BY course_code ASC")
+    LiveData<List<Course>> searchCourses(String searchQuery);
+
+    @Query("SELECT * FROM bookmark_table WHERE note_title LIKE :searchQuery OR note_content LIKE :searchQuery OR course_code LIKE :searchQuery ORDER BY id ASC")
+    LiveData<List<BookMark>> searchBookmarks(String searchQuery);
 }

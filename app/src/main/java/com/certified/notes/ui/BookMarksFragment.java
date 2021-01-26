@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.preference.PreferenceManager;
@@ -46,6 +47,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
     private NavController mNavController;
     private NotesViewModel mViewModel;
     private ImageView ivBookMarkPopupMenu;
+    private SearchView svSearchBookmarks;
 
     public BookMarksFragment() {
         // Required empty public constructor
@@ -59,6 +61,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
         recyclerBookMarks = view.findViewById(R.id.recycler_view_notes);
         ivBookMarkPopupMenu = view.findViewById(R.id.iv_bookmark_popup_menu);
+        svSearchBookmarks = view.findViewById(R.id.sv_search_database);
 
         return view;
     }
@@ -176,6 +179,30 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
             alertDialog.show();
         });
+
+        svSearchBookmarks.isSubmitButtonEnabled();
+        svSearchBookmarks.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != null) {
+                    searchBookmarks(query, bookMarkRecyclerAdapter);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query != null) {
+                    searchBookmarks(query, bookMarkRecyclerAdapter);
+                }
+                return true;
+            }
+        });
+    }
+
+    private void searchBookmarks(String query, BookMarkRecyclerAdapter bookMarkRecyclerAdapter) {
+        String searchQuery = "%" + query + "%";
+        mViewModel.searchBookmarks(searchQuery).observe(getViewLifecycleOwner(), bookMarkRecyclerAdapter::submitList);
     }
 
     private void showPopupMenu(View view) {

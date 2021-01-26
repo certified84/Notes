@@ -1,5 +1,6 @@
 package com.certified.notes.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,6 +43,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     private NavController mNavController;
     private NotesViewModel mViewModel;
     private ImageView ivCoursePopupMenu;
+    private SearchView svSearchNotes;
 
     public CoursesFragment() {
         // Required empty public constructor
@@ -54,6 +57,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         recyclerCourses = view.findViewById(R.id.recycler_view_courses);
         ivCoursePopupMenu = view.findViewById(R.id.iv_course_popup_menu);
+        svSearchNotes = view.findViewById(R.id.sv_search_database);
 
         return view;
     }
@@ -72,7 +76,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         StaggeredGridLayoutManager courseLayoutManager = new StaggeredGridLayoutManager(GRID_SPAN_COUNT, LinearLayoutManager.VERTICAL);
 
         CourseRecyclerAdapter courseRecyclerAdapter = new CourseRecyclerAdapter();
-        mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> courseRecyclerAdapter.submitList(courses));
+        mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setLayoutManager(courseLayoutManager);
 
@@ -104,6 +108,30 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             });
             builder.show();
         });
+
+        svSearchNotes.isSubmitButtonEnabled();
+        svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != null) {
+                    searchCourses(query, courseRecyclerAdapter);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query != null) {
+                    searchCourses(query, courseRecyclerAdapter);
+                }
+                return true;
+            }
+        });
+    }
+
+    private void searchCourses(String query, CourseRecyclerAdapter courseRecyclerAdapter) {
+        String searchQuery = "%" + query + "%";
+        mViewModel.searchCourses(searchQuery).observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
     }
 
     private void showPopupMenu(View view) {
@@ -127,7 +155,9 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         View view = inflater.inflate(R.layout.dialog_new_course, null);
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+        }
         AlertDialog alertDialog = builder.create();
         alertDialog.setView(view);
 
@@ -201,7 +231,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(1);
-        mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
+        mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerViewRelatedNotes.setAdapter(noteRecyclerAdapter);
         recyclerViewRelatedNotes.setLayoutManager(noteLayoutManager);
 

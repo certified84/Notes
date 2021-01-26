@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".ui.NotesFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/sv_search_database"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/search_view_bg"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_note_popup_menu"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <TextView
         android:id="@+id/textView"
         style="@style/TextAppearance.Notes.TitleText2.Tablet"
@@ -19,13 +31,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_notes"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="@+id/iv_note_popup_menu"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/sv_search_database"
+        app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/list_item_notes" />
 
     <androidx.appcompat.widget.AppCompatImageView

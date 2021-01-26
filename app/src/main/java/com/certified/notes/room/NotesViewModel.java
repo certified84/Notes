@@ -184,4 +184,16 @@ public class NotesViewModel extends AndroidViewModel {
     public LiveData<List<BookMark>> getDeletableBookmarks(String noCourse) {
         return mRepository.getDeletableBookmarks(noCourse);
     }
+
+    public LiveData<List<Note>> searchNotes(String searchQuery) {
+        return mRepository.searchNotes(searchQuery);
+    }
+
+    public LiveData<List<Course>> searchCourses(String searchQuery) {
+        return mRepository.searchCourses(searchQuery);
+    }
+
+    public LiveData<List<BookMark>> searchBookmarks(String searchQuery) {
+        return mRepository.searchBookmarks(searchQuery);
+    }
 }

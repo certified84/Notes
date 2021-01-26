@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.preference.PreferenceManager;
@@ -53,6 +54,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     private Set<String> mNoteIds;
     private MaterialAlertDialogBuilder mBuilder;
     private AlertDialog mAlertDialog;
+    private SearchView svSearchNotes;
 
     public NotesFragment() {
         // Required empty public constructor
@@ -66,6 +68,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
         recyclerNotes = view.findViewById(R.id.recycler_view_notes);
         ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu);
+        svSearchNotes = view.findViewById(R.id.sv_search_database);
 
         return view;
     }
@@ -92,6 +95,15 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         menu.setOnMenuItemClickListener(this);
         menu.inflate(R.menu.note_menu);
         menu.show();
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.delete_all_notes) {
+            launchDeleteDialog();
+        }
+        return true;
     }
 
     private void init() {
@@ -248,15 +260,30 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                 }
             }
         }).attachToRecyclerView(recyclerNotes);
+
+        svSearchNotes.isSubmitButtonEnabled();
+        svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (query != null) {
+                    searchNotes(query, noteRecyclerAdapter);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query != null) {
+                    searchNotes(query, noteRecyclerAdapter);
+                }
+                return true;
+            }
+        });
     }
 
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.delete_all_notes) {
-            launchDeleteDialog();
-        }
-        return true;
+    private void searchNotes(String query, NoteRecyclerAdapter noteRecyclerAdapter) {
+        String searchQuery = "%" + query + "%";
+        mViewModel.searchNotes(searchQuery).observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
     }
 
     private void launchDeleteDialog() {

@@ -221,6 +221,33 @@ public class Repository {
         }
     }
 
+    public LiveData<List<Note>> searchNotes(String searchQuery) {
+        try {
+            return executor.submit(() -> mNotesDao.searchNotes(searchQuery)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LiveData<List<Course>> searchCourses(String searchQuery) {
+        try {
+            return executor.submit(() -> mNotesDao.searchCourses(searchQuery)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public LiveData<List<BookMark>> searchBookmarks(String searchQuery) {
+        try {
+            return executor.submit(() -> mNotesDao.searchBookmarks(searchQuery)).get();
+        } catch (ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 //    private long seed = System.currentTimeMillis();
 //    val mItemList: LiveData<MutableList<Note>> = Transformations.map(mNotesDao.getAllHomeNotes()) {
 //        it.shuffled(Random(seed))
