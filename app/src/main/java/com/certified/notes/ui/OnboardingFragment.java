@@ -62,7 +62,7 @@ public class OnboardingFragment extends Fragment {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean(PreferenceKeys.FIRST_TIME_LOGIN, false);
             editor.apply();
-            startActivity(new Intent(getContext(), MainActivityKt.class));
+            startActivity(new Intent(getContext(), MainActivity.class));
             requireActivity().finish();
         });
     }
@@ -70,13 +70,13 @@ public class OnboardingFragment extends Fragment {
     private void setUpSliderItem() {
         mSliderItems = new ArrayList<>();
         mSliderItems.add(new SliderItem(R.raw.animation_note, getString(R.string.view_pager_title_notes),
-                getString(R.string.view_pager_title_description_1)));
+                getString(R.string.view_pager_description_notes)));
         mSliderItems.add(new SliderItem(R.raw.animation_course, getString(R.string.view_pager_title_course),
-                getString(R.string.view_pager_description)));
+                getString(R.string.view_pager_description_courses)));
         mSliderItems.add(new SliderItem(R.raw.animation_todo, getString(R.string.view_pager_title_todo),
-                getString(R.string.view_pager_description)));
+                getString(R.string.view_pager_description_todos)));
         mSliderItems.add(new SliderItem(R.raw.animation_report, getString(R.string.view_pager_title_report),
-                getString(R.string.view_pager_description_2)));
+                getString(R.string.view_pager_description_report)));
     }
 
     private void setUpViewPager() {

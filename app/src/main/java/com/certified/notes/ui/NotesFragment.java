@@ -68,7 +68,10 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
         recyclerNotes = view.findViewById(R.id.recycler_view_notes);
         ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu);
-        svSearchNotes = view.findViewById(R.id.sv_search_database);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchNotes = view.findViewById(R.id.sv_search_database);
+        }
 
         return view;
     }
@@ -261,24 +264,26 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             }
         }).attachToRecyclerView(recyclerNotes);
 
-        svSearchNotes.isSubmitButtonEnabled();
-        svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (query != null) {
-                    searchNotes(query, noteRecyclerAdapter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchNotes.isSubmitButtonEnabled();
+            svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if (query != null) {
+                        searchNotes(query, noteRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String query) {
-                if (query != null) {
-                    searchNotes(query, noteRecyclerAdapter);
+                @Override
+                public boolean onQueryTextChange(String query) {
+                    if (query != null) {
+                        searchNotes(query, noteRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     private void searchNotes(String query, NoteRecyclerAdapter noteRecyclerAdapter) {

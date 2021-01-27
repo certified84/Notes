@@ -65,7 +65,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         tvShowAllCourses.setOnClickListener(this);
         ivTodoPopupMenu.setOnClickListener(this);
 
-        enableStrictMode();
+//        enableStrictMode();
 
         return view;
     }

@@ -57,7 +57,10 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         recyclerCourses = view.findViewById(R.id.recycler_view_courses);
         ivCoursePopupMenu = view.findViewById(R.id.iv_course_popup_menu);
-        svSearchNotes = view.findViewById(R.id.sv_search_database);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchNotes = view.findViewById(R.id.sv_search_database);
+        }
 
         return view;
     }
@@ -109,24 +112,26 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             builder.show();
         });
 
-        svSearchNotes.isSubmitButtonEnabled();
-        svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (query != null) {
-                    searchCourses(query, courseRecyclerAdapter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchNotes.isSubmitButtonEnabled();
+            svSearchNotes.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if (query != null) {
+                        searchCourses(query, courseRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String query) {
-                if (query != null) {
-                    searchCourses(query, courseRecyclerAdapter);
+                @Override
+                public boolean onQueryTextChange(String query) {
+                    if (query != null) {
+                        searchCourses(query, courseRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     private void searchCourses(String query, CourseRecyclerAdapter courseRecyclerAdapter) {

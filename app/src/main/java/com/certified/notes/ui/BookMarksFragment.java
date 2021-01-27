@@ -61,7 +61,10 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
         recyclerBookMarks = view.findViewById(R.id.recycler_view_notes);
         ivBookMarkPopupMenu = view.findViewById(R.id.iv_bookmark_popup_menu);
-        svSearchBookmarks = view.findViewById(R.id.sv_search_database);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchBookmarks = view.findViewById(R.id.sv_search_database);
+        }
 
         return view;
     }
@@ -180,24 +183,26 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             alertDialog.show();
         });
 
-        svSearchBookmarks.isSubmitButtonEnabled();
-        svSearchBookmarks.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                if (query != null) {
-                    searchBookmarks(query, bookMarkRecyclerAdapter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            svSearchBookmarks.isSubmitButtonEnabled();
+            svSearchBookmarks.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    if (query != null) {
+                        searchBookmarks(query, bookMarkRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String query) {
-                if (query != null) {
-                    searchBookmarks(query, bookMarkRecyclerAdapter);
+                @Override
+                public boolean onQueryTextChange(String query) {
+                    if (query != null) {
+                        searchBookmarks(query, bookMarkRecyclerAdapter);
+                    }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        }
     }
 
     private void searchBookmarks(String query, BookMarkRecyclerAdapter bookMarkRecyclerAdapter) {

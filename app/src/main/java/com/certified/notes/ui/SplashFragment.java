@@ -60,7 +60,7 @@ public class SplashFragment extends Fragment {
         } else {
             Context context = getContext();
             if (context != null) {
-                startActivity(new Intent(context, MainActivityKt.class));
+                startActivity(new Intent(context, MainActivity.class));
                 requireActivity().finish();
             }
         }

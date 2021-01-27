@@ -1,7 +1,6 @@
 package com.certified.notes.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class ResultFragment extends Fragment {
-
-    private static final String TAG = "ResultFragment";
 
     private RecyclerView recyclerResults;
     private MaterialButton btnCheckGpa;
@@ -61,7 +58,6 @@ public class ResultFragment extends Fragment {
                 }
                 float gpa = (float) totalCreditPoint / (float) totalLoadUnit;
                 tvGradePointAverage.setText(String.valueOf(gpa));
-                Log.d(TAG, "init: totalCreditPoint = " + totalCreditPoint + ", totalLoadUnit = " + totalLoadUnit);
             });
         });
     }

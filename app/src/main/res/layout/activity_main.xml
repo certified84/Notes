@@ -12,58 +12,57 @@
         tools:context=".ui.MainActivity">
 
         <fragment
-            android:id="@+id/fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/optRoundCardView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
-            app:navGraph="@navigation/nav_graph" />
+                android:id="@+id/fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@+id/optRoundCardView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:navGraph="@navigation/nav_graph" />
 
         <com.github.captain_miao.optroundcardview.OptRoundCardView
-            android:id="@+id/optRoundCardView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:optRoundCardBackgroundColor="?attr/cardBackgroundColor"
-            app:optRoundCardCornerRadius="20dp"
-            app:optRoundCardElevation="16dp"
-            app:optRoundCardLeftBottomCorner="false"
-            app:optRoundCardRightBottomCorner="false"
-            app:optRoundCardUseCompatPadding="false"
-            app:optRoundContentPaddingBottom="0dp"
-            app:optRoundContentPaddingLeft="16dp"
-            app:optRoundContentPaddingRight="16dp"
-            app:optRoundContentPaddingTop="2dp">
+                android:id="@+id/optRoundCardView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:optRoundCardBackgroundColor="?attr/cardBackgroundColor"
+                app:optRoundCardCornerRadius="20dp"
+                app:optRoundCardElevation="8dp"
+                app:optRoundCardLeftBottomCorner="false"
+                app:optRoundCardRightBottomCorner="false"
+                app:optRoundContentPaddingBottom="0dp"
+                app:optRoundContentPaddingLeft="16dp"
+                app:optRoundContentPaddingRight="16dp"
+                app:optRoundContentPaddingTop="2dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize">
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/smoothBottomBar"
-                    style="@style/Widget.Notes.BottomNavigationView"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:background="?attr/cardBackgroundColor"
-                    app:elevation="0dp"
-                    app:iconSize="20dp"
-                    app:itemTextColor="?attr/colorAccent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:menu="@menu/menu_main" />
+                        android:id="@+id/smoothBottomBar"
+                        style="@style/Widget.Notes.BottomNavigationView"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="?attr/cardBackgroundColor"
+                        app:elevation="0dp"
+                        app:iconSize="20dp"
+                        app:itemTextColor="?attr/colorAccent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:menu="@menu/menu_main" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.github.captain_miao.optroundcardview.OptRoundCardView>

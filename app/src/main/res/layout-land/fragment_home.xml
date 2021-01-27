@@ -59,15 +59,15 @@
             app:layout_constraintTop_toBottomOf="@+id/recycler_view_notes" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_show_all_courses"
-            style="@style/Widget.Notes.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/show_all"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
-            app:layout_constraintEnd_toEndOf="@+id/btn_show_all_notes"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+                android:id="@+id/btn_show_all_courses"
+                style="@style/Widget.Notes.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_all"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintEnd_toEndOf="@+id/btn_show_all_notes"
+                app:layout_constraintTop_toTopOf="@+id/textView3" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_courses"
@@ -94,37 +94,37 @@
             app:layout_constraintTop_toBottomOf="@+id/recycler_view_courses" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/iv_todo_popup_menu"
-            style="@style/Widget.Note.ImageView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintTop_toTopOf="@+id/textView5"
-            app:srcCompat="@drawable/ic_more_vert" />
+                android:id="@+id/iv_todo_popup_menu"
+                style="@style/Widget.Note.ImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/textView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView5"
+                app:srcCompat="@drawable/ic_more_vert"
+                android:layout_marginEnd="16dp" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:cardBackgroundColor="?attr/cardBackgroundColor"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:contentPadding="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintVertical_bias="1.0">
+                android:id="@+id/cardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="?attr/cardBackgroundColor"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp"
+                app:contentPadding="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/iv_todo_popup_menu"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+                app:layout_constraintVertical_bias="1.0">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_todos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/list_item_todos" />
+                    android:id="@+id/recycler_view_todos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:listitem="@layout/list_item_todos" />
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

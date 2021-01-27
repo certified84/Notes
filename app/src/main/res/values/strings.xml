@@ -66,11 +66,12 @@
     <string name="mark">Mark</string>
     <string name="get_started">Get Started</string>
     <string name="view_pager_title_notes">Jot down Notes</string>
-    <string name="view_pager_title_description_1">Jotting down notes is now much easier and faster like never before</string>
+    <string name="view_pager_description_notes">Jotting down notes is now much easier and faster like never before</string>
     <string name="view_pager_title_report">Calculate your GPA</string>
-    <string name="view_pager_description_2">Apply to your preferred job that matches your skill</string>
+    <string name="view_pager_description_report">Have a look at what your GPA might look like before your result get released</string>
     <string name="view_pager_title_course">Save semester Courses</string>
-    <string name="view_pager_description">Finding your dream job is now much easier and faster like never before</string>
+    <string name="view_pager_description_courses">Save your courses for the semester and have them with you on the go</string>
+    <string name="view_pager_description_todos">Make a list of To-dos or Task so you can remember to always perform them</string>
     <string name="select_a_course">Select a course</string>
     <string name="no_course">No course</string>
     <string name="view_pager_title_todo">Add To-dos</string>
@@ -108,4 +109,5 @@
     <string name="darkmode">DarkMode</string>
     <string name="nightmode">NightMode</string>
     <string name="lightmode">LightMode</string>
+    <string name="user_department_field">User department field</string>
 </resources>
