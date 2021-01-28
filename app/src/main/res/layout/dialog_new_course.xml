@@ -1,126 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:color/transparent"
-    android:elevation="0dp">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:elevation="0dp">
 
     <TextView
-        android:id="@+id/tv_course_dialog_title"
-        style="@style/TextAppearance.Notes.TitleText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Add Course" />
+            android:id="@+id/tv_course_dialog_title"
+            style="@style/TextAppearance.Notes.TitleText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Add Course" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_code_layout"
-        style="@style/Widgets.Notes.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/course_code"
-        app:boxCollapsedPaddingTop="4dp"
-        app:boxCornerRadiusBottomEnd="5dp"
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/et_course_title_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_course_dialog_title">
+            android:id="@+id/et_course_code_layout"
+            style="@style/Widgets.Notes.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/course_code"
+            app:boxCollapsedPaddingTop="4dp"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/et_course_title_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_course_dialog_title">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_code"
-            style="@style/Widget.Notes.TextInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:textInputLayoutFocusedRectEnabled="false" />
+                android:id="@+id/et_course_code"
+                style="@style/Widget.Notes.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:textInputLayoutFocusedRectEnabled="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/et_course_title_layout"
-        style="@style/Widgets.Notes.TextInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:hint="@string/course_title"
-        app:boxCollapsedPaddingTop="4dp"
-        app:boxCornerRadiusBottomEnd="5dp"
-        app:boxCornerRadiusBottomStart="5dp"
-        app:boxCornerRadiusTopEnd="5dp"
-        app:boxCornerRadiusTopStart="5dp"
-        app:layout_constraintBottom_toTopOf="@+id/number_picker_course_unit"
-        app:layout_constraintEnd_toEndOf="@+id/et_course_code_layout"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/et_course_code_layout">
+            android:id="@+id/et_course_title_layout"
+            style="@style/Widgets.Notes.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="@string/course_title"
+            app:boxCollapsedPaddingTop="4dp"
+            app:boxCornerRadiusBottomEnd="5dp"
+            app:boxCornerRadiusBottomStart="5dp"
+            app:boxCornerRadiusTopEnd="5dp"
+            app:boxCornerRadiusTopStart="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/number_picker_course_unit"
+            app:layout_constraintEnd_toEndOf="@+id/et_course_code_layout"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/et_course_code_layout">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_course_title"
-            style="@style/Widget.Notes.TextInputEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:textInputLayoutFocusedRectEnabled="false" />
+                android:id="@+id/et_course_title"
+                style="@style/Widget.Notes.TextInputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                android:inputType="textMultiLine"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                app:textInputLayoutFocusedRectEnabled="false" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <NumberPicker
-        android:id="@+id/number_picker_course_unit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal"
-        android:solidColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/btn_save"
-        app:layout_constraintStart_toEndOf="@+id/tv_course_unit_title" />
+<!--    <NumberPicker-->
+<!--            android:id="@+id/number_picker_course_unit"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:solidColor="@color/white"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/btn_save"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/tv_course_unit_title" />-->
 
     <Button
-        android:id="@+id/btn_save"
-        style="@style/Widget.Notes.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/et_course_title_layout" />
+            android:id="@+id/btn_save"
+            style="@style/Widget.Notes.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="@string/save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_course_title_layout" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_cancel"
-        style="@style/Widget.Notes.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:text="@string/cancel"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_save"
-        app:layout_constraintEnd_toStartOf="@+id/btn_save"
-        app:layout_constraintTop_toTopOf="@+id/btn_save" />
+            android:id="@+id/btn_cancel"
+            style="@style/Widget.Notes.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:text="@string/cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_save"
+            app:layout_constraintEnd_toStartOf="@+id/btn_save"
+            app:layout_constraintTop_toTopOf="@+id/btn_save" />
 
     <TextView
-        android:id="@+id/tv_course_unit_title"
-        style="@style/TextAppearance.Notes.SubtitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/course_unit"
-        app:layout_constraintStart_toStartOf="@+id/et_course_title_layout"
-        app:layout_constraintTop_toTopOf="@+id/number_picker_course_unit" />
+            android:id="@+id/tv_course_unit_title"
+            style="@style/TextAppearance.Notes.SubtitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/course_unit"
+            app:layout_constraintStart_toStartOf="@+id/et_course_title_layout"
+            app:layout_constraintTop_toTopOf="@+id/number_picker_course_unit" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/number_picker_course_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_save"
+            app:layout_constraintStart_toEndOf="@+id/tv_course_unit_title"
+            app:np_orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

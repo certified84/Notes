@@ -26,6 +26,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
+import com.shawnlin.numberpicker.NumberPicker
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -89,10 +90,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val w: Window = window
-                w.statusBarColor = Color.TRANSPARENT
-            }
         }
     }
 
@@ -170,11 +167,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val MARK_NOT_SET = 0
             val GRADE_POINT_NOT_SET = 0
             if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
-                val course = Course(courseCode, courseTitle, courseUnit, MARK_NOT_SET, "F", GRADE_POINT_NOT_SET)
+                val course = Course(
+                    courseCode,
+                    courseTitle,
+                    courseUnit,
+                    MARK_NOT_SET,
+                    "F",
+                    GRADE_POINT_NOT_SET
+                )
                 notesViewModel.insertCourse(course)
                 alertDialog.dismiss()
             } else
-                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
+                    .show()
         }
         alertDialog.show()
     }
@@ -240,7 +245,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
             val courseTitle = spinnerCourses.selectedItem.toString()
-            val courseCode = if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(courseTitle)
+            val courseCode =
+                if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(
+                    courseTitle
+                )
             val noteTitle = etNoteTitle.text.toString()
             val noteContent = etNoteContent.text.toString()
 
@@ -251,9 +259,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     alertDialog.dismiss()
                     Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
                 } else
-                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG)
+                        .show()
             } else
-                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
+                    .show()
         }
         alertDialog.show()
     }

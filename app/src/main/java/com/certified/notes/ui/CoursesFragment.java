@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -175,7 +175,6 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         numberPickerCourseUnit.setMinValue(1);
         numberPickerCourseUnit.setMaxValue(4);
-        numberPickerCourseUnit.setOrientation(LinearLayout.VERTICAL);
 
         tvCourseDialogTitle.setText(getString(R.string.edit_course));
         etCourseCode.setText(course.getCourseCode());

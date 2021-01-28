@@ -137,7 +137,7 @@ abstract class NotesDatabaseKt : RoomDatabase() {
                     notesDao.insertTodo(todo7)
                     notesDao.insertTodo(todo8)
 
-//                    notesDao.insertUser(user)
+                    notesDao.insertUser(user)
                 }
             }
         }
