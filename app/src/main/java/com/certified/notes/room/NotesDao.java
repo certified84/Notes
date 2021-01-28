@@ -97,7 +97,7 @@ public interface NotesDao {
     @Query("DELETE FROM bookmark_table WHERE note_id = :noteId")
     void deleteBookMarkedNote(int noteId);
 
-    @Query("DELETE FROM todo_table WHERE done == 1")
+    @Query("DELETE FROM todo_table WHERE isDone == 1")
     void deleteCompletedTodos();
 
     @Query("SELECT * FROM bookmark_table WHERE note_id = :noteId")

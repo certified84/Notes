@@ -44,7 +44,6 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import kotlin.collections.UShortIterator;
 
 import static android.app.Activity.RESULT_OK;
 import static android.text.TextUtils.isEmpty;
@@ -258,6 +257,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 User user = new User(userName, userSchool, userDepartment, userLevel, bitmap);
                 user.setId(USER_ID);
                 mViewModel.updateUser(user);
+
+                Glide.with(requireContext())
+                        .load(bitmap)
+                        .into(profileImage);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -13,10 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.R;
 import com.certified.notes.model.Note;
 
-/**
- * Created by Samson.
- */
-
 public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<Note> DIFF_CALLBACK = new DiffUtil.ItemCallback<Note>() {
@@ -32,9 +28,8 @@ public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerA
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
-
-    private OnNoteClickedListener listener;
     private final int ID_NOT_SET = 0;
+    private OnNoteClickedListener listener;
     private int id;
 
     public HomeNoteRecyclerAdapter(int id) {

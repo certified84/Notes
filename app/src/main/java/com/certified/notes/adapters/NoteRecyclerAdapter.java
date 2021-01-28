@@ -15,20 +15,16 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Note;
+import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
 
 import java.util.HashSet;
 import java.util.Set;
-
-/**
- * Created by Samson.
- */
 
 public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.ViewHolder> {
 
@@ -47,13 +43,13 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
     };
 
     private static final String TAG = "NoteRecyclerAdapter";
-    private Context mContext;
-    private LifecycleOwner mOwner;
-    private NotesViewModel mViewModel;
+    private final Context mContext;
+    private final LifecycleOwner mOwner;
+    private final NotesViewModel mViewModel;
+    private final SharedPreferences mPreferences;
+    private final Set<String> mNoteIds;
+    private final Set<String> mDefValues;
     private OnNoteClickedListener listener;
-    private SharedPreferences mPreferences;
-    private Set<String> mNoteIds;
-    private Set<String> mDefValues;
 
     public NoteRecyclerAdapter(Context context, LifecycleOwner owner, NotesViewModel viewModel) {
         super(DIFF_CALLBACK);

@@ -23,10 +23,6 @@ import com.like.OnLikeListener;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Samson.
- */
-
 public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<BookMark> DIFF_CALLBACK = new DiffUtil.ItemCallback<BookMark>() {

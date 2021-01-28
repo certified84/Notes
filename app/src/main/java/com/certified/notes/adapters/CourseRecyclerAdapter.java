@@ -14,11 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
 
-
-/**
- * Created by Samson.
- */
-
 public class CourseRecyclerAdapter extends ListAdapter<Course, CourseRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<Course> DIFF_CALLBACK = new DiffUtil.ItemCallback<Course>() {

@@ -14,14 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
 
-
-/**
- * Created by Samson.
- */
-
 public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRecyclerAdapter.ViewHolder> {
-
-    private onCourseClickedListener listener;
 
     private static final DiffUtil.ItemCallback<Course> DIFF_CALLBACK = new DiffUtil.ItemCallback<Course>() {
         @Override
@@ -35,6 +28,7 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
+    private onCourseClickedListener listener;
 
     public HomeCourseRecyclerAdapter() {
         super(DIFF_CALLBACK);
@@ -54,6 +48,14 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
         holder.mCourseCode.setText(course.getCourseCode());
     }
 
+    public void setOnCourseClickedListener(onCourseClickedListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onCourseClickedListener {
+        void onCourseClicked(Course course);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mCourseCode, mCourseTitle;
@@ -70,13 +72,5 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
                 }
             });
         }
-    }
-
-    public interface onCourseClickedListener {
-        void onCourseClicked(Course course);
-    }
-
-    public void setOnCourseClickedListener(onCourseClickedListener listener) {
-        this.listener = listener;
     }
 }

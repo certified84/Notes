@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-//@Entity(tableName = "bookmark_table")
-class BookMarkKt(
+@Entity(tableName = "bookmark_table")
+class BookMark(
         @field:ColumnInfo(name = "note_id") val noteId: Int,
         @field:ColumnInfo(name = "course_code") val courseCode: String,
         @field:ColumnInfo(name = "note_title") val noteTitle: String,

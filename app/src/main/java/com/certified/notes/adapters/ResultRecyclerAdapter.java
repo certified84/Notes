@@ -16,10 +16,9 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.R;
 import com.certified.notes.model.Course;
+import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -27,10 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.text.TextUtils.isEmpty;
-
-/**
- * Created by Samson.
- */
 
 public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAdapter.ViewHolder> {
 
@@ -42,7 +37,7 @@ public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAda
 
         @Override
         public boolean areContentsTheSame(@NonNull Course oldItem, @NonNull Course newItem) {
-            return oldItem.getCourseUnit().equals(newItem.getCourseUnit()) &&
+            return oldItem.getCourseUnit() == newItem.getCourseUnit() &&
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };

@@ -19,11 +19,6 @@ import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-
-/**
- * Created by Samson.
- */
-
 public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<Todo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Todo>() {

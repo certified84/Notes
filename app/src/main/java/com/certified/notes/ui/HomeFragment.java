@@ -2,7 +2,6 @@ package com.certified.notes.ui;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +20,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.certified.notes.BuildConfig;
 import com.certified.notes.R;
 import com.certified.notes.adapters.HomeCourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
@@ -86,21 +84,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         LinearLayoutManager todoLayoutManager = new LinearLayoutManager(getContext());
 
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(ID_NOT_SET);
-        mViewModel.getAllHomeNotes().observe(getViewLifecycleOwner(), notes -> noteRecyclerAdapter.submitList(notes));
+        mViewModel.getAllHomeNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
-        mViewModel.getAllHomeCourses().observe(getViewLifecycleOwner(), courses -> courseRecyclerAdapter.submitList(courses));
+        mViewModel.getAllHomeCourses().observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
         recyclerCourses.setLayoutManager(courseLayoutManager);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
         recyclerCourses.setClipChildren(false);
 
         TodoRecyclerAdapter todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
-        mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> todoRecyclerAdapter.submitList(todos));
+        mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todoRecyclerAdapter::submitList);
         recyclerTodos.setLayoutManager(todoLayoutManager);
         recyclerTodos.setAdapter(todoRecyclerAdapter);
         todoRecyclerAdapter.setOnTodoClickedListener(todo -> {
@@ -188,22 +186,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
-
-    private void enableStrictMode() {
-        if (BuildConfig.DEBUG) {
-            StrictMode.ThreadPolicy policy = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                policy = new StrictMode.ThreadPolicy.Builder()
-    //                    .detectAll()
-    //                    .detectDiskReads()
-                        .detectDiskWrites()
-                        .detectResourceMismatches()
-    //                    .penaltyLog()
-                        .penaltyFlashScreen()
-                        .build();
-            }
-            StrictMode.setThreadPolicy(policy);
-        }
     }
 }
