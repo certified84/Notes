@@ -2,6 +2,7 @@ package com.certified.notes.util
 
 import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.certified.notes.model.*
 import com.certified.notes.room.NotesDaoKt
 import com.certified.notes.room.NotesDatabaseKt
@@ -9,6 +10,7 @@ import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.random.Random
 
 class RepositoryKt(application: Application) {
 
@@ -195,5 +197,10 @@ class RepositoryKt(application: Application) {
             e.printStackTrace()
             null
         }
+    }
+
+    private val seed = System.currentTimeMillis()
+    val randomNotes: LiveData<List<Note>> = Transformations.map(mNotesDao.getAllHomeNotes()) {
+        it.shuffled(Random(seed))
     }
 }

@@ -76,14 +76,8 @@ public interface NotesDao {
     @Query("SELECT * FROM note_table ORDER BY note_title ASC")
     LiveData<List<Note>> getAllNotes();
 
-    @Query("SELECT * FROM note_table ORDER BY note_title ASC LIMIT 2")
-    LiveData<List<Note>> getAllHomeNotes();
-
     @Query("SELECT * FROM course_table ORDER BY course_code ASC")
     LiveData<List<Course>> getAllCourses();
-
-    @Query("SELECT * FROM course_table ORDER BY course_code ASC LIMIT 2")
-    LiveData<List<Course>> getAllHomeCourses();
 
     @Query("SELECT * FROM todo_table ORDER BY id ASC")
     LiveData<List<Todo>> getAllTodos();

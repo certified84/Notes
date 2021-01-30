@@ -84,14 +84,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         LinearLayoutManager todoLayoutManager = new LinearLayoutManager(getContext());
 
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(ID_NOT_SET);
-        mViewModel.getAllHomeNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
+        mViewModel.getRandomNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
-        mViewModel.getAllHomeCourses().observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
+        mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
         recyclerCourses.setLayoutManager(courseLayoutManager);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
