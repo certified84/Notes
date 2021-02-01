@@ -28,7 +28,9 @@ import com.certified.notes.model.Todo;
 import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textview.MaterialTextView;
 
+import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class HomeFragment extends Fragment implements View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -109,16 +111,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
             }
-            builder.setTitle(R.string.edit_todo);
             AlertDialog alertDialog = builder.create();
             alertDialog.setView(view);
 
+            MaterialTextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
             EditText etTodo = view.findViewById(R.id.et_todo);
             MaterialButton btnSave = view.findViewById(R.id.btn_save);
             MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
 
             etTodo.setText(todo.getTodo());
 
+            tvTodoDialogTitle.setText(getString(R.string.edit_todo));
             btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
@@ -184,7 +187,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             });
         }
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
+        alertDialog.show();
     }
 }

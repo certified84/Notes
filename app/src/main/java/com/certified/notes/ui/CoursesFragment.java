@@ -33,6 +33,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.shawnlin.numberpicker.NumberPicker;
 
+import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
@@ -89,7 +90,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                     "Show related Notes"
             };
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
             builder.setTitle("Options");
 //            builder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg));
             builder.setSingleChoiceItems(selection, -1, (dialog, which) -> {
@@ -163,6 +164,10 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
         AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
         alertDialog.setView(view);
 
         MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
@@ -186,7 +191,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             String courseCode = etCourseCode.getText().toString().trim();
             String courseTitle = etCourseTitle.getText().toString().trim();
             Integer courseUnit = numberPickerCourseUnit.getValue();
-            Integer courseMark = course.getCourseMark();
+            int courseMark = course.getCourseMark();
             String courseGrade = course.getCourseGrade();
             int courseGradePoint = course.getCourseGradePoint();
             if (!isEmpty(courseCode) && !isEmpty(courseTitle)) {
@@ -225,9 +230,12 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_related_notes, null);
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-//        builder.setBackground(getContext().getResources().getDrawable(R.drawable.alert_dialog_bg));
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
         alertDialog.setView(view);
 
         RecyclerView recyclerViewRelatedNotes = view.findViewById(R.id.recycler_view_related_notes);
@@ -242,7 +250,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     }
 
     private void launchDeleteDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Delete");
         builder.setMessage(R.string.all_course_delete_dialog_message);
         builder.setIcon(R.drawable.ic_baseline_delete_24);
@@ -262,8 +270,12 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             dialog1.dismiss();
         });
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
+        alertDialog.show();
     }
 
     private void launchDeleteCourseDialog(Course course) {
@@ -287,6 +299,10 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         });
         builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.dismiss());
         AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
         alertDialog.show();
     }
 }

@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAdapter.ViewHolder> {
@@ -76,6 +77,10 @@ public class ResultRecyclerAdapter extends ListAdapter<Course, ResultRecyclerAda
             builder.setTitle("Enter mark for " + course.getCourseCode());
 
             AlertDialog alertDialog = builder.create();
+            alertDialog.setOnShowListener(dialog1 -> {
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+            });
             alertDialog.setView(view);
 
             EditText etCourseMark = view.findViewById(R.id.et_course_mark);

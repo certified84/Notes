@@ -2,7 +2,6 @@ package com.certified.notes.adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,13 +35,12 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
 
         @Override
         public boolean areContentsTheSame(@NonNull Note oldItem, @NonNull Note newItem) {
-            return oldItem.getTitle().equals(newItem.getTitle()) &&
-                    oldItem.getContent().equals(newItem.getContent()) &&
+            return (oldItem.getTitle().equals(newItem.getTitle()) ||
+                    oldItem.getContent().equals(newItem.getContent())) &&
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
 
-    private static final String TAG = "NoteRecyclerAdapter";
     private final Context mContext;
     private final LifecycleOwner mOwner;
     private final NotesViewModel mViewModel;
@@ -79,7 +77,6 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         Note currentNote = getItem(position);
         holder.mNoteContent.setText(currentNote.getContent());
         holder.mNoteTitle.setText(currentNote.getTitle());
-//        holder.mNoteTitle.setText(currentNote.getTitle());
         holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
@@ -152,7 +149,6 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
             if (noteIds.contains(String.valueOf(noteId))) {
                 likeButton.setLiked(true);
             }
-            Log.d(TAG, "checkIfBookMarked: " + noteIds);
         }
     }
 }

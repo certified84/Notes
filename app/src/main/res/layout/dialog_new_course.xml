@@ -131,6 +131,7 @@
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_save"
             app:layout_constraintStart_toEndOf="@+id/tv_course_unit_title"
-            app:np_orientation="horizontal" />
+            app:np_orientation="horizontal"
+            style="@style/customNumberPickerStyle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

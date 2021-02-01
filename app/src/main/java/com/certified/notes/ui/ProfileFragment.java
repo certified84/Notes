@@ -51,6 +51,8 @@ import static android.text.TextUtils.isEmpty;
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private static final int USER_ID = 0;
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int PICK_IMAGE_CODE = 102;
     String userName, userSchool, userDepartment, userLevel;
     Bitmap profileImageBitmap;
     private NotesViewModel mViewModel;
@@ -59,11 +61,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView tvName, tvSchool, tvDepartment, tvLevel;
     private CircleImageView profileImage;
     private FloatingActionButton fabChangeProfilePicture, fabSettings;
-    private MaterialAlertDialogBuilder mBuilder;
-    private AlertDialog mAlertDialog;
     private SwitchMaterial switchDarkMode;
-    private static final int REQUEST_IMAGE_CAPTURE = 101;
-    private static final int PICK_IMAGE_CODE = 102;
 //    private static final String currentPhotoPath;
 
     public ProfileFragment() {
@@ -101,8 +99,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         mViewModel = new NotesViewModel(requireActivity().getApplication());
         mNavController = Navigation.findNavController(view);
-
-        mBuilder = new MaterialAlertDialogBuilder(requireContext());
 
         groupName.setOnClickListener(this);
         groupSchool.setOnClickListener(this);
@@ -250,6 +246,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     .load(profileImageBitmap)
                     .into(profileImage);
         } else if (requestCode == PICK_IMAGE_CODE && resultCode == RESULT_OK) {
+            assert data != null;
             Uri uri = data.getData();
             try {
                 InputStream stream = getContext().getContentResolver().openInputStream(uri);
@@ -270,13 +267,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void launchNameDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
-        mBuilder.setTitle(getString(R.string.enter_name));
-        mAlertDialog = mBuilder.create();
-        mAlertDialog.setView(view);
+        builder.setTitle(getString(R.string.enter_name));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setView(view);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -286,7 +284,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.name));
         inputEditText.setText(userName);
 
-        btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = Objects.requireNonNull(inputEditText.getText()).toString().trim();
             String school = tvSchool.getText().toString().trim();
@@ -298,31 +296,29 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     User user = new User(name, school, department, level, profileImageBitmap);
                     user.setId(USER_ID);
-                    mViewModel.getUser().observe(getViewLifecycleOwner(), user1 -> {
-                        Bitmap bitmap = user1.getProfileImage();
-                    });
                     mViewModel.updateUser(user);
                     tvName.setText(name);
 
-                    mAlertDialog.dismiss();
+                    alertDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Name not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a name", Toast.LENGTH_SHORT).show();
         });
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     private void launchSchoolDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
-        mBuilder.setTitle(getString(R.string.enter_school));
-        mAlertDialog = mBuilder.create();
-        mAlertDialog.setView(view);
+        builder.setTitle(getString(R.string.enter_school));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setView(view);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -332,7 +328,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.school));
         inputEditText.setText(userSchool);
 
-        btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = tvName.getText().toString().trim();
             String school = inputEditText.getText().toString().trim();
@@ -347,25 +343,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mViewModel.updateUser(user);
                     tvSchool.setText(school);
 
-                    mAlertDialog.dismiss();
+                    alertDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "School not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a school", Toast.LENGTH_SHORT).show();
         });
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     private void launchDepartmentDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
-        mBuilder.setTitle(getString(R.string.enter_department));
-        mAlertDialog = mBuilder.create();
-        mAlertDialog.setView(view);
+        builder.setTitle(getString(R.string.enter_department));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setView(view);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -375,7 +372,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.department));
         inputEditText.setText(userDepartment);
 
-        btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = tvName.getText().toString().trim();
             String school = tvSchool.getText().toString().trim();
@@ -389,25 +386,26 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     mViewModel.updateUser(user);
                     tvDepartment.setText(department);
-                    mAlertDialog.dismiss();
+                    alertDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Department not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a department", Toast.LENGTH_SHORT).show();
         });
-        mAlertDialog.show();
+        alertDialog.show();
     }
 
     private void launchLevelDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_level, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
-        mBuilder.setTitle(getString(R.string.select_level));
-        mAlertDialog = mBuilder.create();
-        mAlertDialog.setView(view);
+        builder.setTitle(getString(R.string.select_level));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setView(view);
 
         Spinner spinnerLevel = view.findViewById(R.id.spinner_level);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
@@ -422,7 +420,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         int selection = adapterLevels.getPosition(userLevel);
         spinnerLevel.setSelection(selection);
 
-        btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = tvName.getText().toString().trim();
             String school = tvSchool.getText().toString().trim();
@@ -437,12 +435,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mViewModel.updateUser(user);
                     tvLevel.setText(level);
 
-                    mAlertDialog.dismiss();
+                    alertDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Level not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please select a level", Toast.LENGTH_SHORT).show();
         });
-        mAlertDialog.show();
+        alertDialog.show();
     }
 }

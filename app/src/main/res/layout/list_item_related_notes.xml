@@ -15,33 +15,37 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/tv_note_content"
-            style="@style/TextAppearance.Notes.SubtitleText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textAlignment="textStart"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_note_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_note_title"
-            tools:text="TextView" />
+                android:id="@+id/tv_note_content"
+                style="@style/TextAppearance.Notes.SubtitleText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/tv_note_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_note_title"
+                tools:text="TextView"
+                android:ellipsize="end"
+                android:maxLines="2" />
 
         <TextView
-            android:id="@+id/tv_note_title"
-            style="@style/TextAppearance.Notes.TitleText1"
-            android:textSize="18sp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textAlignment="textStart"
-            app:layout_constraintBottom_toTopOf="@+id/tv_note_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="TextView" />
+                android:id="@+id/tv_note_title"
+                style="@style/TextAppearance.Notes.TitleText1"
+                android:textSize="18sp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textAlignment="textStart"
+                app:layout_constraintBottom_toTopOf="@+id/tv_note_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="TextView"
+                android:ellipsize="end"
+                android:maxLines="1" />
 
         <ImageView
             android:id="@+id/imageView"

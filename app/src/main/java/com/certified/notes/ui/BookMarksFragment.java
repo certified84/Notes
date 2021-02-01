@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
@@ -247,7 +248,11 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             dialog1.dismiss();
         });
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
+        alertDialog.show();
     }
 }

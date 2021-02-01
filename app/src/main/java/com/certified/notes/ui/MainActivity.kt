@@ -1,5 +1,6 @@
 package com.certified.notes.ui
 
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -43,10 +44,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
 
-    private lateinit var builder: MaterialAlertDialogBuilder
-    private lateinit var alertDialog: AlertDialog
-    private lateinit var inflater: LayoutInflater
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -55,8 +52,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
-        builder = MaterialAlertDialogBuilder(this)
-        inflater = this.layoutInflater
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
 
@@ -138,12 +133,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchCourseDialog() {
+        val inflater: LayoutInflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_course, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
 
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -183,19 +184,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchTodoDialog() {
+        val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_todo, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
         }
-        builder.setTitle(getString(R.string.add_todo))
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
+        val tvTodoDialogTitle: MaterialTextView = view.findViewById(R.id.tv_todo_dialog_title)
         val etTodo: EditText = view.findViewById(R.id.et_todo)
         val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
         val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
 
+        tvTodoDialogTitle.text = getString(R.string.add_todo)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
@@ -210,12 +218,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchNoteDialog() {
+        val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_note, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
         }
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
         val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
