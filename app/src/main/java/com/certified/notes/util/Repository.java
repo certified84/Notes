@@ -53,10 +53,10 @@ public class Repository {
             Collections.shuffle(input, new Random(seed));
             List<Note> notes = new ArrayList<>();
             if (input.size() > 0) {
-                for (int i = 1; i <= 5; i++) {
-                    notes.add(input.get(i));
-                }
                 if (input.size() >= 5) {
+                    for (int i = 1; i <= 5; i++) {
+                        notes.add(input.get(i));
+                    }
                     return notes;
                 } else
                     return input;
@@ -67,11 +67,11 @@ public class Repository {
         randomCourses = Transformations.map(mNotesDao.getAllCourses(), input -> {
             Collections.shuffle(input, new Random(seed));
             List<Course> courses = new ArrayList<>();
-            if (input.size() >= 1) {
-                for (int i = 1; i <= 5; i++) {
-                    courses.add(input.get(i));
-                }
+            if (input.size() > 0) {
                 if (input.size() >= 5) {
+                    for (int i = 1; i <= 5; i++) {
+                        courses.add(input.get(i));
+                    }
                     return courses;
                 } else
                     return input;
