@@ -29,7 +29,7 @@ class NoteRecyclerAdapterKt(private val mContext: Context, private val mOwner: L
     private val mPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext.applicationContext)
     private val mNoteIds: MutableSet<String>
     private val mDefValues: MutableSet<String>
-    private var listener: OnNoteClickedListener? = null
+    private var listener: OnNoteClickedListener?
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_notes, parent, false)
@@ -128,7 +128,7 @@ class NoteRecyclerAdapterKt(private val mContext: Context, private val mOwner: L
     init {
         mDefValues = HashSet()
         mDefValues.add("-1")
-        mNoteIds = HashSet(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues)
-        )
+        mNoteIds = HashSet(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues))
+        listener = null
     }
 }

@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 public class Repository {
 
     public static final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private NotesDao mNotesDao;
+    private final NotesDao mNotesDao;
     private final LiveData<List<Note>> allNotes;
     private final LiveData<List<Note>> randomNotes;
     private final LiveData<List<Course>> allCourses;
@@ -52,25 +52,31 @@ public class Repository {
         randomNotes = Transformations.map(mNotesDao.getAllNotes(), input -> {
             Collections.shuffle(input, new Random(seed));
             List<Note> notes = new ArrayList<>();
-            for (int i = 1; i <= 5; i++) {
-                notes.add(input.get(i));
-            }
-            if (input.size() >= 5) {
-                return notes;
+            if (input.size() > 0) {
+                for (int i = 1; i <= 5; i++) {
+                    notes.add(input.get(i));
+                }
+                if (input.size() >= 5) {
+                    return notes;
+                } else
+                    return input;
             } else
-                return input;
+                return null;
         });
 
         randomCourses = Transformations.map(mNotesDao.getAllCourses(), input -> {
             Collections.shuffle(input, new Random(seed));
             List<Course> courses = new ArrayList<>();
-            for (int i = 1; i <= 5; i++) {
-                courses.add(input.get(i));
-            }
-            if (input.size() >= 5) {
-                return courses;
+            if (input.size() >= 1) {
+                for (int i = 1; i <= 5; i++) {
+                    courses.add(input.get(i));
+                }
+                if (input.size() >= 5) {
+                    return courses;
+                } else
+                    return input;
             } else
-                return input;
+                return null;
         });
     }
 
