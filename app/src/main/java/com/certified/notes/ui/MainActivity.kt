@@ -83,6 +83,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val w = window
+                w.statusBarColor = getColor(R.color.midWhite)
+            }
         }
     }
 

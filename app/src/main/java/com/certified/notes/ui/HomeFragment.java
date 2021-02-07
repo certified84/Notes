@@ -33,6 +33,7 @@ import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -46,11 +47,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
     private final int ID_NOT_SET = 0;
     private RecyclerView recyclerCourses, recyclerNotes, recyclerTodos;
-    private MaterialButton btnShowAllNotes, btnShowAllCourses, btnAddNote;
-    private TextView tvAddNoteDescription;
+    private MaterialButton btnShowAllNotes, btnShowAllCourses, btnAddNote, btnAddCourse, btnAddTodo;
+    private TextView tvAddNoteDescription, tvAddCourseDescription, tvAddTodoDescription;
     private ImageView ivTodoPopupMenu;
     private NavController mNavController;
     private NotesViewModel mViewModel;
+    private MaterialCardView cardView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,17 +71,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         btnShowAllNotes = view.findViewById(R.id.btn_show_all_notes);
         btnShowAllCourses = view.findViewById(R.id.btn_show_all_courses);
         btnAddNote = view.findViewById(R.id.btn_add_note);
+        btnAddCourse = view.findViewById(R.id.btn_add_course);
+        btnAddTodo = view.findViewById(R.id.btn_add_todo);
 
         tvAddNoteDescription = view.findViewById(R.id.tv_add_note_description);
+        tvAddCourseDescription = view.findViewById(R.id.tv_add_course_description);
+        tvAddTodoDescription = view.findViewById(R.id.tv_add_todo_description);
 
         ivTodoPopupMenu = view.findViewById(R.id.iv_todo_popup_menu);
+        cardView = view.findViewById(R.id.card_view);
 
         btnShowAllNotes.setOnClickListener(this);
         btnShowAllCourses.setOnClickListener(this);
         btnAddNote.setOnClickListener(this);
+        btnAddCourse.setOnClickListener(this);
+        btnAddTodo.setOnClickListener(this);
         ivTodoPopupMenu.setOnClickListener(this);
-
-//        enableStrictMode();
 
         return view;
     }
@@ -89,7 +96,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         super.onViewCreated(view, savedInstanceState);
 
         mNavController = Navigation.findNavController(view);
-        mViewModel = new NotesViewModel(getActivity().getApplication());
+        mViewModel = new NotesViewModel(requireActivity().getApplication());
 
         init();
     }
@@ -114,21 +121,36 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerNotes.setClipChildren(false);
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
-        mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courseRecyclerAdapter::submitList);
+        mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courses -> {
+            if (courses != null)
+                courseRecyclerAdapter.submitList(courses);
+            else {
+                tvAddCourseDescription.setVisibility(View.VISIBLE);
+                btnAddCourse.setVisibility(View.VISIBLE);
+            }
+        });
         recyclerCourses.setLayoutManager(courseLayoutManager);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
         recyclerCourses.setClipChildren(false);
 
         TodoRecyclerAdapter todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
-        mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todoRecyclerAdapter::submitList);
+        mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> {
+            if (todos.size() != 0)
+                todoRecyclerAdapter.submitList(todos);
+            else {
+                cardView.setVisibility(View.GONE);
+                tvAddTodoDescription.setVisibility(View.VISIBLE);
+                btnAddTodo.setVisibility(View.VISIBLE);
+            }
+        });
         recyclerTodos.setLayoutManager(todoLayoutManager);
         recyclerTodos.setAdapter(todoRecyclerAdapter);
         todoRecyclerAdapter.setOnTodoClickedListener(todo -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_todo, null);
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
             }
@@ -161,11 +183,17 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             });
             alertDialog.show();
         });
+
+        if (btnAddNote.getVisibility() == View.VISIBLE)
+            btnShowAllNotes.setClickable(false);
+
+        if (btnAddCourse.getVisibility() == View.VISIBLE)
+            btnShowAllCourses.setClickable(false);
+
     }
 
     @Override
     public void onClick(View v) {
-
         int id = v.getId();
         if (id == R.id.btn_show_all_notes) {
             mNavController.navigate(R.id.notesFragment);
@@ -178,6 +206,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             menu.show();
         } else if (id == R.id.btn_add_note) {
             launchNoteDialog();
+        } else if (id == R.id.btn_add_course) {
+            launchCourseDialog();
+        } else if (id == R.id.btn_add_todo) {
+            launchTodoDialog();
         }
     }
 
@@ -193,11 +225,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     }
 
     private void launchNoteDialog() {
-        btnAddNote.setVisibility(View.GONE);
-        tvAddNoteDescription.setVisibility(View.GONE);
-
         View view = getLayoutInflater().inflate(R.layout.dialog_new_note, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
@@ -231,11 +260,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         spinnerCourses.setAdapter(adapterCourses);
         tvNoteDialogTitle.setText(getString(R.string.add_note));
 
-        btnCancel.setOnClickListener(v -> {
-            btnAddNote.setVisibility(View.VISIBLE);
-            tvAddNoteDescription.setVisibility(View.VISIBLE);
-            alertDialog.dismiss();
-        });
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseTitle = spinnerCourses.getSelectedItem().toString();
             String courseCode;
@@ -250,6 +275,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 if (!courseTitle.equals(getString(R.string.select_a_course))) {
                     Note note = new Note(courseCode, noteTitle, noteContent);
                     mViewModel.insertNote(note);
+
+                    btnAddNote.setVisibility(View.GONE);
+                    tvAddNoteDescription.setVisibility(View.GONE);
+
                     alertDialog.dismiss();
                     Toast.makeText(getContext(), getString(R.string.note_saved), Toast.LENGTH_SHORT).show();
                 } else {
@@ -260,6 +289,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             }
         });
         alertDialog.show();
+    }
+
+    public void launchCourseDialog() {
+        btnAddCourse.setVisibility(View.GONE);
+        tvAddCourseDescription.setVisibility(View.GONE);
+    }
+
+    public void launchTodoDialog() {
+        btnAddTodo.setVisibility(View.GONE);
+        tvAddTodoDescription.setVisibility(View.GONE);
     }
 
     private void launchDeleteDialog(int id) {

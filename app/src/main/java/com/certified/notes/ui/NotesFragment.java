@@ -262,6 +262,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                     mEditor = mPreferences.edit();
                     mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
                     mEditor.apply();
+                    noteRecyclerAdapter.notifyDataSetChanged();
 
                     Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
                 }
@@ -302,6 +303,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         builder.setIcon(R.drawable.ic_baseline_delete_24);
         builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllNotes();
+            mViewModel.deleteAllBookMarks();
             dialog1.dismiss();
         });
         builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());

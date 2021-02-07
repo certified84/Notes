@@ -24,11 +24,10 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
 
         @Override
         public boolean areContentsTheSame(@NonNull Course oldItem, @NonNull Course newItem) {
-            return oldItem.getCourseTitle().equals(newItem.getCourseTitle()) &&
+            return oldItem.getCourseTitle().equals(newItem.getCourseTitle()) ||
                     oldItem.getCourseCode().equals(newItem.getCourseCode());
         }
     };
-    private onCourseClickedListener listener;
 
     public HomeCourseRecyclerAdapter() {
         super(DIFF_CALLBACK);
@@ -48,15 +47,7 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
         holder.mCourseCode.setText(course.getCourseCode());
     }
 
-    public void setOnCourseClickedListener(onCourseClickedListener listener) {
-        this.listener = listener;
-    }
-
-    public interface onCourseClickedListener {
-        void onCourseClicked(Course course);
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mCourseCode, mCourseTitle;
 
@@ -64,13 +55,6 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
             super(itemView);
             mCourseCode = itemView.findViewById(R.id.tv_course_code);
             mCourseTitle = itemView.findViewById(R.id.tv_course_title);
-
-            itemView.setOnClickListener(v -> {
-                int position = getAdapterPosition();
-                if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onCourseClicked(getItem(position));
-                }
-            });
         }
     }
 }
