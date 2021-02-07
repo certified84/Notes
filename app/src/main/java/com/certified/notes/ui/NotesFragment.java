@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
@@ -52,8 +53,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     private SharedPreferences.Editor mEditor;
     private Set<String> mDefValues;
     private Set<String> mNoteIds;
-    private MaterialAlertDialogBuilder mBuilder;
-    private AlertDialog mAlertDialog;
     private SearchView svSearchNotes;
 
     public NotesFragment() {
@@ -68,7 +67,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
         recyclerNotes = view.findViewById(R.id.recycler_view_notes);
         ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu);
-        
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             svSearchNotes = view.findViewById(R.id.sv_search_database);
         }
@@ -80,9 +79,8 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = new NotesViewModel(getActivity().getApplication());
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        mBuilder = new MaterialAlertDialogBuilder(getContext());
+        mViewModel = new NotesViewModel(requireActivity().getApplication());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
         ivNotePopupMenu.setOnClickListener(this::showPopupMenu);
 
         mDefValues = new HashSet<>();
@@ -132,12 +130,13 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         noteRecyclerAdapter.setOnNoteClickedListener(note -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                mBuilder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
             }
-            mAlertDialog = mBuilder.create();
-            mAlertDialog.setView(view);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.setView(view);
 
             Spinner spinnerCourses = view.findViewById(R.id.spinner_courses);
             EditText etNoteTitle = view.findViewById(R.id.et_note_title);
@@ -161,7 +160,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
             spinnerCourses.setSelection(coursePosition);
 
-            btnCancel.setOnClickListener(v -> mAlertDialog.dismiss());
+            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
@@ -187,7 +186,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mViewModel.updateBookMark(bookMark1);
                                     }
                                 });
-                                mAlertDialog.dismiss();
+                                alertDialog.dismiss();
                             } else
                                 Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                         } else {
@@ -203,7 +202,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mViewModel.updateBookMark(bookMark1);
                                     }
                                 });
-                                mAlertDialog.dismiss();
+                                alertDialog.dismiss();
                             } else
                                 Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                         }
@@ -213,7 +212,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                     Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
             });
 
-            mAlertDialog.show();
+            alertDialog.show();
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -225,9 +224,10 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (direction == ItemTouchHelper.LEFT) {
-                    mBuilder.setTitle("Delete");
-                    mBuilder.setMessage(R.string.note_delete_dialog_message);
-                    mBuilder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
+                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+                    builder.setTitle("Delete");
+                    builder.setMessage(R.string.note_delete_dialog_message);
+                    builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
                         mViewModel.deleteNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()));
                         mViewModel.deleteBookMarkedNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()).getId());
 
@@ -241,9 +241,13 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
                         dialog1.dismiss();
                     });
-                    mBuilder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
-                    mAlertDialog = mBuilder.create();
-                    mAlertDialog.show();
+                    builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setOnShowListener(dialog1 -> {
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+                    });
+                    alertDialog.show();
                 } else if (direction == ItemTouchHelper.RIGHT) {
                     Note note = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition());
                     int noteId = note.getId();
@@ -258,6 +262,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                     mEditor = mPreferences.edit();
                     mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
                     mEditor.apply();
+                    noteRecyclerAdapter.notifyDataSetChanged();
 
                     Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
                 }
@@ -292,15 +297,21 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     }
 
     private void launchDeleteDialog() {
-        mBuilder.setTitle(R.string.delete);
-        mBuilder.setMessage(R.string.all_note_delete_dialog_message);
-        mBuilder.setIcon(R.drawable.ic_baseline_delete_24);
-        mBuilder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+        builder.setTitle(R.string.delete);
+        builder.setMessage(R.string.all_note_delete_dialog_message);
+        builder.setIcon(R.drawable.ic_baseline_delete_24);
+        builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllNotes();
+            mViewModel.deleteAllBookMarks();
             dialog1.dismiss();
         });
-        mBuilder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
-        mAlertDialog = mBuilder.create();
-        mAlertDialog.show();
+        builder.setNegativeButton(getString(R.string.no), (dialog1, which) -> dialog1.dismiss());
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(dialog1 -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+        });
+        alertDialog.show();
     }
 }

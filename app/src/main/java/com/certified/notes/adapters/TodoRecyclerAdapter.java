@@ -19,6 +19,8 @@ import com.certified.notes.room.NotesViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import static android.graphics.Color.RED;
+
 public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.ViewHolder> {
 
     private static final DiffUtil.ItemCallback<Todo> DIFF_CALLBACK = new DiffUtil.ItemCallback<Todo>() {
@@ -75,6 +77,10 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
                 });
                 builder.setOnDismissListener(dialog -> holder.mCheckBox.setChecked(false));
                 AlertDialog dialog = builder.create();
+                dialog.setOnShowListener(dialog1 -> {
+                    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+                    dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+                });
                 dialog.show();
             } else {
                 holder.mCheckBox.setChecked(false);

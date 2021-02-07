@@ -17,26 +17,26 @@ import java.util.List;
 
 public class NotesViewModel extends AndroidViewModel {
 
-    private Repository mRepository;
+    private final Repository mRepository;
 
-    private LiveData<List<Note>> allNotes;
-    private LiveData<List<Note>> allHomeNotes;
-    private LiveData<List<Course>> allCourses;
-    private LiveData<List<Course>> allHomeCourses;
-    private LiveData<List<Todo>> allTodos;
-    private LiveData<List<BookMark>> allBookMarks;
-    private LiveData<List<Integer>> allNoteIds;
-    private LiveData<List<Integer>> allCourseUnits;
-    private LiveData<List<Integer>> allCourseCreditPoints;
-    private LiveData<User> user;
+    private final LiveData<List<Note>> allNotes;
+    private final LiveData<List<Note>> randomNotes;
+    private final LiveData<List<Course>> randomCourses;
+    private final LiveData<List<Course>> allCourses;
+    private final LiveData<List<Todo>> allTodos;
+    private final LiveData<List<BookMark>> allBookMarks;
+    private final LiveData<List<Integer>> allNoteIds;
+    private final LiveData<List<Integer>> allCourseUnits;
+    private final LiveData<List<Integer>> allCourseCreditPoints;
+    private final LiveData<User> user;
 
     public NotesViewModel(@NonNull Application application) {
         super(application);
         mRepository = new Repository(application);
         allNotes = mRepository.getAllNotes();
-        allHomeNotes = mRepository.getAllHomeNotes();
+        randomNotes = mRepository.getRandomNotes();
         allCourses = mRepository.getAllCourses();
-        allHomeCourses = mRepository.getAllHomeCourses();
+        randomCourses = mRepository.getRandomCourses();
         allTodos = mRepository.getAllTodos();
         allBookMarks = mRepository.getAllBookMarks();
         allNoteIds = mRepository.getAllNoteIds();
@@ -117,16 +117,16 @@ public class NotesViewModel extends AndroidViewModel {
         return allNotes;
     }
 
-    public LiveData<List<Note>> getAllHomeNotes() {
-        return allHomeNotes;
+    public LiveData<List<Note>> getRandomNotes() {
+        return randomNotes;
     }
 
     public LiveData<List<Course>> getAllCourses() {
         return allCourses;
     }
 
-    public LiveData<List<Course>> getAllHomeCourses() {
-        return allHomeCourses;
+    public LiveData<List<Course>> getRandomCourses() {
+        return randomCourses;
     }
 
     public LiveData<List<Todo>> getAllTodos() {

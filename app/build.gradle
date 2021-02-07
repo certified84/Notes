@@ -75,6 +75,7 @@ dependencies {
 
 //    horizontal number picker
     implementation 'me.angrybyte.picker:picker:1.3.1'
+    implementation 'com.shawnlin:number-picker:2.4.6'
 
 //    circle image
     implementation 'de.hdodenhof:circleimageview:3.1.0'

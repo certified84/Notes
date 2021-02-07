@@ -33,30 +33,30 @@
                 style="@style/TextAppearance.Notes.TitleText1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:textAlignment="textStart"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/tv_note_content"
                 app:layout_constraintEnd_toStartOf="@+id/likeButton"
-                app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
-                tools:text="TextView" />
+                tools:text="TextView"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-                android:id="@+id/imageView"
-                style="@style/Widget.Note.ImageView.Profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:contentDescription="@string/notes"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio=""
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_notes_45" />
+<!--        <androidx.appcompat.widget.AppCompatImageView-->
+<!--                android:id="@+id/imageView"-->
+<!--                style="@style/Widget.Note.ImageView.Profile"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:contentDescription="@string/notes"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintDimensionRatio=""-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:srcCompat="@drawable/ic_notes_45" />-->
 
         <com.like.LikeButton
                 android:id="@+id/likeButton"

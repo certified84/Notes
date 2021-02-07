@@ -3,6 +3,7 @@ package com.certified.notes.util;
 import android.app.Application;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
 
 import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
@@ -12,7 +13,10 @@ import com.certified.notes.model.User;
 import com.certified.notes.room.NotesDao;
 import com.certified.notes.room.NotesDatabase;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,31 +24,60 @@ import java.util.concurrent.Executors;
 public class Repository {
 
     public static final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private NotesDao mNotesDao;
-    private LiveData<List<Note>> allNotes;
-    private LiveData<List<Note>> allHomeNotes;
-    private LiveData<List<Course>> allCourses;
-    private LiveData<List<Course>> allHomeCourses;
-    private LiveData<List<Todo>> allTodos;
-    private LiveData<List<BookMark>> allBookMarks;
-    private LiveData<List<Integer>> allNoteIds;
-    private LiveData<List<Integer>> allCourseUnits;
-    private LiveData<List<Integer>> allCourseCreditPoints;
-    private LiveData<User> user;
+    private final NotesDao mNotesDao;
+    private final LiveData<List<Note>> allNotes;
+    private final LiveData<List<Note>> randomNotes;
+    private final LiveData<List<Course>> allCourses;
+    private final LiveData<List<Course>> randomCourses;
+    private final LiveData<List<Todo>> allTodos;
+    private final LiveData<List<BookMark>> allBookMarks;
+    private final LiveData<List<Integer>> allNoteIds;
+    private final LiveData<List<Integer>> allCourseUnits;
+    private final LiveData<List<Integer>> allCourseCreditPoints;
+    private final LiveData<User> user;
 
     public Repository(Application application) {
         NotesDatabase database = NotesDatabase.getInstance(application);
         mNotesDao = database.mNotesDao();
         allNotes = mNotesDao.getAllNotes();
-        allHomeNotes = mNotesDao.getAllHomeNotes();
         allCourses = mNotesDao.getAllCourses();
-        allHomeCourses = mNotesDao.getAllHomeCourses();
         allTodos = mNotesDao.getAllTodos();
         allBookMarks = mNotesDao.getAllBookMarks();
         allNoteIds = mNotesDao.getNoteIds();
         allCourseUnits = mNotesDao.getCourseUnits();
         allCourseCreditPoints = mNotesDao.getCourseCreditPoints();
         user = mNotesDao.getUser();
+
+        final long seed = System.currentTimeMillis();
+        randomNotes = Transformations.map(mNotesDao.getAllNotes(), input -> {
+            Collections.shuffle(input, new Random(seed));
+            List<Note> notes = new ArrayList<>();
+            if (input.size() > 0) {
+                if (input.size() >= 5) {
+                    for (int i = 1; i <= 5; i++) {
+                        notes.add(input.get(i));
+                    }
+                    return notes;
+                } else
+                    return input;
+            } else
+                return null;
+        });
+
+        randomCourses = Transformations.map(mNotesDao.getAllCourses(), input -> {
+            Collections.shuffle(input, new Random(seed));
+            List<Course> courses = new ArrayList<>();
+            if (input.size() > 0) {
+                if (input.size() >= 5) {
+                    for (int i = 1; i <= 5; i++) {
+                        courses.add(input.get(i));
+                    }
+                    return courses;
+                } else
+                    return input;
+            } else
+                return null;
+        });
     }
 
     public void insertNote(Note note) {
@@ -119,16 +152,16 @@ public class Repository {
         return allNotes;
     }
 
-    public LiveData<List<Note>> getAllHomeNotes() {
-        return allHomeNotes;
+    public LiveData<List<Note>> getRandomNotes() {
+        return randomNotes;
     }
 
     public LiveData<List<Course>> getAllCourses() {
         return allCourses;
     }
 
-    public LiveData<List<Course>> getAllHomeCourses() {
-        return allHomeCourses;
+    public LiveData<List<Course>> getRandomCourses() {
+        return randomCourses;
     }
 
     public LiveData<List<Todo>> getAllTodos() {
@@ -247,13 +280,4 @@ public class Repository {
             return null;
         }
     }
-
-//    private long seed = System.currentTimeMillis();
-//    val mItemList: LiveData<MutableList<Note>> = Transformations.map(mNotesDao.getAllHomeNotes()) {
-//        it.shuffled(Random(seed))
-//    }
-//    public LiveData<List<Note>> randomisedNotes() {
-//        Transformations.map(mNotesDao.getAllHomeNotes());
-//        return allHomeNotes.shu
-//    }
 }

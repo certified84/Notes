@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.Window
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -26,6 +25,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
+import com.shawnlin.numberpicker.NumberPicker
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -44,10 +44,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
 
-    private lateinit var builder: MaterialAlertDialogBuilder
-    private lateinit var alertDialog: AlertDialog
-    private lateinit var inflater: LayoutInflater
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,8 +52,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
-        builder = MaterialAlertDialogBuilder(this)
-        inflater = this.layoutInflater
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
 
@@ -89,9 +83,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                val w: Window = window
-                w.statusBarColor = Color.TRANSPARENT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val w = window
+                w.statusBarColor = getColor(R.color.midWhite)
             }
         }
     }
@@ -143,12 +137,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchCourseDialog() {
+        val inflater: LayoutInflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_course, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
 
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -170,29 +170,44 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val MARK_NOT_SET = 0
             val GRADE_POINT_NOT_SET = 0
             if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
-                val course = Course(courseCode, courseTitle, courseUnit, MARK_NOT_SET, "F", GRADE_POINT_NOT_SET)
+                val course = Course(
+                    courseCode,
+                    courseTitle,
+                    courseUnit,
+                    MARK_NOT_SET,
+                    "F",
+                    GRADE_POINT_NOT_SET
+                )
                 notesViewModel.insertCourse(course)
                 alertDialog.dismiss()
             } else
-                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
+                    .show()
         }
         alertDialog.show()
     }
 
     private fun launchTodoDialog() {
+        val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_todo, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
         }
-        builder.setTitle(getString(R.string.add_todo))
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
+        val tvTodoDialogTitle: MaterialTextView = view.findViewById(R.id.tv_todo_dialog_title)
         val etTodo: EditText = view.findViewById(R.id.et_todo)
         val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
         val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
 
+        tvTodoDialogTitle.text = getString(R.string.add_todo)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
@@ -207,12 +222,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun launchNoteDialog() {
+        val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_note, null)
+        val builder = MaterialAlertDialogBuilder(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
         }
-        alertDialog = builder.create()
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+        }
         alertDialog.setView(view)
 
         val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
@@ -240,7 +261,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
             val courseTitle = spinnerCourses.selectedItem.toString()
-            val courseCode = if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(courseTitle)
+            val courseCode =
+                if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(
+                    courseTitle
+                )
             val noteTitle = etNoteTitle.text.toString()
             val noteContent = etNoteContent.text.toString()
 
@@ -251,9 +275,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     alertDialog.dismiss()
                     Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
                 } else
-                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG)
+                        .show()
             } else
-                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
+                    .show()
         }
         alertDialog.show()
     }

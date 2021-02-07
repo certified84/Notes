@@ -8,11 +8,11 @@
     android:elevation="0dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_related_notes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/list_item_notes" />
+            android:id="@+id/recycler_view_related_notes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/list_item_related_notes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Notes" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
@@ -81,6 +81,13 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="customNumberPickerStyle" >
+        <item name="np_dividerColor">@color/midWhite</item>
+        <item name="np_orientation">horizontal</item>
+        <item name="np_selectedTextColor">@color/white</item>
+        <item name="np_textColor">@color/midWhite</item>
     </style>
 
     <style name="TextAppearance.Notes.TitleText2.Profile" parent="Widget.MaterialComponents.TextView">

@@ -106,8 +106,11 @@
     <string name="add_a_todo">Add a todo</string>
     <string name="all_fields_are_required">All fields are required</string>
     <string name="note_saved">Note saved</string>
-    <string name="darkmode">DarkMode</string>
-    <string name="nightmode">NightMode</string>
-    <string name="lightmode">LightMode</string>
+    <string name="dark_mode">DarkMode</string>
+    <string name="night_mode">NightMode</string>
+    <string name="light_mode">LightMode</string>
     <string name="user_department_field">User department field</string>
+    <string name="you_haven_t_added_any_notes_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any notes yet. Click the button below to add a new note.</string>
+    <string name="you_haven_t_added_any_courses_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any courses yet. Click the button below to add a new course.</string>
+    <string name="you_haven_t_added_any_todos_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any todos yet. Click the button below to add a new todo.</string>
 </resources>
