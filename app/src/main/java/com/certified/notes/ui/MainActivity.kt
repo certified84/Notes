@@ -1,5 +1,11 @@
 package com.certified.notes.ui
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +15,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -44,11 +51,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
 
+    private val PRIMARY_CHANNEL_ID = "primary_notification_channel"
+    private lateinit var notifyManager: NotificationManager
+    private val NOTES_NOTIFICATION_ID = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         isDarkModeEnabled()
+        createNotificationChannel()
+        isFirstOpen()
 
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
@@ -88,6 +101,69 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 w.statusBarColor = getColor(R.color.midWhite)
             }
         }
+    }
+
+    private fun isFirstOpen() {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val isFirstOpen = preferences.getBoolean(PreferenceKeys.FIRST_TIME_OPEN, true)
+        if (isFirstOpen) {
+            val alertDialogBuilder = MaterialAlertDialogBuilder(this)
+            alertDialogBuilder.setTitle(getString(R.string.welcome_to_notes))
+            alertDialogBuilder.setMessage(
+                "Hey there, thank you for downloading Notes your personal tool for managing your semester courses, notes and todos." +
+                        "\nMake sure to add your semester courses in other to link your notes to them"
+            )
+            alertDialogBuilder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                val editor = preferences.edit()
+                editor.putBoolean(PreferenceKeys.FIRST_TIME_OPEN, false)
+                editor.apply()
+                dialog.dismiss()
+            }
+//            alertDialogBuilder.setNegativeButton(getString(R.string.no)) { _, _ ->
+//                finish()
+//            }
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+        } else
+            sendNotification()
+    }
+
+    private fun createNotificationChannel() {
+        notifyManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                PRIMARY_CHANNEL_ID,
+                getString(R.string.notes_notification),
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = getString(R.string.notes_reminder_notification)
+            notifyManager.createNotificationChannel(notificationChannel)
+        }
+    }
+
+    private fun getNotificationBuilder(): NotificationCompat.Builder? {
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val notificationPendingIntent = PendingIntent.getActivity(
+            this, NOTES_NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val message = getString(R.string.notification_message)
+        return NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
+            .setDefaults(Notification.DEFAULT_ALL)
+            .setSmallIcon(R.drawable.ic_notes)
+            .setContentTitle(getString(R.string.notes_reminder))
+            .setColor(resources.getColor(R.color.colorAccent))
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setTicker("Notes")
+            .setAutoCancel(true)
+    }
+
+    private fun sendNotification() {
+        val notifyBuilder = getNotificationBuilder()
+        notifyManager.notify(NOTES_NOTIFICATION_ID, notifyBuilder!!.build())
     }
 
     override fun onClick(v: View) {
@@ -160,7 +236,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         picker.minValue = 1
         picker.maxValue = 4
-
         tvCourseDialogTitle.text = getString(R.string.add_course)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
@@ -192,9 +267,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val view = inflater.inflate(R.layout.dialog_new_todo, null)
         val builder = MaterialAlertDialogBuilder(this)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             builder.background = getDrawable(R.drawable.alert_dialog_bg)
-        }
+
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)

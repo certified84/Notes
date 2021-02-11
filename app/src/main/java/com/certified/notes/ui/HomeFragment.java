@@ -36,6 +36,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,10 +116,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 btnAddNote.setVisibility(View.VISIBLE);
             }
         });
+
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
+        recyclerNotes.setOnClickListener(v -> mNavController.navigate(R.id.notesFragment));
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
         mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courses -> {
@@ -129,10 +132,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 btnAddCourse.setVisibility(View.VISIBLE);
             }
         });
+
         recyclerCourses.setLayoutManager(courseLayoutManager);
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
         recyclerCourses.setClipChildren(false);
+        recyclerCourses.setOnClickListener(v -> mNavController.navigate(R.id.coursesFragment));
 
         TodoRecyclerAdapter todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
         mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> {
@@ -144,8 +149,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 btnAddTodo.setVisibility(View.VISIBLE);
             }
         });
+
         recyclerTodos.setLayoutManager(todoLayoutManager);
         recyclerTodos.setAdapter(todoRecyclerAdapter);
+
         todoRecyclerAdapter.setOnTodoClickedListener(todo -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_todo, null);
@@ -231,7 +238,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
         }
         AlertDialog alertDialog = builder.create();
-        alertDialog.setCancelable(false);
+//        alertDialog.setCancelable(false);
         alertDialog.setOnShowListener(dialog -> {
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
@@ -292,13 +299,87 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     }
 
     public void launchCourseDialog() {
-        btnAddCourse.setVisibility(View.GONE);
-        tvAddCourseDescription.setVisibility(View.GONE);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_new_course, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(v -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+        });
+        alertDialog.setView(view);
+
+        MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
+        EditText etCourseCode = view.findViewById(R.id.et_course_code);
+        EditText etCourseTitle = view.findViewById(R.id.et_course_title);
+        NumberPicker picker = view.findViewById(R.id.number_picker_course_unit);
+        MaterialButton btnSave = view.findViewById(R.id.btn_save);
+        MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
+
+        picker.setMinValue(1);
+        picker.setMaxValue(4);
+        tvCourseDialogTitle.setText(getString(R.string.add_course));
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnSave.setOnClickListener(v -> {
+            String courseCode = etCourseCode.getText().toString().trim();
+            String courseTitle = etCourseTitle.getText().toString().trim();
+            int courseUnit = picker.getValue();
+            int MARK_NOT_SET = 0;
+            int GRADE_POINT_NOT_SET = 0;
+            if (!courseCode.isEmpty() && !courseTitle.isEmpty()) {
+                Course course = new Course(courseCode, courseTitle, courseUnit, MARK_NOT_SET, "F", GRADE_POINT_NOT_SET);
+                mViewModel.insertCourse(course);
+
+                btnAddCourse.setVisibility(View.GONE);
+                tvAddCourseDescription.setVisibility(View.GONE);
+
+                alertDialog.dismiss();
+            } else
+                Toast.makeText(getContext(), getString(R.string.all_fields_are_required), Toast.LENGTH_SHORT).show();
+        });
+        alertDialog.show();
     }
 
     public void launchTodoDialog() {
-        btnAddTodo.setVisibility(View.GONE);
-        tvAddTodoDescription.setVisibility(View.GONE);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_new_todo, null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(v -> {
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+        });
+        alertDialog.setView(view);
+
+        MaterialTextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
+        EditText etTodo = view.findViewById(R.id.et_todo);
+        MaterialButton btnSave = view.findViewById(R.id.btn_save);
+        MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
+
+        tvTodoDialogTitle.setText(getString(R.string.add_todo));
+        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnSave.setOnClickListener(v -> {
+            String todoContent = etTodo.getText().toString().trim();
+            if (!todoContent.isEmpty()) {
+                Todo todo = new Todo(todoContent, false);
+                mViewModel.insertTodo(todo);
+
+                btnAddTodo.setVisibility(View.GONE);
+                tvAddTodoDescription.setVisibility(View.GONE);
+
+                alertDialog.dismiss();
+            } else
+                Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
+        });
+        alertDialog.show();
     }
 
     private void launchDeleteDialog(int id) {

@@ -292,7 +292,8 @@
                     android:contentDescription="@string/settings_button"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_settings_50" />
+                    app:srcCompat="@drawable/ic_settings_50"
+                    android:visibility="gone" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_dark_mode"
@@ -308,11 +309,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/night_mode"
-                    app:layout_constraintBottom_toBottomOf="@+id/fab_settings"
                     app:layout_constraintStart_toEndOf="@+id/switch_dark_mode"
-                    app:layout_constraintTop_toTopOf="@+id/fab_settings"
+                    app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_baseline_dark_mode_50"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp" />
 
             <ImageView
                     android:id="@+id/imageView9"

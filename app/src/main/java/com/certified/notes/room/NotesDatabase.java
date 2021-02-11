@@ -66,36 +66,36 @@ public abstract class NotesDatabase extends RoomDatabase {
                 NotesDao notesDao = instance.mNotesDao();
 
 //                notesDao.deleteAllNotes();
-                notesDao.insertNote(note1);
-                notesDao.insertNote(note2);
-                notesDao.insertNote(note3);
-                notesDao.insertNote(note4);
-                notesDao.insertNote(note5);
-                notesDao.insertNote(note6);
-                notesDao.insertNote(note7);
-                notesDao.insertNote(note8);
-
-//                notesDao.deleteAllCourses();
-                notesDao.insertCourse(course1);
-                notesDao.insertCourse(course2);
-                notesDao.insertCourse(course3);
-                notesDao.insertCourse(course4);
-                notesDao.insertCourse(course5);
-                notesDao.insertCourse(course6);
-                notesDao.insertCourse(course7);
-                notesDao.insertCourse(course8);
-                notesDao.insertCourse(course9);
-                notesDao.insertCourse(course10);
-
-//                notesDao.deleteAllTodos();
-                notesDao.insertTodo(todo1);
-                notesDao.insertTodo(todo2);
-                notesDao.insertTodo(todo3);
-                notesDao.insertTodo(todo4);
-                notesDao.insertTodo(todo5);
-                notesDao.insertTodo(todo6);
-                notesDao.insertTodo(todo7);
-                notesDao.insertTodo(todo8);
+//                notesDao.insertNote(note1);
+//                notesDao.insertNote(note2);
+//                notesDao.insertNote(note3);
+//                notesDao.insertNote(note4);
+//                notesDao.insertNote(note5);
+//                notesDao.insertNote(note6);
+//                notesDao.insertNote(note7);
+//                notesDao.insertNote(note8);
+//
+////                notesDao.deleteAllCourses();
+//                notesDao.insertCourse(course1);
+//                notesDao.insertCourse(course2);
+//                notesDao.insertCourse(course3);
+//                notesDao.insertCourse(course4);
+//                notesDao.insertCourse(course5);
+//                notesDao.insertCourse(course6);
+//                notesDao.insertCourse(course7);
+//                notesDao.insertCourse(course8);
+//                notesDao.insertCourse(course9);
+//                notesDao.insertCourse(course10);
+//
+////                notesDao.deleteAllTodos();
+//                notesDao.insertTodo(todo1);
+//                notesDao.insertTodo(todo2);
+//                notesDao.insertTodo(todo3);
+//                notesDao.insertTodo(todo4);
+//                notesDao.insertTodo(todo5);
+//                notesDao.insertTodo(todo6);
+//                notesDao.insertTodo(todo7);
+//                notesDao.insertTodo(todo8);
 
                 notesDao.insertUser(user);
             });
