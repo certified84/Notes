@@ -22,7 +22,8 @@ import com.like.OnLikeListener
 import java.util.*
 
 class NoteRecyclerAdapterKt(private val mContext: Context, private val mOwner: LifecycleOwner,
-    private val mViewModel: NotesViewModel) : ListAdapter<Note, NoteRecyclerAdapterKt.ViewHolder>(
+    private val mViewModel: NotesViewModel
+) : ListAdapter<Note, NoteRecyclerAdapterKt.ViewHolder>(
         DIFF_CALLBACK
     ) {
 

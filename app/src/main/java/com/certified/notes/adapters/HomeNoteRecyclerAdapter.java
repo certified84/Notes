@@ -67,10 +67,10 @@ public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerA
     }
 
     public interface OnNoteClickedListener {
-        void onNoteClick(Note note);
+        void onNoteClick();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mNoteContent;
         public final TextView mNoteTitle;
@@ -83,7 +83,7 @@ public class HomeNoteRecyclerAdapter extends ListAdapter<Note, HomeNoteRecyclerA
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (listener != null && position != RecyclerView.NO_POSITION) {
-                    listener.onNoteClick(getItem(position));
+                    listener.onNoteClick();
                 }
             });
         }

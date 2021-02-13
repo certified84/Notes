@@ -113,4 +113,10 @@
     <string name="you_haven_t_added_any_notes_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any notes yet. Click the button below to add a new note.</string>
     <string name="you_haven_t_added_any_courses_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any courses yet. Click the button below to add a new course.</string>
     <string name="you_haven_t_added_any_todos_yet_click_the_button_below_to_add_a_new_note">You haven\'t added any todos yet. Click the button below to add a new todo.</string>
+    <string name="welcome_to_notes">Welcome to Notes</string>
+    <string name="notification_message">Hey there, don\'t forget to add your notes</string>
+    <string name="notes_reminder_notification">Notes reminder notification</string>
+    <string name="notes_notification">Notes Notification</string>
+    <string name="ok">OK</string>
+    <string name="notes_reminder">Notes reminder</string>
 </resources>

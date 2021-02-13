@@ -288,15 +288,16 @@
                     app:fabSize="mini"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_settings" />
+                    app:srcCompat="@drawable/ic_settings"
+                    android:visibility="gone" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switch_dark_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="@+id/fab_settings"
                     app:layout_constraintStart_toEndOf="@+id/imageView9"
-                    app:layout_constraintTop_toTopOf="@+id/fab_settings" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="16dp" />
 
             <ImageView
                     android:id="@+id/imageView6"
