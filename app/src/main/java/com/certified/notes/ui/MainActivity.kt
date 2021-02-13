@@ -63,7 +63,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         createNotificationChannel()
         isFirstOpen()
 
-        notesViewModel = NotesViewModel(application)
+        notesViewModel =
+            NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
@@ -119,9 +120,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 editor.apply()
                 dialog.dismiss()
             }
-//            alertDialogBuilder.setNegativeButton(getString(R.string.no)) { _, _ ->
-//                finish()
-//            }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
         } else
@@ -158,6 +156,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setTicker("Notes")
+            .addAction(R.drawable.ic_add, "Add Note", notificationPendingIntent)
             .setAutoCancel(true)
     }
 

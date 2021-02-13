@@ -54,6 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     private NavController mNavController;
     private NotesViewModel mViewModel;
     private MaterialCardView cardView;
+    private TodoRecyclerAdapter todoRecyclerAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -109,11 +110,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(ID_NOT_SET);
         mViewModel.getRandomNotes().observe(getViewLifecycleOwner(), notes -> {
-            if (notes != null)
+            if (notes != null) {
                 noteRecyclerAdapter.submitList(notes);
+                btnShowAllNotes.setClickable(true);
+            }
             else {
                 tvAddNoteDescription.setVisibility(View.VISIBLE);
                 btnAddNote.setVisibility(View.VISIBLE);
+                btnShowAllNotes.setClickable(false);
             }
         });
 
@@ -121,15 +125,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
-        recyclerNotes.setOnClickListener(v -> mNavController.navigate(R.id.notesFragment));
+        noteRecyclerAdapter.setOnNoteClickedListener(() -> mNavController.navigate(R.id.notesFragment));
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
         mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courses -> {
-            if (courses != null)
+            if (courses != null) {
                 courseRecyclerAdapter.submitList(courses);
+                btnShowAllCourses.setClickable(true);
+            }
             else {
                 tvAddCourseDescription.setVisibility(View.VISIBLE);
                 btnAddCourse.setVisibility(View.VISIBLE);
+                btnShowAllCourses.setClickable(false);
             }
         });
 
@@ -137,9 +144,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerCourses.setAdapter(courseRecyclerAdapter);
         recyclerCourses.setClipToPadding(false);
         recyclerCourses.setClipChildren(false);
-        recyclerCourses.setOnClickListener(v -> mNavController.navigate(R.id.coursesFragment));
+        courseRecyclerAdapter.setOnCourseClickedListener(() -> mNavController.navigate(R.id.coursesFragment));
 
-        TodoRecyclerAdapter todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
+        todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
         mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> {
             if (todos.size() != 0)
                 todoRecyclerAdapter.submitList(todos);
@@ -374,6 +381,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
                 btnAddTodo.setVisibility(View.GONE);
                 tvAddTodoDescription.setVisibility(View.GONE);
+                todoRecyclerAdapter.notifyDataSetChanged();
 
                 alertDialog.dismiss();
             } else

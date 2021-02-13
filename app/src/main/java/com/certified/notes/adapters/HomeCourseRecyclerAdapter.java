@@ -29,6 +29,7 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
         }
     };
 
+    private OnCourseClickedListener listener;
     public HomeCourseRecyclerAdapter() {
         super(DIFF_CALLBACK);
     }
@@ -47,7 +48,15 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
         holder.mCourseCode.setText(course.getCourseCode());
     }
 
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
+    public void setOnCourseClickedListener(OnCourseClickedListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnCourseClickedListener {
+        void onCourseClick();
+    }
+
+    protected class ViewHolder extends RecyclerView.ViewHolder {
 
         public final TextView mCourseCode, mCourseTitle;
 
@@ -55,6 +64,13 @@ public class HomeCourseRecyclerAdapter extends ListAdapter<Course, HomeCourseRec
             super(itemView);
             mCourseCode = itemView.findViewById(R.id.tv_course_code);
             mCourseTitle = itemView.findViewById(R.id.tv_course_title);
+
+            itemView.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onCourseClick();
+                }
+            });
         }
     }
 }
