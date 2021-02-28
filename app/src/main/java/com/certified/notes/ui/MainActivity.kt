@@ -1,11 +1,5 @@
 package com.certified.notes.ui
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -15,7 +9,6 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -51,16 +44,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var navController: NavController
     private lateinit var bottomNavigationView: BottomNavigationView
 
-    private val PRIMARY_CHANNEL_ID = "primary_notification_channel"
-    private lateinit var notifyManager: NotificationManager
-    private val NOTES_NOTIFICATION_ID = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         isDarkModeEnabled()
-        createNotificationChannel()
+//        createNotificationChannel()
         isFirstOpen()
 
         notesViewModel =
@@ -122,47 +111,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
-        } else
-            sendNotification()
-    }
-
-    private fun createNotificationChannel() {
-        notifyManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                PRIMARY_CHANNEL_ID,
-                getString(R.string.notes_notification),
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = getString(R.string.notes_reminder_notification)
-            notifyManager.createNotificationChannel(notificationChannel)
         }
-    }
-
-    private fun getNotificationBuilder(): NotificationCompat.Builder? {
-        val notificationIntent = Intent(this, MainActivity::class.java)
-        val notificationPendingIntent = PendingIntent.getActivity(
-            this, NOTES_NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val message = getString(R.string.notification_message)
-        return NotificationCompat.Builder(this, PRIMARY_CHANNEL_ID)
-            .setDefaults(Notification.DEFAULT_ALL)
-            .setSmallIcon(R.drawable.ic_notes)
-            .setContentTitle(getString(R.string.notes_reminder))
-            .setColor(resources.getColor(R.color.colorAccent))
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setTicker("Notes")
-            .addAction(R.drawable.ic_add, "Add Note", notificationPendingIntent)
-            .setAutoCancel(true)
-    }
-
-    private fun sendNotification() {
-        val notifyBuilder = getNotificationBuilder()
-        notifyManager.notify(NOTES_NOTIFICATION_ID, notifyBuilder!!.build())
     }
 
     override fun onClick(v: View) {

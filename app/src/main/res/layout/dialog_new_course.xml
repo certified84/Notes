@@ -4,8 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:elevation="0dp">
+        android:background="@drawable/bottom_sheet_bg"
+        android:elevation="8dp">
 
     <TextView
             android:id="@+id/tv_course_dialog_title"

@@ -32,6 +32,7 @@ import com.certified.notes.R;
 import com.certified.notes.model.User;
 import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -267,14 +268,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void launchNameDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-        }
-        builder.setTitle(getString(R.string.enter_name));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -284,7 +278,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.name));
         inputEditText.setText(userName);
 
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = Objects.requireNonNull(inputEditText.getText()).toString().trim();
             String school = tvSchool.getText().toString().trim();
@@ -299,26 +293,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mViewModel.updateUser(user);
                     tvName.setText(name);
 
-                    alertDialog.dismiss();
+                    bottomSheetDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Name not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a name", Toast.LENGTH_SHORT).show();
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchSchoolDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-        }
-        builder.setTitle(getString(R.string.enter_school));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -328,7 +316,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.school));
         inputEditText.setText(userSchool);
 
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = tvName.getText().toString().trim();
             String school = inputEditText.getText().toString().trim();
@@ -343,26 +331,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     mViewModel.updateUser(user);
                     tvSchool.setText(school);
 
-                    alertDialog.dismiss();
+                    bottomSheetDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "School not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a school", Toast.LENGTH_SHORT).show();
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchDepartmentDialog() {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-        }
-        builder.setTitle(getString(R.string.enter_department));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
@@ -372,7 +354,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         inputLayout.setHint(getString(R.string.department));
         inputEditText.setText(userDepartment);
 
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String name = tvName.getText().toString().trim();
             String school = tvSchool.getText().toString().trim();
@@ -386,13 +368,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     mViewModel.updateUser(user);
                     tvDepartment.setText(department);
-                    alertDialog.dismiss();
+                    bottomSheetDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Department not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "Please Enter a department", Toast.LENGTH_SHORT).show();
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchLevelDialog() {

@@ -33,6 +33,7 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -130,13 +131,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         noteRecyclerAdapter.setOnNoteClickedListener(note -> {
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-            }
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setView(view);
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
             Spinner spinnerCourses = view.findViewById(R.id.spinner_courses);
             EditText etNoteTitle = view.findViewById(R.id.et_note_title);
@@ -160,7 +155,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
             spinnerCourses.setSelection(coursePosition);
 
-            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String courseTitle = spinnerCourses.getSelectedItem().toString();
@@ -186,7 +181,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mViewModel.updateBookMark(bookMark1);
                                     }
                                 });
-                                alertDialog.dismiss();
+                                bottomSheetDialog.dismiss();
                             } else
                                 Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                         } else {
@@ -202,7 +197,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mViewModel.updateBookMark(bookMark1);
                                     }
                                 });
-                                alertDialog.dismiss();
+                                bottomSheetDialog.dismiss();
                             } else
                                 Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                         }
@@ -211,8 +206,8 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                 } else
                     Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
             });
-
-            alertDialog.show();
+            bottomSheetDialog.setContentView(view);
+            bottomSheetDialog.show();
         });
 
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -241,7 +236,10 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
                         dialog1.dismiss();
                     });
-                    builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> dialog1.dismiss());
+                    builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> {
+                        noteRecyclerAdapter.notifyDataSetChanged();
+                        dialog1.dismiss();
+                    });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.setOnShowListener(dialog1 -> {
                         alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);

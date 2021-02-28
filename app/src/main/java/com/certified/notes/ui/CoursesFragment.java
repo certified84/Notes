@@ -17,6 +17,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -28,6 +29,7 @@ import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.room.NotesViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
@@ -69,7 +71,8 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = new NotesViewModel(getActivity().getApplication());
+        mNavController = Navigation.findNavController(view);
+        mViewModel = new NotesViewModel(requireActivity().getApplication());
         ivCoursePopupMenu.setOnClickListener(this::showPopupMenu);
 
         init();
@@ -158,17 +161,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
     private void launchEditCourseDialog(@NonNull Course course) {
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_new_course, null);
-
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-        }
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(dialog1 -> {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
-        });
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
@@ -185,7 +178,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         etCourseTitle.setText(course.getCourseTitle());
         numberPickerCourseUnit.setValue(course.getCourseUnit());
 
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setText(R.string.update);
         btnSave.setOnClickListener(v -> {
             String courseCode = etCourseCode.getText().toString().trim();
@@ -216,14 +209,14 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                         }
                     });
                     mViewModel.updateCourse(course1);
-                    alertDialog.dismiss();
+                    bottomSheetDialog.dismiss();
                 } else
                     Toast.makeText(getContext(), "Course not changed", Toast.LENGTH_SHORT).show();
             } else
                 Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
         });
-
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchRelatedNotesDialog(@NonNull Course course) {
@@ -245,6 +238,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerViewRelatedNotes.setAdapter(noteRecyclerAdapter);
         recyclerViewRelatedNotes.setLayoutManager(noteLayoutManager);
+        noteRecyclerAdapter.setOnNoteClickedListener(() -> mNavController.navigate(R.id.notesFragment));
 
         alertDialog.show();
     }
