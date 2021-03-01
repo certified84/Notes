@@ -223,13 +223,7 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_related_notes, null);
 
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(dialog1 -> {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
-        });
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         RecyclerView recyclerViewRelatedNotes = view.findViewById(R.id.recycler_view_related_notes);
 
@@ -238,9 +232,12 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
         mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerViewRelatedNotes.setAdapter(noteRecyclerAdapter);
         recyclerViewRelatedNotes.setLayoutManager(noteLayoutManager);
-        noteRecyclerAdapter.setOnNoteClickedListener(() -> mNavController.navigate(R.id.notesFragment));
-
-        alertDialog.show();
+        noteRecyclerAdapter.setOnNoteClickedListener(() -> {
+            mNavController.navigate(R.id.notesFragment);
+            bottomSheetDialog.dismiss();
+        });
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchDeleteDialog() {

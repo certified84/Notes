@@ -1,7 +1,5 @@
 package com.certified.notes.ui;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,6 +30,7 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
 import com.certified.notes.room.NotesViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -113,8 +112,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             if (notes != null) {
                 noteRecyclerAdapter.submitList(notes);
                 btnShowAllNotes.setClickable(true);
-            }
-            else {
+            } else {
                 tvAddNoteDescription.setVisibility(View.VISIBLE);
                 btnAddNote.setVisibility(View.VISIBLE);
                 btnShowAllNotes.setClickable(false);
@@ -132,8 +130,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             if (courses != null) {
                 courseRecyclerAdapter.submitList(courses);
                 btnShowAllCourses.setClickable(true);
-            }
-            else {
+            } else {
                 tvAddCourseDescription.setVisibility(View.VISIBLE);
                 btnAddCourse.setVisibility(View.VISIBLE);
                 btnShowAllCourses.setClickable(false);
@@ -164,12 +161,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_todo, null);
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-            }
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setView(view);
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
             MaterialTextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
             EditText etTodo = view.findViewById(R.id.et_todo);
@@ -179,7 +171,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
             etTodo.setText(todo.getTodo());
 
             tvTodoDialogTitle.setText(getString(R.string.edit_todo));
-            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 String todoContent = etTodo.getText().toString().trim();
@@ -189,13 +181,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                         Todo todo1 = new Todo(todoContent, done);
                         todo1.setId(todo.getId());
                         mViewModel.updateTodo(todo1);
-                        alertDialog.dismiss();
+                        bottomSheetDialog.dismiss();
                     } else
                         Toast.makeText(getContext(), "Todo not changed", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(getContext(), "Add a todo", Toast.LENGTH_SHORT).show();
             });
-            alertDialog.show();
+            bottomSheetDialog.setContentView(view);
+            bottomSheetDialog.show();
         });
 
         if (btnAddNote.getVisibility() == View.VISIBLE)
@@ -240,17 +233,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
 
     private void launchNoteDialog() {
         View view = getLayoutInflater().inflate(R.layout.dialog_new_note, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-        }
-        AlertDialog alertDialog = builder.create();
-//        alertDialog.setCancelable(false);
-        alertDialog.setOnShowListener(dialog -> {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
-        });
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         Spinner spinnerCourses = view.findViewById(R.id.spinner_courses);
         EditText etNoteTitle = view.findViewById(R.id.et_note_title);
@@ -274,7 +257,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         spinnerCourses.setAdapter(adapterCourses);
         tvNoteDialogTitle.setText(getString(R.string.add_note));
 
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseTitle = spinnerCourses.getSelectedItem().toString();
             String courseCode;
@@ -293,7 +276,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                     btnAddNote.setVisibility(View.GONE);
                     tvAddNoteDescription.setVisibility(View.GONE);
 
-                    alertDialog.dismiss();
+                    bottomSheetDialog.dismiss();
                     Toast.makeText(getContext(), getString(R.string.note_saved), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), getString(R.string.select_a_course), Toast.LENGTH_SHORT).show();
@@ -302,23 +285,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 Toast.makeText(getContext(), getString(R.string.all_fields_are_required), Toast.LENGTH_SHORT).show();
             }
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     public void launchCourseDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_new_course, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(v -> {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
-        });
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         MaterialTextView tvCourseDialogTitle = view.findViewById(R.id.tv_course_dialog_title);
         EditText etCourseCode = view.findViewById(R.id.et_course_code);
@@ -330,7 +304,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         picker.setMinValue(1);
         picker.setMaxValue(4);
         tvCourseDialogTitle.setText(getString(R.string.add_course));
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String courseCode = etCourseCode.getText().toString().trim();
             String courseTitle = etCourseTitle.getText().toString().trim();
@@ -344,27 +318,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 btnAddCourse.setVisibility(View.GONE);
                 tvAddCourseDescription.setVisibility(View.GONE);
 
-                alertDialog.dismiss();
+                bottomSheetDialog.dismiss();
             } else
                 Toast.makeText(getContext(), getString(R.string.all_fields_are_required), Toast.LENGTH_SHORT).show();
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     public void launchTodoDialog() {
         LayoutInflater inflater = getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_new_todo, null);
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener(v -> {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
-        });
-        alertDialog.setView(view);
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
         MaterialTextView tvTodoDialogTitle = view.findViewById(R.id.tv_todo_dialog_title);
         EditText etTodo = view.findViewById(R.id.et_todo);
@@ -372,7 +337,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
 
         tvTodoDialogTitle.setText(getString(R.string.add_todo));
-        btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
         btnSave.setOnClickListener(v -> {
             String todoContent = etTodo.getText().toString().trim();
             if (!todoContent.isEmpty()) {
@@ -383,11 +348,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
                 tvAddTodoDescription.setVisibility(View.GONE);
                 todoRecyclerAdapter.notifyDataSetChanged();
 
-                alertDialog.dismiss();
+                bottomSheetDialog.dismiss();
             } else
                 Toast.makeText(getContext(), "", Toast.LENGTH_SHORT).show();
         });
-        alertDialog.show();
+        bottomSheetDialog.setContentView(view);
+        bottomSheetDialog.show();
     }
 
     private void launchDeleteDialog(int id) {

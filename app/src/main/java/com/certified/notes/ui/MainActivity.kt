@@ -1,12 +1,10 @@
 package com.certified.notes.ui
 
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Observer
@@ -21,6 +19,7 @@ import com.certified.notes.model.Todo
 import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -90,6 +89,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val w = window
                 w.statusBarColor = getColor(R.color.midWhite)
             }
+        }
+    }
+
+    override fun onBackPressed() {
+//        var count = 0
+        if (viewBlur.visibility == View.VISIBLE) {
+            hideViews()
+        } else {
+//            val toast = Toast.makeText(this, "Press back one more time to quit", Toast.LENGTH_LONG)
+//            toast.show()
+//            count = 1
+//            if (count > 0) {
+//                finish()
+//            } else {
+            super.onBackPressed()
+//            }
         }
     }
 
@@ -163,17 +178,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun launchCourseDialog() {
         val inflater: LayoutInflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_course, null)
-        val builder = MaterialAlertDialogBuilder(this)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.background = getDrawable(R.drawable.alert_dialog_bg)
-
-        val alertDialog = builder.create()
-        alertDialog.setOnShowListener {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-        }
-        alertDialog.setView(view)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
         val etCourseCode: EditText = view.findViewById(R.id.et_course_code)
@@ -185,7 +190,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         picker.minValue = 1
         picker.maxValue = 4
         tvCourseDialogTitle.text = getString(R.string.add_course)
-        btnCancel.setOnClickListener { alertDialog.dismiss() }
+        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
             val courseCode: String = etCourseCode.text.toString()
             val courseTitle: String = etCourseTitle.text.toString()
@@ -202,28 +207,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     GRADE_POINT_NOT_SET
                 )
                 notesViewModel.insertCourse(course)
-                alertDialog.dismiss()
+                bottomSheetDialog.dismiss()
             } else
                 Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
                     .show()
         }
-        alertDialog.show()
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
     }
 
     private fun launchTodoDialog() {
         val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_todo, null)
-        val builder = MaterialAlertDialogBuilder(this)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            builder.background = getDrawable(R.drawable.alert_dialog_bg)
-
-        val alertDialog = builder.create()
-        alertDialog.setOnShowListener {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-        }
-        alertDialog.setView(view)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvTodoDialogTitle: MaterialTextView = view.findViewById(R.id.tv_todo_dialog_title)
         val etTodo: EditText = view.findViewById(R.id.et_todo)
@@ -231,33 +227,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
 
         tvTodoDialogTitle.text = getString(R.string.add_todo)
-        btnCancel.setOnClickListener { alertDialog.dismiss() }
+        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
             if (todoContent.isNotEmpty()) {
                 val todo = Todo(todoContent, false)
                 notesViewModel.insertTodo(todo)
-                alertDialog.dismiss()
+                bottomSheetDialog.dismiss()
             } else
                 Toast.makeText(this, getString(R.string.add_a_todo), Toast.LENGTH_LONG).show()
         }
-        alertDialog.show()
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
     }
 
     private fun launchNoteDialog() {
         val inflater = layoutInflater
         val view = inflater.inflate(R.layout.dialog_new_note, null)
-        val builder = MaterialAlertDialogBuilder(this)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder.background = getDrawable(R.drawable.alert_dialog_bg)
-        }
-        val alertDialog = builder.create()
-        alertDialog.setOnShowListener {
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
-        }
-        alertDialog.setView(view)
+        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
         val etNoteTitle: EditText = view.findViewById(R.id.et_note_title)
@@ -281,7 +268,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         spinnerCourses.adapter = adapterCourses
         tvNoteDialogTitle.text = getString(R.string.add_note)
 
-        btnCancel.setOnClickListener { alertDialog.dismiss() }
+        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
             val courseTitle = spinnerCourses.selectedItem.toString()
             val courseCode =
@@ -295,7 +282,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (courseTitle != getString(R.string.select_a_course)) {
                     val note = Note(courseCode, noteTitle, noteContent)
                     notesViewModel.insertNote(note)
-                    alertDialog.dismiss()
+                    bottomSheetDialog.dismiss()
                     Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
                 } else
                     Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG)
@@ -304,6 +291,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
                     .show()
         }
-        alertDialog.show()
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
     }
 }

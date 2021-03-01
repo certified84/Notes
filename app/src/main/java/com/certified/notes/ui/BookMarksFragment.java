@@ -32,6 +32,7 @@ import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -105,12 +106,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             LayoutInflater inflater = this.getLayoutInflater();
             View view = inflater.inflate(R.layout.dialog_new_note, null);
 
-            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder.setBackground(getContext().getDrawable(R.drawable.alert_dialog_bg));
-            }
-            AlertDialog alertDialog = builder.create();
-            alertDialog.setView(view);
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
             Spinner spinnerCourses = view.findViewById(R.id.spinner_courses);
             EditText etNoteTitle = view.findViewById(R.id.et_note_title);
@@ -134,7 +130,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
 
             spinnerCourses.setSelection(coursePosition);
 
-            btnCancel.setOnClickListener(v -> alertDialog.dismiss());
+            btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
             btnSave.setText(R.string.update);
             btnSave.setOnClickListener(v -> {
                 int noteId = bookMark.getNoteId();
@@ -172,7 +168,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                                     }
                                 });
                             }
-                            alertDialog.dismiss();
+                            bottomSheetDialog.dismiss();
                         } else
                             Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
                     } else
@@ -180,8 +176,8 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                 } else
                     Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
             });
-
-            alertDialog.show();
+            bottomSheetDialog.setContentView(view);
+            bottomSheetDialog.show();
         });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
