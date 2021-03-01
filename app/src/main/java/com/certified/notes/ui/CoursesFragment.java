@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.shawnlin.numberpicker.NumberPicker;
+
+import java.util.ArrayList;
 
 import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
@@ -229,12 +234,109 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
 
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
         HomeNoteRecyclerAdapter noteRecyclerAdapter = new HomeNoteRecyclerAdapter(1);
-        mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
+        mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), notes -> {
+            if (notes.size() > 0)
+                noteRecyclerAdapter.submitList(notes);
+            else
+                Toast.makeText(requireContext(), "No related notes", Toast.LENGTH_SHORT).show();
+        });
         recyclerViewRelatedNotes.setAdapter(noteRecyclerAdapter);
         recyclerViewRelatedNotes.setLayoutManager(noteLayoutManager);
-        noteRecyclerAdapter.setOnNoteClickedListener(() -> {
-            mNavController.navigate(R.id.notesFragment);
+
+        noteRecyclerAdapter.setOnNoteClickedListener(note -> {
             bottomSheetDialog.dismiss();
+
+            LayoutInflater inflater1 = getLayoutInflater();
+            View view1 = inflater1.inflate(R.layout.dialog_new_note, null);
+            BottomSheetDialog bottomSheetDialog1 = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
+
+            ArrayList<String> courseList = new ArrayList<>();
+            ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);
+
+            courseList.add(getString(R.string.select_a_course));
+            courseList.add(getString(R.string.no_course));
+            mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> {
+                for (Course course1 : courses) {
+                    courseList.add(course1.getCourseTitle());
+                }
+                adapterCourses.notifyDataSetChanged();
+            });
+
+            Spinner spinnerCourses = view1.findViewById(R.id.spinner_courses);
+            EditText etNoteTitle = view1.findViewById(R.id.et_note_title);
+            EditText etNoteContent = view1.findViewById(R.id.et_note_content);
+            MaterialButton btnSave = view1.findViewById(R.id.btn_save);
+            MaterialButton btnCancel = view1.findViewById(R.id.btn_cancel);
+            TextView tvNoteDialogTitle = view1.findViewById(R.id.tv_note_dialog_title);
+
+            adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerCourses.setAdapter(adapterCourses);
+
+            tvNoteDialogTitle.setText(getString(R.string.edit_note));
+            etNoteTitle.setText(note.getTitle());
+            etNoteContent.setText(note.getContent());
+            int coursePosition;
+            if (!note.getCourseCode().equals("NIL")) {
+                coursePosition = adapterCourses.getPosition(mViewModel.getCourseTitle(note.getCourseCode()));
+            } else {
+                coursePosition = 1;
+            }
+
+            spinnerCourses.setSelection(coursePosition);
+
+            btnCancel.setOnClickListener(v -> bottomSheetDialog1.dismiss());
+            btnSave.setText(R.string.update);
+            btnSave.setOnClickListener(v -> {
+                String courseTitle = spinnerCourses.getSelectedItem().toString();
+                String courseCode;
+                if (courseTitle.equals(getString(R.string.no_course)))
+                    courseCode = "NIL";
+                else
+                    courseCode = mViewModel.getCourseCode(courseTitle);
+                String noteTitle = etNoteTitle.getText().toString().trim();
+                String noteContent = etNoteContent.getText().toString().trim();
+                if (!isEmpty(noteTitle) && !isEmpty(noteContent)) {
+                    if (!courseTitle.equals("Select a course")) {
+                        if (!courseTitle.equals("No course")) {
+                            if (!courseCode.equals(note.getCourseCode()) || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
+                                Note note1 = new Note(courseCode, noteTitle, noteContent);
+                                note1.setId(note.getId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark : bookMarks) {
+                                        int noteId = note1.getId();
+                                        BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                        bookMark1.setId(bookMark.getId());
+                                        mViewModel.updateBookMark(bookMark1);
+                                    }
+                                });
+                                bottomSheetDialog1.dismiss();
+                            } else
+                                Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (!note.getCourseCode().equals("NIL") || !noteTitle.equals(note.getTitle()) || !noteContent.equals(note.getContent())) {
+                                Note note1 = new Note("NIL", noteTitle, noteContent);
+                                note1.setId(note.getId());
+                                mViewModel.updateNote(note1);
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    for (BookMark bookMark : bookMarks) {
+                                        int noteId = note1.getId();
+                                        BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
+                                        bookMark1.setId(bookMark.getId());
+                                        mViewModel.updateBookMark(bookMark1);
+                                    }
+                                });
+                                bottomSheetDialog1.dismiss();
+                            } else
+                                Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
+                        }
+                    } else
+                        Toast.makeText(getContext(), "Select a course", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getContext(), "All fields are required", Toast.LENGTH_SHORT).show();
+            });
+            bottomSheetDialog1.setContentView(view1);
+            bottomSheetDialog1.show();
         });
         bottomSheetDialog.setContentView(view);
         bottomSheetDialog.show();

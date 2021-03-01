@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerNotes.setLayoutManager(noteLayoutManager);
         recyclerNotes.setClipToPadding(false);
         recyclerNotes.setClipChildren(false);
-        noteRecyclerAdapter.setOnNoteClickedListener(() -> mNavController.navigate(R.id.notesFragment));
+        noteRecyclerAdapter.setOnNoteClickedListener(note -> mNavController.navigate(R.id.notesFragment));
 
         HomeCourseRecyclerAdapter courseRecyclerAdapter = new HomeCourseRecyclerAdapter();
         mViewModel.getRandomCourses().observe(getViewLifecycleOwner(), courses -> {
