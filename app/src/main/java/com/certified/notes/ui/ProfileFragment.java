@@ -39,6 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -270,11 +271,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
+        MaterialTextView tvEditProfileDialogTitle = view.findViewById(R.id.tv_edit_profile_dialog_title);
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
 
+        tvEditProfileDialogTitle.setText(R.string.edit_name);
         inputLayout.setHint(getString(R.string.name));
         inputEditText.setText(userName);
 
@@ -308,11 +311,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
+        MaterialTextView tvEditProfileDialogTitle = view.findViewById(R.id.tv_edit_profile_dialog_title);
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
 
+        tvEditProfileDialogTitle.setText(R.string.edit_school);
         inputLayout.setHint(getString(R.string.school));
         inputEditText.setText(userSchool);
 
@@ -346,11 +351,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.dialog_edit_profile, null);
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme);
 
+        MaterialTextView tvEditProfileDialogTitle = view.findViewById(R.id.tv_edit_profile_dialog_title);
         TextInputLayout inputLayout = view.findViewById(R.id.et_edit_profile_layout);
         TextInputEditText inputEditText = view.findViewById(R.id.et_edit_profile);
         MaterialButton btnCancel = view.findViewById(R.id.btn_cancel);
         MaterialButton btnSave = view.findViewById(R.id.btn_save);
 
+        tvEditProfileDialogTitle.setText(R.string.edit_department);
         inputLayout.setHint(getString(R.string.department));
         inputEditText.setText(userDepartment);
 

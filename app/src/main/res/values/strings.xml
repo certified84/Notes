@@ -119,4 +119,7 @@
     <string name="notes_notification">Notes Notification</string>
     <string name="ok">OK</string>
     <string name="notes_reminder">Notes reminder</string>
+    <string name="edit_name">Edit name</string>
+    <string name="edit_department">Edit Department</string>
+    <string name="edit_school">Edit School</string>
 </resources>

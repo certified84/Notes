@@ -3,9 +3,20 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
         android:background="@drawable/bottom_sheet_bg"
         android:elevation="8dp"
         android:id="@+id/constraint_layout">
+
+    <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_edit_profile_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/et_edit_profile_layout"
+            style="@style/TextAppearance.Notes.TitleText2"
+            tools:text="Edit Profile"/>
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/et_edit_profile_layout"
@@ -13,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:hint="@string/name"
@@ -25,7 +36,7 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_save"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@+id/tv_edit_profile_dialog_title">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_edit_profile"
