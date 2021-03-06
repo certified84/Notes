@@ -2,6 +2,7 @@ package com.certified.notes.adapters;
 
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,9 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
         Todo todo = getItem(position);
         holder.mTodo.setText(todo.getTodo());
         holder.mCheckBox.setChecked(todo.isDone());
+        if (holder.mCheckBox.isChecked()){
+            strikeThrough(holder.mTodo, holder.mCheckBox.isChecked());
+        }
 
         holder.mCheckBox.setOnClickListener(v -> {
             String todoContent = holder.mTodo.getText().toString().trim();
@@ -89,6 +93,13 @@ public class TodoRecyclerAdapter extends ListAdapter<Todo, TodoRecyclerAdapter.V
                 mViewModel.updateTodo(todo1);
             }
         });
+    }
+
+    private void strikeThrough(TextView todo, boolean strikeThrough) {
+        if (strikeThrough)
+            todo.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        else
+            todo.setPaintFlags(0);
     }
 
     public void setOnTodoClickedListener(onTodoClickedListener listener) {
