@@ -7,17 +7,26 @@
     android:background="?attr/backgroundColor"
     tools:context=".ui.NotesFragment">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/sv_search_database"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/search_view_bg"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/iv_bookmark_popup_menu"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+    <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_bookmark_popup_menu"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:layout_marginTop="16dp"
+            app:cardPreventCornerOverlap="false">
+
+        <androidx.appcompat.widget.SearchView
+                android:id="@+id/sv_search_database"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/cardBackgroundColor"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+    </com.google.android.material.card.MaterialCardView>
 
     <TextView
         android:id="@+id/textView"
@@ -38,18 +47,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/iv_bookmark_popup_menu"
         app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/sv_search_database"
+        app:layout_constraintTop_toBottomOf="@+id/card_view"
         tools:listitem="@layout/list_item_notes" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/iv_bookmark_popup_menu"
-        style="@style/Widget.Note.ImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="@string/options"
-        app:srcCompat="@drawable/ic_more_vert"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+            android:id="@+id/iv_bookmark_popup_menu"
+            style="@style/Widget.Note.ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/options"
+            app:srcCompat="@drawable/ic_more_vert"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

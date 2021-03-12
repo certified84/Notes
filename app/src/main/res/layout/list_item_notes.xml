@@ -55,15 +55,18 @@
             app:srcCompat="@drawable/ic_notes" />
 
         <com.like.LikeButton
-            android:id="@+id/likeButton"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline9"
-            app:layout_constraintTop_toBottomOf="@+id/tv_note_content" />
+                android:id="@+id/likeButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/tv_note_content"
+                android:clickable="false"
+                android:longClickable="false"
+                app:is_enabled="false" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline9"

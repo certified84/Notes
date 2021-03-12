@@ -89,7 +89,7 @@ class OnboardingFragment : Fragment() {
     }
 
     private fun setUpViewPager() {
-        viewPagerAdapter = ViewPagerAdapter(sliderItem, viewPager2)
+        viewPagerAdapter = ViewPagerAdapter(sliderItem)
         viewPager2.adapter = viewPagerAdapter
         viewPager2.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
