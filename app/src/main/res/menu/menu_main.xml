@@ -13,10 +13,10 @@
         android:title="@string/result"
         app:showAsAction="always" />
     <item
-        android:id="@+id/bookMarksFragment"
-        android:icon="@drawable/ic_baseline_bookmark_24"
-        android:title="@string/bookmarks"
-        app:showAsAction="always" />
+            android:id="@+id/bookMarksFragment"
+            android:icon="@drawable/ic_baseline_bookmarks_24"
+            android:title="@string/bookmarks"
+            app:showAsAction="always" />
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/ic_baseline_person_24"

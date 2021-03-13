@@ -87,7 +87,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         mDefValues = new HashSet<>();
         mDefValues.add("-1");
 
-        mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues));
+        mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS,  mDefValues));
 
         init();
     }
@@ -173,14 +173,15 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                 Note note1 = new Note(courseCode, noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark : bookMarks) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                                    if (bookMark != null) {
                                         int noteId = note1.getId();
                                         BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
                                         mViewModel.updateBookMark(bookMark1);
                                     }
                                 });
+                                noteRecyclerAdapter.notifyDataSetChanged();
                                 bottomSheetDialog.dismiss();
                             } else
                                 Toast.makeText(getContext(), "Note not changed", Toast.LENGTH_SHORT).show();
@@ -189,8 +190,8 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                 Note note1 = new Note("NIL", noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark : bookMarks) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                                    if (bookMark != null) {
                                         int noteId = note1.getId();
                                         BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
@@ -218,51 +219,75 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                if (direction == ItemTouchHelper.LEFT) {
-                    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
-                    builder.setTitle("Delete");
-                    builder.setMessage(R.string.note_delete_dialog_message);
-                    builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
-                        mViewModel.deleteNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()));
-                        mViewModel.deleteBookMarkedNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()).getId());
+                switch (direction) {
+                    case ItemTouchHelper.LEFT:
+                        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
+                        builder.setTitle("Delete");
+                        builder.setMessage(R.string.note_delete_dialog_message);
+                        builder.setPositiveButton(getString(R.string.delete), (dialog1, which) -> {
 
-                        int noteId = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()).getId();
+                            int noteId = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()).getId();
 
-                        mNoteIds.remove(String.valueOf(noteId));
+                            mViewModel.deleteNote(noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition()));
+                            mViewModel.deleteBookMarkedNote(noteId);
+                            mNoteIds.remove(String.valueOf(noteId));
 
-                        mEditor = mPreferences.edit();
-                        mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
-                        mEditor.apply();
+                            mEditor = mPreferences.edit();
+                            mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+                            mEditor.apply();
 
-                        dialog1.dismiss();
-                    });
-                    builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> {
-                        noteRecyclerAdapter.notifyDataSetChanged();
-                        dialog1.dismiss();
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.setOnShowListener(dialog1 -> {
-                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
-                    });
-                    alertDialog.show();
-                } else if (direction == ItemTouchHelper.RIGHT) {
-                    Note note = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition());
-                    int noteId = note.getId();
-                    String courseCode = note.getCourseCode();
-                    String noteTitle = note.getTitle();
-                    String noteContent = note.getContent();
-                    BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                    mViewModel.insertBookMark(bookMark);
+//                            noteRecyclerAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
 
-                    mNoteIds.add(String.valueOf(noteId));
+                            dialog1.dismiss();
+                        });
+                        builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> {
+                            noteRecyclerAdapter.notifyDataSetChanged();
+                            dialog1.dismiss();
+                        });
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.setOnShowListener(dialog1 -> {
+                            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(RED);
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(RED);
+                        });
+                        alertDialog.show();
+                        break;
+                    case ItemTouchHelper.RIGHT:
+                        Note note = noteRecyclerAdapter.getNoteAt(viewHolder.getAdapterPosition());
+                        int noteId = note.getId();
+                        String courseCode = note.getCourseCode();
+                        String noteTitle = note.getTitle();
+                        String noteContent = note.getContent();
+                        BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
 
-                    mEditor = mPreferences.edit();
-                    mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
-                    mEditor.apply();
-                    noteRecyclerAdapter.notifyDataSetChanged();
+                        mViewModel.getBookMarkAt(noteId).observe(getViewLifecycleOwner(), bookMark1 -> {
+                            if (bookMark1 != null)
+                                bookMark.setId(bookMark1.getId());
+                            else {
+                                mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookMarks -> {
+                                    if (!bookMarks.contains(bookMark)) {
+                                        mViewModel.insertBookMark(bookMark);
 
-                    Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
+                                        mNoteIds.add(String.valueOf(noteId));
+
+                                        mEditor = mPreferences.edit();
+                                        mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+                                        mEditor.apply();
+                                        noteRecyclerAdapter.notifyDataSetChanged();
+                                    }
+                                });
+                            }
+                        });
+//                        mViewModel.insertBookMark(bookMark);
+//
+//                        mNoteIds.add(String.valueOf(noteId));
+//
+//                        mEditor = mPreferences.edit();
+//                        mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+//                        mEditor.apply();
+//                        noteRecyclerAdapter.notifyDataSetChanged();
+//
+//                        Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
         }).attachToRecyclerView(recyclerNotes);

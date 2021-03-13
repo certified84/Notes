@@ -1,6 +1,7 @@
 package com.certified.notes.ui;
 
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,9 +20,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
 import androidx.preference.PreferenceManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,13 +42,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
+
 import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
 public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private RecyclerView recyclerBookMarks;
-    private NavController mNavController;
     private NotesViewModel mViewModel;
     private ImageView ivBookMarkPopupMenu;
     private SearchView svSearchBookmarks;
@@ -149,8 +152,8 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                                 Note note1 = new Note(courseCode, noteTitle, noteContent);
                                 note1.setId(bookMark.getNoteId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark1 : bookMarks) {
+                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMark1 -> {
+                                    if (bookMark1 != null) {
                                         BookMark bookMark2 = new BookMark(noteId, courseCode, noteTitle, noteContent);
                                         bookMark2.setId(bookMark1.getId());
                                         mViewModel.updateBookMark(bookMark2);
@@ -160,8 +163,8 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
                                 Note note1 = new Note("NIL", noteTitle, noteContent);
                                 note1.setId(bookMark.getNoteId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark1 : bookMarks) {
+                                mViewModel.getBookMarkAt(bookMark.getNoteId()).observe(getViewLifecycleOwner(), bookMark1 -> {
+                                    if (bookMark1 != null) {
                                         BookMark bookMark2 = new BookMark(noteId, "NIL", noteTitle, noteContent);
                                         bookMark2.setId(bookMark1.getId());
                                         mViewModel.updateBookMark(bookMark2);
@@ -179,6 +182,40 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
             bottomSheetDialog.setContentView(view);
             bottomSheetDialog.show();
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                BookMark bookMark = bookMarkRecyclerAdapter.getBookMarkAt(viewHolder.getAdapterPosition());
+                mViewModel.deleteBookMark(bookMark);
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireActivity().getApplicationContext());
+                SharedPreferences.Editor editor = preferences.edit();
+
+                Set<String> defValues = new HashSet<>();
+                defValues.add("-1");
+                Set<String> noteIds = new HashSet<>(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
+                noteIds.remove(String.valueOf(bookMark.getNoteId()));
+
+                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds);
+                editor.apply();
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                        .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_50)
+                        .addSwipeLeftBackgroundColor(ContextCompat.getColor(requireActivity(), R.color.red))
+                        .create()
+                        .decorate();
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        }).attachToRecyclerView(recyclerBookMarks);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             svSearchBookmarks.isSubmitButtonEnabled();
@@ -223,13 +260,13 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
     }
 
     private void launchDeleteDialog() {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(requireContext());
         builder.setTitle("Delete");
         builder.setMessage(R.string.all_bookmark_delete_dialog_message);
         builder.setIcon(R.drawable.ic_baseline_delete_24);
         builder.setPositiveButton(getString(R.string.yes), (dialog1, which) -> {
             mViewModel.deleteAllBookMarks();
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext().getApplicationContext());
             SharedPreferences.Editor editor = preferences.edit();
 
             Set<String> defValues = new HashSet<>();

@@ -13,6 +13,7 @@
 <!--            Main Colors          -->
     <color name="midWhite">#F8F8F8</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
 
 <!--    Light theme colors    -->
     <color name="colorPrimary">#FF3400</color>

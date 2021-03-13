@@ -169,7 +169,7 @@ public class NotesViewModel extends AndroidViewModel {
         mRepository.deleteBookMarkedNote(noteId);
     }
 
-    public LiveData<List<BookMark>> getBookMarkAt(int noteId) {
+    public LiveData<BookMark> getBookMarkAt(int noteId) {
         return mRepository.getBookMarkAt(noteId);
     }
 

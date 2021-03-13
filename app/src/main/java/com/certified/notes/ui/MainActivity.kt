@@ -1,6 +1,5 @@
 package com.certified.notes.ui
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -51,8 +50,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //        createNotificationChannel()
         isFirstOpen()
 
-        notesViewModel =
-            NotesViewModel(application)
+        notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
@@ -81,15 +79,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun isDarkModeEnabled() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
         val isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false)
-        if (isDarkModeEnabled) {
+        if (isDarkModeEnabled)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
+        else
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val w = window
-                w.statusBarColor = getColor(R.color.midWhite)
-            }
-        }
     }
 
     override fun onBackPressed() {

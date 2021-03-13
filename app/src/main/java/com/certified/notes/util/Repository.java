@@ -218,7 +218,7 @@ public class Repository {
         }
     }
 
-    public LiveData<List<BookMark>> getBookMarkAt(int noteId) {
+    public LiveData<BookMark> getBookMarkAt(int noteId) {
         try {
             return executor.submit(() -> mNotesDao.getBookMarkAt(noteId)).get();
         } catch (ExecutionException | InterruptedException e) {

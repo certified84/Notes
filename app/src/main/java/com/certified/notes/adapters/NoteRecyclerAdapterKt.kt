@@ -58,8 +58,8 @@ class NoteRecyclerAdapterKt(private val mContext: Context, private val mOwner: L
             }
 
             override fun unLiked(likeButton: LikeButton) {
-                mViewModel.getBookMarkAt(currentNote.id).observe(mOwner, Observer { bookMarks: List<BookMark?> ->
-                        for (bookMark in bookMarks) {
+                mViewModel.getBookMarkAt(currentNote.id).observe(mOwner, Observer { bookMark :BookMark? ->
+                        if (bookMark != null) {
                             mViewModel.deleteBookMark(bookMark)
                         }
                         mNoteIds.remove((currentNote.id).toString())

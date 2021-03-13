@@ -1,14 +1,13 @@
 package com.certified.notes.adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,12 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.R;
 import com.certified.notes.model.BookMark;
 import com.certified.notes.room.NotesViewModel;
-import com.certified.notes.util.PreferenceKeys;
 import com.like.LikeButton;
-import com.like.OnLikeListener;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyclerAdapter.ViewHolder> {
 
@@ -62,35 +56,36 @@ public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyc
         BookMark currentBookMark = getItem(position);
         holder.mNoteContent.setText(currentBookMark.getNoteContent());
         holder.mNoteTitle.setText(currentBookMark.getNoteTitle());
-        holder.mLikeButton.setLiked(true);
-        holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                int noteId = currentBookMark.getNoteId();
-                String courseCode = currentBookMark.getCourseCode();
-                String noteTitle = currentBookMark.getNoteTitle();
-                String noteContent = currentBookMark.getNoteContent();
-                BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                bookMark.setId(currentBookMark.getId());
-                mViewModel.deleteBookMark(bookMark);
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
-                SharedPreferences.Editor editor = preferences.edit();
-
-                Set<String> defValues = new HashSet<>();
-                defValues.add("-1");
-                Set<String> noteIds = new HashSet<>(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
-                noteIds.remove(String.valueOf(noteId));
-
-                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds);
-                editor.apply();
-            }
-        });
+        holder.ivBookmark.setVisibility(View.VISIBLE);
+//        holder.mLikeButton.setLiked(true);
+//        holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
+//            @Override
+//            public void liked(LikeButton likeButton) {
+//
+//            }
+//
+//            @Override
+//            public void unLiked(LikeButton likeButton) {
+//                int noteId = currentBookMark.getNoteId();
+//                String courseCode = currentBookMark.getCourseCode();
+//                String noteTitle = currentBookMark.getNoteTitle();
+//                String noteContent = currentBookMark.getNoteContent();
+//                BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
+//                bookMark.setId(currentBookMark.getId());
+//                mViewModel.deleteBookMark(bookMark);
+//
+//                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
+//                SharedPreferences.Editor editor = preferences.edit();
+//
+//                Set<String> defValues = new HashSet<>();
+//                defValues.add("-1");
+//                Set<String> noteIds = new HashSet<>(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
+//                noteIds.remove(String.valueOf(noteId));
+//
+//                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds);
+//                editor.apply();
+//            }
+//        });
     }
 
     public BookMark getBookMarkAt(int position) {
@@ -110,12 +105,14 @@ public class BookMarkRecyclerAdapter extends ListAdapter<BookMark, BookMarkRecyc
         public final TextView mNoteContent;
         public final TextView mNoteTitle;
         public final LikeButton mLikeButton;
+        public final ImageView ivBookmark;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mNoteContent = itemView.findViewById(R.id.tv_note_content);
             mNoteTitle = itemView.findViewById(R.id.tv_note_title);
             mLikeButton = itemView.findViewById(R.id.likeButton);
+            ivBookmark = itemView.findViewById(R.id.iv_bookmark);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();

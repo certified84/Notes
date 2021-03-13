@@ -204,8 +204,8 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                             note1.setId(note.getId());
                             mViewModel.updateNote(note1);
 
-                            mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                for (BookMark bookMark : bookMarks) {
+                            mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                                if (bookMark != null) {
                                     BookMark bookMark1 = new BookMark(note.getId(), courseCode, noteTitle, noteContent);
                                     bookMark1.setId(bookMark.getId());
                                     mViewModel.updateBookMark(bookMark1);
@@ -302,8 +302,8 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                                 Note note1 = new Note(courseCode, noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark : bookMarks) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                                    if (bookMark != null) {
                                         int noteId = note1.getId();
                                         BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
@@ -318,8 +318,8 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
                                 Note note1 = new Note("NIL", noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                                    for (BookMark bookMark : bookMarks) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                                    if (bookMark != null) {
                                         int noteId = note1.getId();
                                         BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
                                         bookMark1.setId(bookMark.getId());
@@ -381,10 +381,9 @@ public class CoursesFragment extends Fragment implements PopupMenu.OnMenuItemCli
             mViewModel.getNotesAt(course.getCourseCode()).observe(getViewLifecycleOwner(), notes -> {
                 for (Note note : notes) {
                     mViewModel.deleteNote(note);
-                    mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
-                        for (BookMark bookMark : bookMarks) {
+                    mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
+                        if (bookMark != null)
                             mViewModel.deleteBookMark(bookMark);
-                        }
                     });
                 }
             });

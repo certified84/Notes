@@ -95,7 +95,7 @@ public interface NotesDao {
     void deleteCompletedTodos();
 
     @Query("SELECT * FROM bookmark_table WHERE note_id = :noteId")
-    LiveData<List<BookMark>> getBookMarkAt(int noteId);
+    LiveData<BookMark> getBookMarkAt(int noteId);
 
     @Query("SELECT * FROM note_table WHERE course_code = :course_code")
     LiveData<List<Note>> getNotesAt(String course_code);

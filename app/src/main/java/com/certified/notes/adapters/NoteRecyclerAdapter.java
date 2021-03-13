@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,12 +16,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.R;
-import com.certified.notes.model.BookMark;
 import com.certified.notes.model.Note;
 import com.certified.notes.room.NotesViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.like.LikeButton;
-import com.like.OnLikeListener;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,23 +40,20 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         }
     };
 
-    private final Context mContext;
     private final LifecycleOwner mOwner;
     private final NotesViewModel mViewModel;
     private final SharedPreferences mPreferences;
     private final Set<String> mNoteIds;
-    private final Set<String> mDefValues;
     private OnNoteClickedListener listener;
 
     public NoteRecyclerAdapter(Context context, LifecycleOwner owner, NotesViewModel viewModel) {
         super(DIFF_CALLBACK);
-        this.mContext = context;
         this.mOwner = owner;
         this.mViewModel = viewModel;
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(mContext.getApplicationContext());
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 
-        mDefValues = new HashSet<>();
+        Set<String> mDefValues = new HashSet<>();
         mDefValues.add("-1");
 
         mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues));
@@ -72,42 +68,42 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SharedPreferences.Editor editor = mPreferences.edit();
+//        SharedPreferences.Editor editor = mPreferences.edit();
 
         Note currentNote = getItem(position);
         holder.mNoteContent.setText(currentNote.getContent());
         holder.mNoteTitle.setText(currentNote.getTitle());
-        holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
-            @Override
-            public void liked(LikeButton likeButton) {
-                int noteId = currentNote.getId();
-                String courseCode = currentNote.getCourseCode();
-                String noteTitle = currentNote.getTitle();
-                String noteContent = currentNote.getContent();
+//        holder.mLikeButton.setOnLikeListener(new OnLikeListener() {
+//            @Override
+//            public void liked(LikeButton likeButton) {
+//                int noteId = currentNote.getId();
+//                String courseCode = currentNote.getCourseCode();
+//                String noteTitle = currentNote.getTitle();
+//                String noteContent = currentNote.getContent();
+//
+//                BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
+//                mViewModel.insertBookMark(bookMark);
+//
+//                mNoteIds.add(String.valueOf(noteId));
+//                editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+//                editor.apply();
+//            }
+//
+//            @Override
+//            public void unLiked(LikeButton likeButton) {
+//                mViewModel.getBookMarkAt(currentNote.getId()).observe(mOwner, bookMarks -> {
+//                    for (BookMark bookMark : bookMarks) {
+//                        mViewModel.deleteBookMark(bookMark);
+//                    }
+//
+//                    mNoteIds.remove(String.valueOf(currentNote.getId()));
+//                    editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
+//                    editor.apply();
+//                });
+//            }
+//        });
 
-                BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                mViewModel.insertBookMark(bookMark);
-
-                mNoteIds.add(String.valueOf(noteId));
-                editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
-                editor.apply();
-            }
-
-            @Override
-            public void unLiked(LikeButton likeButton) {
-                mViewModel.getBookMarkAt(currentNote.getId()).observe(mOwner, bookMarks -> {
-                    for (BookMark bookMark : bookMarks) {
-                        mViewModel.deleteBookMark(bookMark);
-                    }
-
-                    mNoteIds.remove(String.valueOf(currentNote.getId()));
-                    editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
-                    editor.apply();
-                });
-            }
-        });
-
-        holder.checkIfBookMarked(currentNote.getId(), holder.mLikeButton);
+        holder.checkIfBookMarked(currentNote.getId(), holder.ivBookmark);
     }
 
     public Note getNoteAt(int position) {
@@ -127,12 +123,14 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
         public final TextView mNoteContent;
         public final TextView mNoteTitle;
         public final LikeButton mLikeButton;
+        public final ImageView ivBookmark;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mNoteContent = itemView.findViewById(R.id.tv_note_content);
             mNoteTitle = itemView.findViewById(R.id.tv_note_title);
             mLikeButton = itemView.findViewById(R.id.likeButton);
+            ivBookmark = itemView.findViewById(R.id.iv_bookmark);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -142,13 +140,14 @@ public class NoteRecyclerAdapter extends ListAdapter<Note, NoteRecyclerAdapter.V
             });
         }
 
-        private void checkIfBookMarked(int noteId, LikeButton likeButton) {
+        private void checkIfBookMarked(int noteId, ImageView imageView) {
             Set<String> defValues = new HashSet<>();
             defValues.add("-1");
             Set<String> noteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues));
-            if (noteIds.contains(String.valueOf(noteId))) {
-                likeButton.setLiked(true);
-            }
+            if (noteIds.contains(String.valueOf(noteId)))
+                imageView.setVisibility(View.VISIBLE);
+            else
+                imageView.setVisibility(View.INVISIBLE);
         }
     }
 }
