@@ -25,7 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.certified.notes.R;
 import com.certified.notes.adapters.HomeCourseRecyclerAdapter;
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter;
-import com.certified.notes.adapters.TodoRecyclerAdapter;
+import com.certified.notes.adapters.TodoRecyclerAdapterKt;
 import com.certified.notes.model.Course;
 import com.certified.notes.model.Note;
 import com.certified.notes.model.Todo;
@@ -53,7 +53,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
     private NavController mNavController;
     private NotesViewModel mViewModel;
     private MaterialCardView cardView;
-    private TodoRecyclerAdapter todoRecyclerAdapter;
+    private TodoRecyclerAdapterKt todoRecyclerAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -143,7 +143,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, Popu
         recyclerCourses.setClipChildren(false);
         courseRecyclerAdapter.setOnCourseClickedListener(() -> mNavController.navigate(R.id.coursesFragment));
 
-        todoRecyclerAdapter = new TodoRecyclerAdapter(getContext(), mViewModel);
+        todoRecyclerAdapter = new TodoRecyclerAdapterKt(getContext(), mViewModel);
         mViewModel.getAllTodos().observe(getViewLifecycleOwner(), todos -> {
             if (todos.size() != 0)
                 todoRecyclerAdapter.submitList(todos);

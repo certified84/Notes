@@ -122,4 +122,9 @@
     <string name="edit_name">Edit name</string>
     <string name="edit_department">Edit Department</string>
     <string name="edit_school">Edit School</string>
+    <string name="enter_score_for">"Enter score for "</string>
+    <string name="please_input_a_score">Please input a score</string>
+    <string name="please_input_a_valid_score">Please input a valid score</string>
+    <string name="score_not_changed">Score not changed</string>
+    <string name="delete_completed_todo_message">This todo has been marked as done. Would you like to delete it?</string>
 </resources>

@@ -47,6 +47,8 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
+//import com.certified.notes.adapters.BookMarkRecyclerAdapter;
+
 public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private RecyclerView recyclerBookMarks;
@@ -87,7 +89,7 @@ public class BookMarksFragment extends Fragment implements PopupMenu.OnMenuItemC
     private void init() {
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
-        BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter(getContext(), mViewModel);
+        BookMarkRecyclerAdapter bookMarkRecyclerAdapter = new BookMarkRecyclerAdapter();
         mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookMarkRecyclerAdapter::submitList);
         recyclerBookMarks.setAdapter(bookMarkRecyclerAdapter);
         recyclerBookMarks.setLayoutManager(noteLayoutManager);

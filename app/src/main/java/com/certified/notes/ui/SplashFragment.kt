@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -80,7 +81,7 @@ class SplashFragment : Fragment() {
             .setDefaults(Notification.DEFAULT_ALL)
             .setSmallIcon(R.drawable.ic_notes)
             .setContentTitle(getString(R.string.notes_reminder))
-            .setColor(resources.getColor(R.color.colorAccent))
+            .setColor(ContextCompat.getColor(requireContext(), R.color.colorAccent))
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setTicker("Notes")

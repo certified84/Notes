@@ -65,7 +65,7 @@ public class ResultFragment extends Fragment {
     private void init() {
         mViewModel = new NotesViewModel(getActivity().getApplication());
         LinearLayoutManager resultLayoutManager = new LinearLayoutManager(getContext());
-        mResultRecyclerAdapter = new ResultRecyclerAdapter(mViewModel);
+        mResultRecyclerAdapter = new ResultRecyclerAdapter(requireContext(), mViewModel);
 
         mViewModel.getAllCourses().observe(getViewLifecycleOwner(), courses -> mResultRecyclerAdapter.submitList(courses));
 

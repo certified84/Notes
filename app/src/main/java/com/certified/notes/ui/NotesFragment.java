@@ -87,7 +87,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         mDefValues = new HashSet<>();
         mDefValues.add("-1");
 
-        mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS,  mDefValues));
+        mNoteIds = new HashSet<>(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues));
 
         init();
     }
@@ -111,7 +111,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
     private void init() {
         LinearLayoutManager noteLayoutManager = new LinearLayoutManager(getContext());
 
-        NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(getContext(), getViewLifecycleOwner(), mViewModel);
+        NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(getContext());
         mViewModel.getAllNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerNotes.setAdapter(noteRecyclerAdapter);
         recyclerNotes.setLayoutManager(noteLayoutManager);
@@ -272,7 +272,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mEditor = mPreferences.edit();
                                         mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
                                         mEditor.apply();
-                                        noteRecyclerAdapter.notifyDataSetChanged();
                                     }
                                 });
                             }
@@ -287,6 +286,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
 //                        noteRecyclerAdapter.notifyDataSetChanged();
 //
 //                        Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
+                        noteRecyclerAdapter.notifyDataSetChanged();
                         break;
                 }
             }
