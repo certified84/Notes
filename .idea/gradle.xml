@@ -7,6 +7,7 @@
         <option name="testRunner" value="PLATFORM" />
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="$USER_HOME$/Android Dev/gradle-6.7.1-bin/gradle-6.7.1" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />

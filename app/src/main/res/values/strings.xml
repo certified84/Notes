@@ -127,4 +127,8 @@
     <string name="please_input_a_valid_score">Please input a valid score</string>
     <string name="score_not_changed">Score not changed</string>
     <string name="delete_completed_todo_message">This todo has been marked as done. Would you like to delete it?</string>
+    <string name="nil">NIL</string>
+    <string name="course_not_changed">Course not changed</string>
+    <string name="no_related_notes">No related notes</string>
+    <string name="note_not_changed">Note not changed</string>
 </resources>

@@ -23,8 +23,8 @@ class NoteRecyclerAdapter(context: Context) :
 
     private val mPreferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    private val mNoteIds: MutableSet<String>
-    private val mDefValues: MutableSet<String>
+    private val mNoteIds = mutableSetOf<String>()
+    private val mDefValues = mutableSetOf<String>()
     private var listener: OnNoteClickedListener?
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -82,16 +82,17 @@ class NoteRecyclerAdapter(context: Context) :
 
     inner class ViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        val mNoteContent: TextView
-        val mNoteTitle: TextView
-        val mLikeButton: LikeButton
-        val ivBookMark: ImageView
+        val mNoteContent: TextView = itemView.findViewById(R.id.tv_note_content)
+        val mNoteTitle: TextView = itemView.findViewById(R.id.tv_note_title)
+        private val mLikeButton: LikeButton = itemView.findViewById(R.id.likeButton)
+        val ivBookMark: ImageView = itemView.findViewById(R.id.iv_bookmark)
 
         fun checkIfBookMarked(noteId: Int, imageView: ImageView) {
-            val defValues: MutableSet<String> = HashSet()
+            val defValues = mutableSetOf<String>()
             defValues.add("-1")
-            val noteIds: Set<String> =
-                HashSet(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues))
+            val noteIds = mutableSetOf<String>()
+            mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues)
+                ?.let { noteIds.addAll(it) }
             if (noteId.toString() in noteIds)
                 imageView.visibility = View.VISIBLE
             else
@@ -99,10 +100,6 @@ class NoteRecyclerAdapter(context: Context) :
         }
 
         init {
-            mNoteContent = itemView.findViewById(R.id.tv_note_content)
-            mNoteTitle = itemView.findViewById(R.id.tv_note_title)
-            mLikeButton = itemView.findViewById(R.id.likeButton)
-            ivBookMark = itemView.findViewById(R.id.iv_bookmark)
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (listener != null && position != RecyclerView.NO_POSITION) {
@@ -127,9 +124,8 @@ class NoteRecyclerAdapter(context: Context) :
     }
 
     init {
-        mDefValues = HashSet()
         mDefValues.add("-1")
-        mNoteIds = HashSet(mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues))
+        mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues)?.let { mNoteIds.addAll(it) }
         listener = null
     }
 }

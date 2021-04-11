@@ -173,12 +173,14 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                 Note note1 = new Note(courseCode, noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
-                                    if (bookMark != null) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    if (bookMarks != null) {
                                         int noteId = note1.getId();
-                                        BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
-                                        bookMark1.setId(bookMark.getId());
-                                        mViewModel.updateBookMark(bookMark1);
+                                        for (BookMark bookMark : bookMarks) {
+                                            BookMark bookMark1 = new BookMark(noteId, courseCode, noteTitle, noteContent);
+                                            bookMark1.setId(bookMark.getId());
+                                            mViewModel.updateBookMark(bookMark1);
+                                        }
                                     }
                                 });
                                 noteRecyclerAdapter.notifyDataSetChanged();
@@ -190,12 +192,14 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                 Note note1 = new Note("NIL", noteTitle, noteContent);
                                 note1.setId(note.getId());
                                 mViewModel.updateNote(note1);
-                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMark -> {
-                                    if (bookMark != null) {
+                                mViewModel.getBookMarkAt(note.getId()).observe(getViewLifecycleOwner(), bookMarks -> {
+                                    if (bookMarks != null) {
                                         int noteId = note1.getId();
-                                        BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
-                                        bookMark1.setId(bookMark.getId());
-                                        mViewModel.updateBookMark(bookMark1);
+                                        for (BookMark bookMark : bookMarks) {
+                                            BookMark bookMark1 = new BookMark(noteId, "NIL", noteTitle, noteContent);
+                                            bookMark1.setId(bookMark.getId());
+                                            mViewModel.updateBookMark(bookMark1);
+                                        }
                                     }
                                 });
                                 bottomSheetDialog.dismiss();
@@ -236,8 +240,6 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                             mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
                             mEditor.apply();
 
-//                            noteRecyclerAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
-
                             dialog1.dismiss();
                         });
                         builder.setNegativeButton(getString(R.string.cancel), (dialog1, which) -> {
@@ -259,12 +261,14 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                         String noteContent = note.getContent();
                         BookMark bookMark = new BookMark(noteId, courseCode, noteTitle, noteContent);
 
-                        mViewModel.getBookMarkAt(noteId).observe(getViewLifecycleOwner(), bookMark1 -> {
-                            if (bookMark1 != null)
-                                bookMark.setId(bookMark1.getId());
-                            else {
-                                mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookMarks -> {
-                                    if (!bookMarks.contains(bookMark)) {
+                        mViewModel.getBookMarkAt(noteId).observe(getViewLifecycleOwner(), bookMarks -> {
+                            if (bookMarks == null) {
+//                                for(BookMark bookMark1 : bookMarks) {
+//                                }
+//                            else {
+//                                mViewModel.getAllBookMarks().observe(getViewLifecycleOwner(), bookMarks1 -> {
+//                                    if (!bookMarks.contains(bookMark)) {
+//                                        bookMark.setId(bookMark1.getId());
                                         mViewModel.insertBookMark(bookMark);
 
                                         mNoteIds.add(String.valueOf(noteId));
@@ -272,20 +276,10 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
                                         mEditor = mPreferences.edit();
                                         mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
                                         mEditor.apply();
-                                    }
-                                });
+//                                    }
+//                                });
                             }
                         });
-//                        mViewModel.insertBookMark(bookMark);
-//
-//                        mNoteIds.add(String.valueOf(noteId));
-//
-//                        mEditor = mPreferences.edit();
-//                        mEditor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds);
-//                        mEditor.apply();
-//                        noteRecyclerAdapter.notifyDataSetChanged();
-//
-//                        Toast.makeText(getContext(), "Note bookmarked", Toast.LENGTH_SHORT).show();
                         noteRecyclerAdapter.notifyDataSetChanged();
                         break;
                 }

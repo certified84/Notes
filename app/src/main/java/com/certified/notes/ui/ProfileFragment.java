@@ -167,7 +167,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         } else if (id == R.id.group_edit_level) {
             launchLevelDialog();
         } else if (id == R.id.fab_settings) {
-            mNavController.navigate(R.id.settingsFragment);
+//            mNavController.navigate(R.id.settingsFragment);
         } else if (id == R.id.profile_image || id == R.id.fab_change_profile_picture) {
             launchProfileImageDialog();
         }

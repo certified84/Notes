@@ -20,22 +20,16 @@ import com.certified.notes.room.NotesViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ResultRecyclerAdapter(val context: Context, val viewModel: NotesViewModel) :
+class ResultRecyclerAdapter(val context: Context, private val viewModel: NotesViewModel) :
     ListAdapter<Course, ResultRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val courseCode: TextView
-        val courseUnit: TextView
-        val courseMark: TextView
-        val courseGrade: TextView
+        val courseCode: TextView = itemView.findViewById(R.id.tv_course_code)
+        val courseUnit: TextView = itemView.findViewById(R.id.tv_course_unit)
+        val courseMark: TextView = itemView.findViewById(R.id.tv_course_mark)
+        val courseGrade: TextView = itemView.findViewById(R.id.tv_course_grade)
 
-        init {
-            courseCode = itemView.findViewById(R.id.tv_course_code)
-            courseUnit = itemView.findViewById(R.id.tv_course_unit)
-            courseMark = itemView.findViewById(R.id.tv_course_mark)
-            courseGrade = itemView.findViewById(R.id.tv_course_grade)
-        }
     }
 
     companion object {

@@ -13,23 +13,21 @@ import com.certified.notes.model.Course
 class CourseRecyclerAdapter :
     ListAdapter<Course, CourseRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
-    private lateinit var listener: onCourseClickedListener
+    private lateinit var listener: OnCourseClickedListener
 
-    fun setOnCourseClickedListener(listener: onCourseClickedListener) {
+    fun setOnCourseClickedListener(listener: OnCourseClickedListener) {
         this.listener = listener
     }
 
-    interface onCourseClickedListener {
+    interface OnCourseClickedListener {
         fun onCourseClicked(course: Course)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val courseCode: TextView
-        val courseTitle: TextView
+        val courseCode: TextView = itemView.findViewById(R.id.tv_course_code)
+        val courseTitle: TextView = itemView.findViewById(R.id.tv_course_title)
 
         init {
-            courseCode = itemView.findViewById(R.id.tv_course_code)
-            courseTitle = itemView.findViewById(R.id.tv_course_title)
 
             itemView.setOnClickListener{
                 val position = adapterPosition
