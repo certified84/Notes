@@ -26,13 +26,10 @@ class HomeNoteRecyclerAdapter(val id: Int) :
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val noteContent: TextView
-        val noteTitle: TextView
+        val noteContent: TextView = itemView.findViewById(R.id.tv_note_content)
+        val noteTitle: TextView = itemView.findViewById(R.id.tv_note_title)
 
         init {
-            noteContent = itemView.findViewById(R.id.tv_note_content)
-            noteTitle = itemView.findViewById(R.id.tv_note_title)
-
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION)

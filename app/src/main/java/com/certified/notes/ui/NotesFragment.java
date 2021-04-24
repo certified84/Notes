@@ -41,6 +41,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import io.sulek.ssml.SSMLLinearLayoutManager;
+
 import static android.graphics.Color.RED;
 import static android.text.TextUtils.isEmpty;
 
@@ -114,7 +116,7 @@ public class NotesFragment extends Fragment implements PopupMenu.OnMenuItemClick
         NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(getContext());
         mViewModel.getAllNotes().observe(getViewLifecycleOwner(), noteRecyclerAdapter::submitList);
         recyclerNotes.setAdapter(noteRecyclerAdapter);
-        recyclerNotes.setLayoutManager(noteLayoutManager);
+        recyclerNotes.setLayoutManager(new SSMLLinearLayoutManager(requireContext()));
 
         ArrayList<String> courseList = new ArrayList<>();
         ArrayAdapter<String> adapterCourses = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, courseList);

@@ -17,10 +17,10 @@ import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
 import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
+import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
 import com.shawnlin.numberpicker.NumberPicker
@@ -33,14 +33,18 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvFabNoteTitle: TextView
     private lateinit var tvFabCourseTitle: TextView
 
-    private lateinit var fab: FloatingActionButton
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var fabAddNote: FloatingActionButton
     private lateinit var fabAddCourse: FloatingActionButton
     private lateinit var fabAddTodo: FloatingActionButton
 
     private lateinit var viewBlur: View
     private lateinit var navController: NavController
-    private lateinit var bottomNavigationView: BottomNavigationView
+
+    companion object {
+        lateinit var fab: FloatingActionButton
+        lateinit var optRoundCardView: OptRoundCardView
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         isDarkModeEnabled()
 //        createNotificationChannel()
-        isFirstOpen()
 
         notesViewModel = NotesViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
@@ -57,6 +60,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
 
+        optRoundCardView = findViewById(R.id.optRoundCardView2)
         fab = findViewById(R.id.fab)
         fabAddCourse = findViewById(R.id.fab_add_course)
         fabAddNote = findViewById(R.id.fab_add_note)
@@ -98,27 +102,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            } else {
             super.onBackPressed()
 //            }
-        }
-    }
-
-    private fun isFirstOpen() {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val isFirstOpen = preferences.getBoolean(PreferenceKeys.FIRST_TIME_OPEN, true)
-        if (isFirstOpen) {
-            val alertDialogBuilder = MaterialAlertDialogBuilder(this)
-            alertDialogBuilder.setTitle(getString(R.string.welcome_to_notes))
-            alertDialogBuilder.setMessage(
-                "Hey there, thank you for downloading Notes your personal tool for managing your semester courses, notes and todos." +
-                        "\nMake sure to add your semester courses in other to link your notes to them"
-            )
-            alertDialogBuilder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                val editor = preferences.edit()
-                editor.putBoolean(PreferenceKeys.FIRST_TIME_OPEN, false)
-                editor.apply()
-                dialog.dismiss()
-            }
-            val alertDialog = alertDialogBuilder.create()
-            alertDialog.show()
         }
     }
 

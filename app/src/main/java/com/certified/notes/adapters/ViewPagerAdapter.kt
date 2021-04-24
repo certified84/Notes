@@ -1,5 +1,6 @@
 package com.certified.notes.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.RenderMode
 import com.certified.notes.R
 import com.certified.notes.model.SliderItem
+import java.util.concurrent.Executors
 
 class ViewPagerAdapter(private val sliderItem: List<SliderItem>) :
     RecyclerView.Adapter<ViewPagerAdapter.ViewPagerViewHolder>() {
@@ -20,8 +22,13 @@ class ViewPagerAdapter(private val sliderItem: List<SliderItem>) :
         private val tvDescription: TextView = itemView.findViewById(R.id.tv_description)
 
         fun setItems(sliderItem: SliderItem) {
-            animationView.setRenderMode(RenderMode.SOFTWARE)
-            animationView.setAnimation(sliderItem.animation)
+            val executorService = Executors.newSingleThreadExecutor()
+            executorService.execute {
+                animationView.setRenderMode(RenderMode.SOFTWARE)
+                animationView.setAnimation(sliderItem.animation)
+                Log.d("SliderItem", "setItems: " + Thread.currentThread().id)
+            }
+            animationView.enableMergePathsForKitKatAndAbove(true)
             tvTitle.text = sliderItem.title
             tvDescription.text = sliderItem.description
         }

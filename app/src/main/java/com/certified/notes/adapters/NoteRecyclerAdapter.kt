@@ -21,10 +21,10 @@ class NoteRecyclerAdapter(context: Context) :
         DIFF_CALLBACK
     ) {
 
-    private val mPreferences: SharedPreferences =
+    private val preferences: SharedPreferences =
         PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    private val mNoteIds = mutableSetOf<String>()
-    private val mDefValues = mutableSetOf<String>()
+    private val noteIds: MutableSet<String>
+    private val defValues: MutableSet<String>
     private var listener: OnNoteClickedListener?
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,7 +34,7 @@ class NoteRecyclerAdapter(context: Context) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        val editor = mPreferences.edit()
+//        val editor = preferences.edit()
         val currentNote = getItem(position)
         holder.mNoteContent.text = currentNote!!.content
         holder.mNoteTitle.text = currentNote.title
@@ -48,8 +48,8 @@ class NoteRecyclerAdapter(context: Context) :
 //                val bookMark = BookMark(noteId, courseCode, noteTitle, noteContent!!)
 //                mViewModel.insertBookMark(bookMark)
 //
-//                mNoteIds.add(noteId.toString())
-//                editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds)
+//                noteIds.add(noteId.toString())
+//                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
 //                editor.apply()
 //            }
 //
@@ -58,8 +58,8 @@ class NoteRecyclerAdapter(context: Context) :
 //                        if (bookMark != null) {
 //                            mViewModel.deleteBookMark(bookMark)
 //                        }
-//                        mNoteIds.remove((currentNote.id).toString())
-//                        editor.putStringSet(PreferenceKeys.NOTE_IDS, mNoteIds)
+//                        noteIds.remove((currentNote.id).toString())
+//                        editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
 //                        editor.apply()
 //                    }
 //                )
@@ -91,7 +91,7 @@ class NoteRecyclerAdapter(context: Context) :
             val defValues = mutableSetOf<String>()
             defValues.add("-1")
             val noteIds = mutableSetOf<String>()
-            mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues)
+            preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues)
                 ?.let { noteIds.addAll(it) }
             if (noteId.toString() in noteIds)
                 imageView.visibility = View.VISIBLE
@@ -124,8 +124,10 @@ class NoteRecyclerAdapter(context: Context) :
     }
 
     init {
-        mDefValues.add("-1")
-        mPreferences.getStringSet(PreferenceKeys.NOTE_IDS, mDefValues)?.let { mNoteIds.addAll(it) }
+        defValues = mutableSetOf()
+        defValues.add("-1")
+        noteIds = HashSet(preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues))
+//        preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues)?.let { noteIds.addAll(it) }
         listener = null
     }
 }

@@ -19,7 +19,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.certified.notes.R
@@ -44,6 +43,8 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        MainActivity.optRoundCardView.visibility = View.GONE
+        MainActivity.fab.visibility = View.GONE
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
@@ -85,7 +86,7 @@ class SplashFragment : Fragment() {
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setTicker("Notes")
-            .addAction(R.drawable.ic_add, "Add Note", notificationPendingIntent)
+//            .addAction(R.drawable.ic_add, "Add Note", notificationPendingIntent)
             .setAutoCancel(true)
     }
 
@@ -97,15 +98,17 @@ class SplashFragment : Fragment() {
     private fun isFirstLogin() {
         val isFirstLogin: Boolean = preferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true)
         if (isFirstLogin) {
-            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
-            navController.navigate(R.id.onboardingFragment, null, navOptions)
+//            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
+            navController.navigate(R.id.onboardingFragment2)
         } else {
-            val context1 = context
-            if (context1 != null) {
-                startActivity(Intent(context, MainActivity::class.java))
-                sendNotification()
-                requireActivity().finish()
-            }
+//            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
+            navController.navigate(R.id.homeFragment)
+//            val context1 = context
+//            if (context1 != null) {
+//                startActivity(Intent(context, MainActivity::class.java))
+//                sendNotification()
+//                requireActivity().finish()
+//            }
         }
     }
 }
