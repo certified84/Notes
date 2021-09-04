@@ -4,10 +4,11 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="testRunner" value="PLATFORM" />
+        <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleHome" value="$USER_HOME$/Android Dev/gradle-6.7.1-bin/gradle-6.7.1" />
+        <option name="gradleHome" value="D:/Android Dev/gradle-7.2" />
+        <option name="gradleJvm" value="11" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -15,8 +16,8 @@
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
-        <option name="useQualifiedModuleNames" value="true" />
       </GradleProjectSettings>
     </option>
+    <option name="offlineMode" value="true" />
   </component>
 </project>
