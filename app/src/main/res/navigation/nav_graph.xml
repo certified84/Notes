@@ -3,7 +3,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/nav_graph"
-        app:startDestination="@id/splashFragment2">
+        app:startDestination="@id/splashFragment">
     <fragment
             android:id="@+id/homeFragment"
             android:name="com.certified.notes.ui.HomeFragment"
@@ -35,12 +35,12 @@
             android:label="fragment_profile"
             tools:layout="@layout/fragment_profile" />
     <fragment
-            android:id="@+id/splashFragment2"
+            android:id="@+id/splashFragment"
             android:name="com.certified.notes.ui.SplashFragment"
             android:label="fragment_splash"
             tools:layout="@layout/fragment_splash" />
     <fragment
-            android:id="@+id/onboardingFragment2"
+            android:id="@+id/onboardingFragment"
             android:name="com.certified.notes.ui.OnboardingFragment"
             android:label="fragment_onboarding"
             tools:layout="@layout/fragment_onboarding" />

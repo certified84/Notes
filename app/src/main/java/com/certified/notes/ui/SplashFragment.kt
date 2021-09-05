@@ -43,8 +43,6 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        MainActivity.optRoundCardView.visibility = View.GONE
-        MainActivity.fab.visibility = View.GONE
         return inflater.inflate(R.layout.fragment_splash, container, false)
     }
 
@@ -53,7 +51,7 @@ class SplashFragment : Fragment() {
         createNotificationChannel()
         navController = Navigation.findNavController(view)
         val handler = Handler(Looper.myLooper()!!)
-        handler.postDelayed(this::isFirstLogin, 3000)
+        handler.postDelayed(this::isFirstLogin, 5000)
     }
 
     private fun createNotificationChannel() {
@@ -99,7 +97,7 @@ class SplashFragment : Fragment() {
         val isFirstLogin: Boolean = preferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true)
         if (isFirstLogin) {
 //            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
-            navController.navigate(R.id.onboardingFragment2)
+            navController.navigate(R.id.onboardingFragment)
         } else {
 //            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
             navController.navigate(R.id.homeFragment)

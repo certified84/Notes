@@ -25,10 +25,12 @@ import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
 import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
+import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
 
 class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClickListener {
@@ -53,8 +55,6 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        MainActivity.optRoundCardView.visibility = View.VISIBLE
-        MainActivity.fab.visibility = View.VISIBLE
 
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
@@ -80,6 +80,9 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
 
         navController = Navigation.findNavController(view)
         viewModel = NotesViewModel(requireActivity().application)
+
+        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
 
         isFirstOpen()
         init()

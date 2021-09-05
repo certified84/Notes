@@ -41,10 +41,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var viewBlur: View
     private lateinit var navController: NavController
 
-    companion object {
-        lateinit var fab: FloatingActionButton
-        lateinit var optRoundCardView: OptRoundCardView
-    }
+
+    private lateinit var fab: FloatingActionButton
+    private lateinit var optRoundCardView: OptRoundCardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +70,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         tvFabCourseTitle = findViewById(R.id.tv_fab_course_title)
 
         viewBlur = findViewById(R.id.view)
+
+        optRoundCardView.visibility = View.GONE
+        fab.visibility = View.GONE
 
         fab.setOnClickListener(this)
         fabAddCourse.setOnClickListener(this)
