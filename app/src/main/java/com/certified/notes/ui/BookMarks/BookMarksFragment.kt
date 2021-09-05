@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.ui.BookMarks
 
 import android.content.DialogInterface
 import android.graphics.Canvas
@@ -15,6 +15,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,6 @@ import com.certified.notes.adapters.BookMarkRecyclerAdapter
 import com.certified.notes.adapters.BookMarkRecyclerAdapter.OnBookMarkClickedListener
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -34,7 +34,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private lateinit var recyclerBookMarks: RecyclerView
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: BookMarksViewModel
     private lateinit var ivBookMarkPopupMenu: ImageView
     private lateinit var svSearchBookMark: SearchView
 
@@ -48,9 +48,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerBookMarks = view.findViewById(R.id.recycler_view_notes)
         ivBookMarkPopupMenu = view.findViewById(R.id.iv_bookmark_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchBookMark = view.findViewById(R.id.sv_search_database)
-        }
+        svSearchBookMark = view.findViewById(R.id.sv_search_database)
 
         return view
     }
@@ -58,7 +56,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = BookMarksViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(BookMarksViewModel::class.java)
         ivBookMarkPopupMenu.setOnClickListener(this::showPopupMenu)
 
         init()

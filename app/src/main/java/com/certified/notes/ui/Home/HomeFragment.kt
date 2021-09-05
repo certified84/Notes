@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.ui.Home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
@@ -23,7 +24,6 @@ import com.certified.notes.adapters.HomeNoteRecyclerAdapter
 import com.certified.notes.adapters.TodoRecyclerAdapter
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -46,7 +46,7 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
     private lateinit var btnShowAllCourses: MaterialButton
     private lateinit var ivTodoPopupMenu: ImageView
     private lateinit var navController: NavController
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: HomeViewModel
     private lateinit var cardView: MaterialCardView
     private lateinit var todoRecyclerAdapter: TodoRecyclerAdapter
 
@@ -79,7 +79,9 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         super.onViewCreated(view, savedInstanceState)
 
         navController = Navigation.findNavController(view)
-        viewModel = NotesViewModel(requireActivity().application)
+
+        val viewModelFactory = HomeViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
         activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
@@ -259,31 +261,35 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
             if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
+                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black
+                        )
                     )
-                )
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
+                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.black
+                        )
                     )
-                )
             } else {
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
+                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
                     )
-                )
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
+                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
                     )
-                )
             }
         }
         alertDialog.show()

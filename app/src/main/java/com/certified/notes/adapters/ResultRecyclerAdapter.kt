@@ -16,11 +16,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Course
-import com.certified.notes.room.NotesViewModel
+import com.certified.notes.ui.Main.MainActivityViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ResultRecyclerAdapter(val context: Context, private val viewModel: NotesViewModel) :
+class ResultRecyclerAdapter(val context: Context, private val viewModel: MainActivityViewModel) :
     ListAdapter<Course, ResultRecyclerAdapter.ViewHolder>(DIFF_CALLBACK) {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

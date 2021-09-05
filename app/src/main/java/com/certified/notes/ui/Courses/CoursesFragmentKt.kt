@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.ui.Courses
 
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -23,7 +24,6 @@ import com.certified.notes.adapters.HomeNoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,7 +37,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private lateinit var recyclerCourses: RecyclerView
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: CoursesViewModel
     private lateinit var ivCoursePopupMenu: ImageView
     private lateinit var svSearchCourses: SearchView
 
@@ -61,7 +61,8 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = CoursesViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(CoursesViewModel::class.java)
         ivCoursePopupMenu.setOnClickListener(this::showPopupMenu)
 
         init()

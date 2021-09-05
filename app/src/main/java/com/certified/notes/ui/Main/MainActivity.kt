@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.ui.Main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,7 +15,6 @@ import com.certified.notes.R
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +26,7 @@ import com.shawnlin.numberpicker.NumberPicker
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var notesViewModel: NotesViewModel
+    private lateinit var notesViewModel: MainActivityViewModel
 
     private lateinit var tvFabTodoTitle: TextView
     private lateinit var tvFabNoteTitle: TextView
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         isDarkModeEnabled()
 //        createNotificationChannel()
 
-        notesViewModel = NotesViewModel(application)
+        notesViewModel = MainActivityViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)

@@ -30,7 +30,7 @@ import androidx.preference.PreferenceManager;
 import com.bumptech.glide.Glide;
 import com.certified.notes.R;
 import com.certified.notes.model.User;
-import com.certified.notes.room.NotesViewModel;
+import com.certified.notes.ui.Main.MainActivityViewModel;
 import com.certified.notes.util.PreferenceKeys;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final int PICK_IMAGE_CODE = 102;
     String userName, userSchool, userDepartment, userLevel;
     Bitmap profileImageBitmap;
-    private NotesViewModel mViewModel;
+    private MainActivityViewModel mViewModel;
     private NavController mNavController;
     private Group groupName, groupSchool, groupDepartment, groupLevel;
     private TextView tvName, tvSchool, tvDepartment, tvLevel;
@@ -99,7 +99,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mViewModel = new NotesViewModel(requireActivity().getApplication());
+        mViewModel = new MainActivityViewModel(requireActivity().getApplication());
         mNavController = Navigation.findNavController(view);
 
         groupName.setOnClickListener(this);

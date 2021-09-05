@@ -3,7 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout-sw600dp/fragment_book_marks.xml" value="0.1051912568306011" />
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout-sw600dp/fragment_notes.xml" value="0.1051912568306011" />
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout-v21/fragment_book_marks.xml" value="0.13949275362318841" />
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout-v21/fragment_notes.xml" value="0.10055724417426545" />
         <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_main.xml" value="0.21" />
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_book_marks.xml" value="0.13949275362318841" />
+        <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_notes.xml" value="0.10055724417426545" />
       </map>
     </option>
   </component>

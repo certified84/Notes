@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.R;
 import com.certified.notes.adapters.ResultRecyclerAdapter;
-import com.certified.notes.room.NotesViewModel;
+import com.certified.notes.ui.Main.MainActivityViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class ResultFragment extends Fragment {
@@ -22,7 +22,7 @@ public class ResultFragment extends Fragment {
     private RecyclerView recyclerResults;
     private MaterialButton btnCheckGpa;
     private TextView tvTotalLoadUnit, tvGradePointAverage;
-    private NotesViewModel mViewModel;
+    private MainActivityViewModel mViewModel;
     private ResultRecyclerAdapter mResultRecyclerAdapter;
 
     public ResultFragment() {
@@ -63,7 +63,7 @@ public class ResultFragment extends Fragment {
     }
 
     private void init() {
-        mViewModel = new NotesViewModel(getActivity().getApplication());
+        mViewModel = new MainActivityViewModel(getActivity().getApplication());
         LinearLayoutManager resultLayoutManager = new LinearLayoutManager(getContext());
         mResultRecyclerAdapter = new ResultRecyclerAdapter(requireContext(), mViewModel);
 

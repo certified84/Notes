@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.ui.Notes
 
 import android.content.SharedPreferences
 import android.os.Build
@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +24,6 @@ import com.certified.notes.R
 import com.certified.notes.adapters.NoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -31,7 +31,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 import io.sulek.ssml.SSMLLinearLayoutManager
 
-class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
+class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private lateinit var recyclerNotes: RecyclerView
     private lateinit var viewModel: NotesViewModel
@@ -61,7 +61,8 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = NotesViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NotesViewModel::class.java)
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         ivNotePopupMenu.setOnClickListener(this::showPopupMenu)
 

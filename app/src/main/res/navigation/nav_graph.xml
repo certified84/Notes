@@ -6,22 +6,22 @@
         app:startDestination="@id/splashFragment">
     <fragment
             android:id="@+id/homeFragment"
-            android:name="com.certified.notes.ui.HomeFragment"
+            android:name="com.certified.notes.ui.Home.HomeFragment"
             android:label="fragment_home"
             tools:layout="@layout/fragment_home" />
     <fragment
             android:id="@+id/notesFragment"
-            android:name="com.certified.notes.ui.NotesFragmentKt"
+            android:name="com.certified.notes.ui.Notes.NotesFragment"
             android:label="fragment_notes"
             tools:layout="@layout/fragment_notes" />
     <fragment
             android:id="@+id/coursesFragment"
-            android:name="com.certified.notes.ui.CoursesFragmentKt"
+            android:name="com.certified.notes.ui.Courses.CoursesFragmentKt"
             android:label="fragment_courses"
             tools:layout="@layout/fragment_courses" />
     <fragment
             android:id="@+id/bookMarksFragment"
-            android:name="com.certified.notes.ui.BookMarksFragment"
+            android:name="com.certified.notes.ui.BookMarks.BookMarksFragment"
             android:label="BookMarksFragment"
             tools:layout="@layout/fragment_book_marks" />
     <fragment
