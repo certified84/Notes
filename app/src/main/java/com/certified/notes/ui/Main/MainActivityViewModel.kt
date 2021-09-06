@@ -10,7 +10,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     private val repository = Repository(application)
 
-    val allNotes: LiveData<List<Note>> = repository.allNotes
     val allCourses: LiveData<List<Course>> = repository.allCourses
     val allNoteIds: LiveData<List<Int>> = repository.allNoteIds
     val allCourseUnits: LiveData<List<Int>> = repository.allCourseUnits
@@ -35,10 +34,6 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
 
     fun updateCourse(course: Course) {
         repository.updateCourse(course)
-    }
-
-    fun updateUser(user: User) {
-        repository.updateUser(user)
     }
 
     fun deleteAllCourses() {

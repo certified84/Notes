@@ -52,8 +52,7 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerNotes = view.findViewById(R.id.recycler_view_notes)
         ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            svSearchNotes = view.findViewById(R.id.sv_search_database)
+        svSearchNotes = view.findViewById(R.id.sv_search_database)
 
         return view
     }
