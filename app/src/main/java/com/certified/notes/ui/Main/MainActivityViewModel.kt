@@ -3,8 +3,11 @@ package com.certified.notes.ui.Main
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.certified.notes.model.*
 import com.certified.notes.util.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -17,23 +20,33 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     val user: LiveData<User> = repository.user
 
     fun insertNote(note: Note) {
-        repository.insertNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertNote(note)
+        }
     }
 
     fun insertCourse(course: Course) {
-        repository.insertCourse(course)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertCourse(course)
+        }
     }
 
     fun insertTodo(todo: Todo) {
-        repository.insertTodo(todo)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertTodo(todo)
+        }
     }
 
     fun updateNote(note: Note) {
-        repository.updateNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(note)
+        }
     }
 
     fun updateCourse(course: Course) {
-        repository.updateCourse(course)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateCourse(course)
+        }
     }
 
     fun deleteAllCourses() {

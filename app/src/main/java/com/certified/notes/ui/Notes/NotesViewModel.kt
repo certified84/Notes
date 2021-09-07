@@ -3,32 +3,42 @@ package com.certified.notes.ui.Notes
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
-import com.certified.notes.model.Todo
 import com.certified.notes.util.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class NotesViewModel(application: Application): AndroidViewModel(application) {
+class NotesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(application)
 
     val allNotes: LiveData<List<Note>> = repository.allNotes
     val allCourses: LiveData<List<Course>> = repository.allCourses
 
     fun insertBookMark(bookMark: BookMark) {
-        repository.insertBookMark(bookMark)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertBookMark(bookMark)
+        }
     }
 
     fun updateNote(note: Note) {
-        repository.updateNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(note)
+        }
     }
 
     fun updateBookMark(bookMark: BookMark) {
-        repository.updateBookMark(bookMark)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateBookMark(bookMark)
+        }
     }
 
     fun deleteNote(note: Note) {
-        repository.deleteNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteNote(note)
+        }
     }
 
     fun deleteAllNotes() {

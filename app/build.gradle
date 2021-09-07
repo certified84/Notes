@@ -31,6 +31,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
@@ -58,7 +61,7 @@ dependencies {
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
 
 //    Room persistence library
-    implementation "androidx.room:room-runtime:2.3.0"
+    implementation "androidx.room:room-ktx:2.3.0"
     kapt "androidx.room:room-compiler:2.3.0"
 
 //    Paging
@@ -71,7 +74,7 @@ dependencies {
     implementation 'com.github.captain-miao:optroundcardview:1.0.0'
 
 //   lottie
-    implementation "com.airbnb.android:lottie:3.4.0"
+    implementation "com.airbnb.android:lottie:3.6.0"
 
 //    page indicator
     implementation "com.romandanylyk:pageindicatorview:1.0.3@aar"

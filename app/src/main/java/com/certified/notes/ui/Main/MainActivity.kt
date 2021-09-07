@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.Observer
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchCourseDialog() {
         val inflater: LayoutInflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_course, null)
+        val view = inflater.inflate(R.layout.dialog_new_course, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val GRADE_POINT_NOT_SET = 0
             if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
                 val course = Course(
-                    courseCode,
+                    0, courseCode,
                     courseTitle,
                     courseUnit,
                     MARK_NOT_SET,
@@ -195,7 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchTodoDialog() {
         val inflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_todo, null)
+        val view = inflater.inflate(R.layout.dialog_new_todo, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvTodoDialogTitle: MaterialTextView = view.findViewById(R.id.tv_todo_dialog_title)
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
             if (todoContent.isNotEmpty()) {
-                val todo = Todo(todoContent, false)
+                val todo = Todo(0, todoContent, false)
                 notesViewModel.insertTodo(todo)
                 bottomSheetDialog.dismiss()
             } else
@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchNoteDialog() {
         val inflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_note, null)
+        val view = inflater.inflate(R.layout.dialog_new_note, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val courseList = arrayListOf<String>()
         val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
-        notesViewModel.allCourses.observe(this, Observer { courses: List<Course> ->
+        notesViewModel.allCourses.observe(this, { courses: List<Course> ->
             courseList.add(getString(R.string.select_a_course))
             courseList.add(getString(R.string.no_course))
             for (course in courses) {
@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                 if (courseTitle != getString(R.string.select_a_course)) {
-                    val note = Note(courseCode, noteTitle, noteContent)
+                    val note = Note(0, courseCode, noteTitle, noteContent)
                     notesViewModel.insertNote(note)
                     bottomSheetDialog.dismiss()
                     Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()

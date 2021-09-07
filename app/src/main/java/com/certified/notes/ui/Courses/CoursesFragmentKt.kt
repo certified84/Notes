@@ -1,6 +1,5 @@
 package com.certified.notes.ui.Courses
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +11,7 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -51,9 +51,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerCourses = view.findViewById(R.id.recycler_view_courses)
         ivCoursePopupMenu = view.findViewById(R.id.iv_course_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchCourses = view.findViewById(R.id.sv_search_database)
-        }
+        svSearchCourses = view.findViewById(R.id.sv_search_database)
 
         return view
     }
@@ -107,27 +105,27 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         })
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchCourses.isSubmitButtonEnabled
-            svSearchCourses.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (query != null)
-                        searchCourses(query, courseRecyclerAdapter)
-                    return true
-                }
+        svSearchCourses.isSubmitButtonEnabled
+        svSearchCourses.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null)
+                    searchCourses(query, courseRecyclerAdapter)
+                return true
+            }
 
-                override fun onQueryTextChange(query: String?): Boolean {
-                    if (query != null)
-                        searchCourses(query, courseRecyclerAdapter)
-                    return true
-                }
-
-            })
-        }
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null)
+                    searchCourses(query, courseRecyclerAdapter)
+                return true
+            }
+        })
     }
 
     private fun launchRelatedNotesDialog(course: Course) {
-        val view = layoutInflater.inflate(R.layout.dialog_related_notes, null)
+        val view = layoutInflater.inflate(
+            R.layout.dialog_related_notes,
+            ConstraintLayout(requireContext())
+        )
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val recyclerViewRelatedNotes: RecyclerView =
             view.findViewById(R.id.recycler_view_related_notes)
@@ -163,7 +161,10 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             override fun onNoteClicked(note: Note) {
                 bottomSheetDialog.dismiss()
 
-                val view1 = layoutInflater.inflate(R.layout.dialog_new_note, null)
+                val view1 = layoutInflater.inflate(
+                    R.layout.dialog_new_note,
+                    ConstraintLayout(requireContext())
+                )
                 val bottomSheetDialog1 = BottomSheetDialog(
                     requireContext(),
                     R.style.BottomSheetDialogTheme
@@ -217,7 +218,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                         if (courseTitle != getString(R.string.select_a_course)) {
                             if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
-                                val note1 = Note(courseCode, noteTitle, noteContent)
+                                val note1 = Note(0, courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
                                 viewModel.getBookMarkAt(note.id)
@@ -225,7 +226,13 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                                         val noteId = note1.id
                                         for (bookMark in bookMarks) {
                                             val bookMark1 =
-                                                BookMark(noteId, courseCode, noteTitle, noteContent)
+                                                BookMark(
+                                                    0,
+                                                    noteId,
+                                                    courseCode,
+                                                    noteTitle,
+                                                    noteContent
+                                                )
                                             bookMark1.id = bookMark.id
                                             viewModel.updateBookMark(bookMark1)
                                         }
@@ -259,7 +266,8 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun launchEditCourseDialog(course: Course) {
-        val view = layoutInflater.inflate(R.layout.dialog_new_course, null)
+        val view =
+            layoutInflater.inflate(R.layout.dialog_new_course, ConstraintLayout(requireContext()))
         val bottomSheetDialog = BottomSheetDialog(requireContext())
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -292,20 +300,20 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     courseUnit != course.courseUnit
                 ) {
                     val course1 = Course(
-                        courseCode,
+                        course.id, courseCode,
                         courseTitle,
                         courseUnit,
                         courseMark,
                         courseGrade,
                         courseGradePoint
                     )
-                    course1.id = course.id
+//                    course1.id = course.id
                     viewModel.getNotesAt(course.courseCode)?.observe(viewLifecycleOwner) { notes ->
                         if (notes.isNotEmpty()) {
                             for (note in notes) {
                                 val noteTitle = note.title
                                 val noteContent = note.content
-                                val note1 = Note(courseCode, noteTitle, noteContent)
+                                val note1 = Note(0, courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
 
@@ -314,7 +322,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                                         if (bookMarks.isNotEmpty()) {
                                             for (bookMark in bookMarks) {
                                                 val bookMark1 = BookMark(
-                                                    note.id,
+                                                    0, note.id,
                                                     courseCode,
                                                     noteTitle,
                                                     noteContent!!

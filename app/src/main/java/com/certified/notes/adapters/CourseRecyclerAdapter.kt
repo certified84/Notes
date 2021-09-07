@@ -29,8 +29,8 @@ class CourseRecyclerAdapter :
 
         init {
 
-            itemView.setOnClickListener{
-                val position = adapterPosition
+            itemView.setOnClickListener {
+                val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION)
                     listener.onCourseClicked(getItem(position))
             }

@@ -120,6 +120,7 @@ class ResultRecyclerAdapter(val context: Context, private val viewModel: MainAct
                     if (courseMark in validMark) {
                         if (courseMark != course.courseMark) {
                             val course1 = Course(
+                                course.id,
                                 courseCode,
                                 courseTitle,
                                 courseUnit,
@@ -127,7 +128,6 @@ class ResultRecyclerAdapter(val context: Context, private val viewModel: MainAct
                                 courseGrade,
                                 courseGradePoint
                             )
-                            course1.id = course.id
                             viewModel.updateCourse(course1)
 
                             holder.courseGrade.text = courseGrade

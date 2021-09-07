@@ -29,6 +29,7 @@ import com.bumptech.glide.Glide
 import com.certified.notes.R
 import com.certified.notes.model.User
 import com.certified.notes.util.PreferenceKeys
+import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -152,6 +153,13 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
+    }
+
     override fun onClick(v: View) {
         when (v.id) {
             R.id.group_edit_name -> launchNameDialog()
@@ -185,8 +193,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun deleteProfilePicture() {
-        val user = User(userName, userSchool, userDepartment, userLevel, null)
-        user.id = USER_ID
+        val user = User(USER_ID, userName, userSchool, userDepartment, userLevel, null)
         viewModel.updateUser(user)
     }
 
@@ -221,8 +228,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             val department = tvDepartment.text.toString()
             val level = tvLevel.text.toString()
 
-            val user = User(name, school, department, level, profileImageBitmap)
-            user.id = USER_ID
+            val user = User(USER_ID, name, school, department, level, profileImageBitmap)
             viewModel.updateUser(user)
 
             Glide.with(requireContext())
@@ -234,8 +240,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             try {
                 val stream = uri?.let { requireContext().contentResolver.openInputStream(it) }
                 val bitmap = BitmapFactory.decodeStream(stream)
-                val user = User(userName, userSchool, userDepartment, userLevel, bitmap)
-                user.id = USER_ID
+                val user = User(USER_ID, userName, userSchool, userDepartment, userLevel, bitmap)
                 viewModel.updateUser(user)
                 Glide.with(requireContext())
                     .load(bitmap)
@@ -273,8 +278,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             val level = tvLevel.text.toString().trim()
             if (!isEmpty(name)) {
                 if (name != userName) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
+                    val user = User(USER_ID, name, school, department, level, profileImageBitmap)
                     viewModel.updateUser(user)
                     tvName.text = name
                 } else Toast.makeText(context, "Name not changed", Toast.LENGTH_SHORT).show()
@@ -313,8 +317,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             val level = tvLevel.text.toString().trim()
             if (!isEmpty(school)) {
                 if (school != userSchool) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
+                    val user = User(USER_ID, name, school, department, level, profileImageBitmap)
                     viewModel.updateUser(user)
                     tvSchool.text = school
                 } else Toast.makeText(context, "School not changed", Toast.LENGTH_SHORT).show()
@@ -352,8 +355,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             val level = tvLevel.text.toString().trim()
             if (!isEmpty(department)) {
                 if (department != userDepartment) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
+                    val user = User(USER_ID, name, school, department, level, profileImageBitmap)
                     viewModel.updateUser(user)
                     tvDepartment.text = department
                 } else Toast.makeText(context, "Department not changed", Toast.LENGTH_SHORT).show()
@@ -398,8 +400,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             val level = spinnerLevel.selectedItem.toString()
             if (level != getString(R.string.select_level)) {
                 if (level != userLevel) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
+                    val user = User(USER_ID, name, school, department, level, profileImageBitmap)
                     viewModel.updateUser(user)
                     tvLevel.text = level
                 } else Toast.makeText(context, "Level not changed", Toast.LENGTH_SHORT).show()

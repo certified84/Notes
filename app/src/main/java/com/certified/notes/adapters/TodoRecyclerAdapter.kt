@@ -97,8 +97,7 @@ class TodoRecyclerAdapter(val context: Context, private val viewModel: HomeViewM
                     dialog.cancel()
                 }
                 builder.setNegativeButton(context.getString(R.string.no)) { dialog, _ ->
-                    val todo1 = Todo(todoContent, true)
-                    todo1.id = getItem(position).id
+                    val todo1 = Todo(getItem(position).id, todoContent, true)
                     viewModel.updateTodo(todo1)
                     dialog.cancel()
                 }

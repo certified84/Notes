@@ -7,47 +7,47 @@ import com.certified.notes.model.*
 @Dao
 interface NotesDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNote(note: Note)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertNote(note: Note)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertCourse(course: Course)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertTodo(todo: Todo)
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertBookMark(bookMark: BookMark)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertCourse(course: Course)
+    suspend fun insertUser(user: User)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTodo(todo: Todo)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateNote(note: Note)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertBookMark(bookMark: BookMark)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateCourse(course: Course)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertUser(user: User)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateTodo(todo: Todo)
 
-    @Update
-    fun updateNote(note: Note)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateBookMark(bookMark: BookMark)
 
-    @Update
-    fun updateCourse(course: Course)
-
-    @Update
-    fun updateTodo(todo: Todo)
-
-    @Update
-    fun updateBookMark(bookMark: BookMark)
-
-    @Update
-    fun updateUser(user: User)
+    @Update(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun updateUser(user: User)
 
     @Delete
-    fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note)
 
     @Delete
-    fun deleteCourse(course: Course)
+    suspend fun deleteCourse(course: Course)
 
     @Delete
-    fun deleteTodo(todo: Todo)
+    suspend fun deleteTodo(todo: Todo)
 
     @Delete
-    fun deleteBookMark(bookMark: BookMark)
+    suspend fun deleteBookMark(bookMark: BookMark)
 
     @Query("DELETE FROM note_table ")
     fun deleteAllNotes()
@@ -95,10 +95,10 @@ interface NotesDao {
     fun getNotesAt(course_code: String): LiveData<List<Note>>
 
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")
-    fun getCourseCode(courseTitle: String): String?
+    fun getCourseCode(courseTitle: String): String
 
     @Query("SELECT course_title FROM course_table WHERE course_code = :courseCode")
-    fun getCourseTitle(courseCode: String): String?
+    fun getCourseTitle(courseCode: String): String
 
     @Query("SELECT note_id FROM bookmark_table")
     fun getNoteIds(): LiveData<List<Int>>
@@ -116,7 +116,7 @@ interface NotesDao {
     fun getDeletableBookmarks(noCourse: String): LiveData<List<BookMark>>
 
     @Query("SELECT * FROM note_table WHERE note_title LIKE :searchQuery OR note_content LIKE :searchQuery OR course_code LIKE :searchQuery ORDER BY note_title ASC")
-    fun searchNotes(searchQuery: String): LiveData<List<Note?>?>?
+    fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>?
 
     @Query("SELECT * FROM course_table WHERE course_code LIKE :searchQuery OR course_title LIKE :searchQuery ORDER BY course_code ASC")
     fun searchCourses(searchQuery: String?): LiveData<List<Course?>?>?

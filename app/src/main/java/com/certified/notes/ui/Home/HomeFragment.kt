@@ -24,6 +24,7 @@ import com.certified.notes.adapters.HomeNoteRecyclerAdapter
 import com.certified.notes.adapters.TodoRecyclerAdapter
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
+import com.certified.notes.ui.Main.MainActivity
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -171,8 +172,8 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                     val done = todo.isDone
                     if (todoContent.isNotEmpty()) {
                         if (todoContent != todo.todo) {
-                            val todo1 = Todo(todoContent, done)
-                            todo1.id = todo.id
+                            val todo1 = Todo(todo.id, todoContent, done)
+//                            todo1.id = todo.id
                             viewModel.updateTodo(todo1)
                             bottomSheetDialog.dismiss()
                         } else

@@ -3,37 +3,54 @@ package com.certified.notes.ui.Courses
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.certified.notes.model.*
+import androidx.lifecycle.viewModelScope
+import com.certified.notes.model.BookMark
+import com.certified.notes.model.Course
+import com.certified.notes.model.Note
 import com.certified.notes.util.Repository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class CoursesViewModel(application: Application): AndroidViewModel(application) {
+class CoursesViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = Repository(application)
 
     val allCourses: LiveData<List<Course>> = repository.allCourses
 
     fun updateNote(note: Note) {
-        repository.updateNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNote(note)
+        }
     }
 
     fun updateCourse(course: Course) {
-        repository.updateCourse(course)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateCourse(course)
+        }
     }
 
     fun updateBookMark(bookMark: BookMark) {
-        repository.updateBookMark(bookMark)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateBookMark(bookMark)
+        }
     }
 
     fun deleteNote(note: Note) {
-        repository.deleteNote(note)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteNote(note)
+        }
     }
 
     fun deleteCourse(course: Course) {
-        repository.deleteCourse(course)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteCourse(course)
+        }
     }
 
     fun deleteBookMark(bookMark: BookMark) {
-        repository.deleteBookMark(bookMark)
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteBookMark(bookMark)
+        }
     }
 
     fun deleteAllCourses() {
