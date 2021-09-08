@@ -1,5 +1,5 @@
 # Notes 📙
-A Simple Note Taking App 📱 built to demonstrate the use of modern android architecture component with MVVM Architecture 🏗. *Made with love ❤️ by [Sammie_kt](https://github.com/certified84)*
+A simple note-taking 📝 Android application built to describe the use of Modern Android development tools. 🏗. *Made with love ❤️ by [Sammie_kt](https://github.com/certified84)*
 
 <br />
 
@@ -10,16 +10,20 @@ A Simple Note Taking App 📱 built to demonstrate the use of modern android arc
 <br />
 
 ## Day Mode 🌞
-Splash | Home | Notes | Courses | Bookmarks | Result | Profile
---- | --- | --- | --- | --- | --- | --- | 
-![](https://github.com/Spikeysanju/Expenso/blob/master/art/DASHBOARD.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/INCOME.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/EXPENSE.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/DETAILS.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/ADD-TRANSACTION.png) 
+Splash | Onboarding 1 | Onboarding 2 | Onboarding 3 | Onboarding 4 | 
+--- | --- | --- | --- | --- | 
+![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Splash.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_1.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_2.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_3.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_4.png)
+
+Home | Notes | Courses | Bookmarks | Profile | Result
+--- | --- | --- | --- | --- | --- |
+![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Home.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Notes.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Courses.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Bookmarks.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Profile.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Result.png)
 
 <br />
 
 ## We Support Dark Mode Too 🌚
-Splash | Home | Notes | Courses | Bookmarks | Result | Profile
---- | --- | --- | --- | --- | --- | --- | 
-![](https://github.com/Spikeysanju/Expenso/blob/master/art/DARK-DASHBOARD.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/DARK-INCOME.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/DARK-EXPENSE.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/DARK-DETAILS.png) | ![](https://github.com/Spikeysanju/Expenso/blob/master/art/DARK-ADD-TRANSACTION.png) 
+Splash | Home | Notes | Courses | Bookmarks | Profile | Result
+--- | --- | --- | --- | --- | --- | --- |
+![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Splash_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Home_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Notes_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Courses_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Bookmarks_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Profile_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Result_dark.png)
 
 <br />
 
@@ -28,15 +32,15 @@ Splash | Home | Notes | Courses | Bookmarks | Result | Profile
 - [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android development.
 - [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html) - For asynchronous and more..
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) - Collection of libraries that help you design robust, testable, and maintainable apps.
-  - [Stateflow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) - StateFlow is a state-holder observable flow that emits the current and new state updates to its collectors. 
-  - [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) - A flow is an asynchronous version of a Sequence, a type of collection whose values are lazily produced.
   - [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel) - Stores UI-related data that isn't destroyed on UI changes. 
   - [Room](https://developer.android.com/topic/libraries/architecture/room) - SQLite object mapping library.
   - [Jetpack Navigation](https://developer.android.com/guide/navigation) - Navigation refers to the interactions that allow users to navigate across, into, and back out from the different pieces of content within your app
-  - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
+<!--   - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
+  - [Stateflow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow) - StateFlow is a state-holder observable flow that emits the current and new state updates to its collectors. 
+  - [Flow](https://kotlinlang.org/docs/reference/coroutines/flow.html) - A flow is an asynchronous version of a Sequence, a type of collection whose values are lazily produced. -->
 - [Material Components for Android](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android.
 
-<br />
+<!-- <br />
 
 ## Package Structure 📦
     
@@ -72,7 +76,7 @@ Splash | Home | Notes | Courses | Bookmarks | Result | Profile
 
 
 <br />
-
+ -->
 
 ## Architecture 🗼
 This app uses [***MVVM (Model View View-Model)***](https://developer.android.com/jetpack/docs/guide#recommended-app-arch) architecture.
