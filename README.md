@@ -12,18 +12,18 @@ A simple note-taking 📝 Android application built to describe the use of Moder
 ## Day Mode 🌞
 Splash | Onboarding 1 | Onboarding 2 | Onboarding 3 | Onboarding 4 | 
 --- | --- | --- | --- | --- | 
-![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Splash.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_1.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_2.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_3.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Onboarding_4.png)
+![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Splash.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_1.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_2.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_3.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Onboarding_4.png)
 
 Home | Notes | Courses | Bookmarks | Profile | Result
 --- | --- | --- | --- | --- | --- |
-![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Home.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Notes.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Courses.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Bookmarks.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Profile.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Result.png)
+![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Notes.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Courses.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Bookmarks.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Profile.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Result.png)
 
 <br />
 
 ## We Support Dark Mode Too 🌚
 Splash | Home | Notes | Courses | Bookmarks | Profile | Result
 --- | --- | --- | --- | --- | --- | --- |
-![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Splash_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Home_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Notes_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Courses_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Bookmarks_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Profile_dark.png) | ![](https://github.com/certified84/Notes/blob/readme-branch/Screenshot/Result_dark.png)
+![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Splash_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Home_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Notes_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Courses_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Bookmarks_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Profile_dark.png) | ![](https://github.com/certified84/Notes/blob/release_branch/Screenshot/Result_dark.png)
 
 <br />
 
