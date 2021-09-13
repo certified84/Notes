@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.view.Main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.Observer
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -15,7 +15,6 @@ import com.certified.notes.R
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -27,7 +26,7 @@ import com.shawnlin.numberpicker.NumberPicker
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var notesViewModel: NotesViewModel
+    private lateinit var notesViewModel: MainActivityViewModel
 
     private lateinit var tvFabTodoTitle: TextView
     private lateinit var tvFabNoteTitle: TextView
@@ -52,7 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         isDarkModeEnabled()
 //        createNotificationChannel()
 
-        notesViewModel = NotesViewModel(application)
+        notesViewModel = MainActivityViewModel(application)
         navController = Navigation.findNavController(this, R.id.fragment)
 
         bottomNavigationView = findViewById(R.id.smoothBottomBar)
@@ -155,7 +154,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchCourseDialog() {
         val inflater: LayoutInflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_course, null)
+        val view = inflater.inflate(R.layout.dialog_new_course, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -196,7 +195,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchTodoDialog() {
         val inflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_todo, null)
+        val view = inflater.inflate(R.layout.dialog_new_todo, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val tvTodoDialogTitle: MaterialTextView = view.findViewById(R.id.tv_todo_dialog_title)
@@ -221,7 +220,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchNoteDialog() {
         val inflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_note, null)
+        val view = inflater.inflate(R.layout.dialog_new_note, ConstraintLayout(this))
         val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
 
         val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
@@ -233,7 +232,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val courseList = arrayListOf<String>()
         val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
-        notesViewModel.allCourses.observe(this, Observer { courses: List<Course> ->
+        notesViewModel.allCourses.observe(this, { courses: List<Course> ->
             courseList.add(getString(R.string.select_a_course))
             courseList.add(getString(R.string.no_course))
             for (course in courses) {

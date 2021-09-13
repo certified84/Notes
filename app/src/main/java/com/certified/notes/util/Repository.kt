@@ -6,12 +6,8 @@ import androidx.lifecycle.Transformations
 import com.certified.notes.model.*
 import com.certified.notes.room.NotesDao
 import com.certified.notes.room.NotesDatabase
-import com.certified.notes.room.NotesDatabasekt
 import java.util.*
-import java.util.concurrent.Callable
 import java.util.concurrent.ExecutionException
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import kotlin.random.Random
 
 class Repository(application: Application) {
@@ -28,13 +24,9 @@ class Repository(application: Application) {
     val allCourseCreditPoints: LiveData<List<Int>>
     val user: LiveData<User>
 
-    companion object {
-        val executor: ExecutorService = Executors.newSingleThreadExecutor()
-    }
-
     init {
-        val database = NotesDatabasekt.getInstance(application)
-        noteDao = database!!.mNotesDao()
+        val database = NotesDatabase.getInstance(application)
+        noteDao = database.noteDao()
         allNotes = noteDao.getAllNotes()
         allCourses = noteDao.getAllCourses()
         allTodos = noteDao.getAllTodos()
@@ -72,81 +64,81 @@ class Repository(application: Application) {
         }
     }
 
-    fun insertNote(note: Note) {
-        executor.execute { noteDao.insertNote(note) }
+    suspend fun insertNote(note: Note) {
+        noteDao.insertNote(note)
     }
 
-    fun insertCourse(course: Course) {
-        executor.execute { noteDao.insertCourse(course) }
+    suspend fun insertCourse(course: Course) {
+        noteDao.insertCourse(course)
     }
 
-    fun insertTodo(todo: Todo) {
-        executor.execute { noteDao.insertTodo(todo) }
+    suspend fun insertTodo(todo: Todo) {
+        noteDao.insertTodo(todo)
     }
 
-    fun insertBookMark(bookMark: BookMark) {
-        executor.execute { noteDao.insertBookMark(bookMark) }
+    suspend fun insertBookMark(bookMark: BookMark) {
+        noteDao.insertBookMark(bookMark)
     }
 
-    fun updateNote(note: Note) {
-        executor.execute { noteDao.updateNote(note) }
+    suspend fun updateNote(note: Note) {
+        noteDao.updateNote(note)
     }
 
-    fun updateCourse(course: Course) {
-        executor.execute { noteDao.updateCourse(course) }
+    suspend fun updateCourse(course: Course) {
+        noteDao.updateCourse(course)
     }
 
-    fun updateTodo(todo: Todo) {
-        executor.execute { noteDao.updateTodo(todo) }
+    suspend fun updateTodo(todo: Todo) {
+        noteDao.updateTodo(todo)
     }
 
-    fun updateBookMark(bookMark: BookMark) {
-        executor.execute { noteDao.updateBookMark(bookMark) }
+    suspend fun updateBookMark(bookMark: BookMark) {
+        noteDao.updateBookMark(bookMark)
     }
 
-    fun updateUser(user: User) {
-        executor.execute { noteDao.updateUser(user) }
+    suspend fun updateUser(user: User) {
+        noteDao.updateUser(user)
     }
 
-    fun deleteNote(note: Note) {
-        executor.execute { noteDao.deleteNote(note) }
+    suspend fun deleteNote(note: Note) {
+        noteDao.deleteNote(note)
     }
 
-    fun deleteCourse(course: Course) {
-        executor.execute { noteDao.deleteCourse(course) }
+    suspend fun deleteCourse(course: Course) {
+        noteDao.deleteCourse(course)
     }
 
-    fun deleteTodo(todo: Todo) {
-        executor.execute { noteDao.deleteTodo(todo) }
+    suspend fun deleteTodo(todo: Todo) {
+        noteDao.deleteTodo(todo)
     }
 
-    fun deleteBookMark(bookMark: BookMark) {
-        executor.execute { noteDao.deleteBookMark(bookMark) }
+    suspend fun deleteBookMark(bookMark: BookMark) {
+        noteDao.deleteBookMark(bookMark)
     }
 
     fun deleteAllNotes() {
-        NotesDatabase.databaseWriteExecutor.execute { noteDao.deleteAllNotes() }
+        noteDao.deleteAllNotes()
     }
 
     fun deleteAllCourses() {
-        NotesDatabase.databaseWriteExecutor.execute { noteDao.deleteAllCourses() }
+        noteDao.deleteAllCourses()
     }
 
     fun deleteAllTodos() {
-        NotesDatabase.databaseWriteExecutor.execute { noteDao.deleteAllTodos() }
+        noteDao.deleteAllTodos()
     }
 
     fun deleteAllBookMarks() {
-        NotesDatabase.databaseWriteExecutor.execute { noteDao.deleteAllBookMarks() }
+        noteDao.deleteAllBookMarks()
     }
 
     fun deleteCompletedTodos() {
-        executor.execute { noteDao.deleteCompletedTodos() }
+        noteDao.deleteCompletedTodos()
     }
 
     fun getCourseCode(courseTitle: String): String {
         return try {
-            executor.submit<String> { noteDao.getCourseCode(courseTitle) }.get()
+            noteDao.getCourseCode(courseTitle)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             ""
@@ -158,7 +150,7 @@ class Repository(application: Application) {
 
     fun getCourseTitle(courseCode: String): String {
         return try {
-            executor.submit<String> { noteDao.getCourseTitle(courseCode) }.get()
+            noteDao.getCourseTitle(courseCode)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             ""
@@ -170,7 +162,7 @@ class Repository(application: Application) {
 
     fun deleteBookMarkedNote(noteId: Int) {
         try {
-            executor.submit { noteDao.deleteBookMarkedNote(noteId) }.get()
+            noteDao.deleteBookMarkedNote(noteId)
         } catch (e: ExecutionException) {
             e.printStackTrace()
         } catch (e: InterruptedException) {
@@ -180,7 +172,7 @@ class Repository(application: Application) {
 
     fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {
         return try {
-            executor.submit(Callable { noteDao.getBookMarkAt(noteId) }).get()
+            noteDao.getBookMarkAt(noteId)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -192,7 +184,7 @@ class Repository(application: Application) {
 
     fun getNotesAt(courseCode: String): LiveData<List<Note>>? {
         return try {
-            executor.submit(Callable { noteDao.getNotesAt(courseCode) }).get()
+            noteDao.getNotesAt(courseCode)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -204,7 +196,7 @@ class Repository(application: Application) {
 
     fun getDeletableNotes(noCourse: String): LiveData<List<Note>>? {
         return try {
-            executor.submit(Callable { noteDao.getDeletableNotes(noCourse) }).get()
+            noteDao.getDeletableNotes(noCourse)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -216,7 +208,7 @@ class Repository(application: Application) {
 
     fun getDeletableBookmarks(noCourse: String): LiveData<List<BookMark>>? {
         return try {
-            executor.submit(Callable { noteDao.getDeletableBookmarks(noCourse) }).get()
+            noteDao.getDeletableBookmarks(noCourse)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -228,11 +220,7 @@ class Repository(application: Application) {
 
     fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>? {
         return try {
-            executor.submit(Callable {
-                noteDao.searchNotes(
-                    searchQuery!!
-                )
-            }).get()
+            noteDao.searchNotes(searchQuery)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -244,11 +232,7 @@ class Repository(application: Application) {
 
     fun searchCourses(searchQuery: String?): LiveData<List<Course?>?>? {
         return try {
-            executor.submit(Callable {
-                noteDao.searchCourses(
-                    searchQuery
-                )
-            }).get()
+            noteDao.searchCourses(searchQuery)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null
@@ -260,11 +244,7 @@ class Repository(application: Application) {
 
     fun searchBookmarks(searchQuery: String?): LiveData<List<BookMark?>?>? {
         return try {
-            executor.submit(Callable {
-                noteDao.searchBookmarks(
-                    searchQuery
-                )
-            }).get()
+            noteDao.searchBookmarks(searchQuery)
         } catch (e: ExecutionException) {
             e.printStackTrace()
             null

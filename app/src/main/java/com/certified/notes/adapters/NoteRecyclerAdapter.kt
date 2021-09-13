@@ -77,7 +77,7 @@ class NoteRecyclerAdapter(context: Context) :
     }
 
     interface OnNoteClickedListener {
-        fun onNoteClick(note: Note?)
+        fun onNoteClick(note: Note)
     }
 
     inner class ViewHolder(itemView: View) :

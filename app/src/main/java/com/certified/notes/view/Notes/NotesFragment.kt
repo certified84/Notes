@@ -1,7 +1,6 @@
-package com.certified.notes.ui
+package com.certified.notes.view.Notes
 
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -15,15 +14,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.adapters.NoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -31,7 +29,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 import io.sulek.ssml.SSMLLinearLayoutManager
 
-class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
+class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private lateinit var recyclerNotes: RecyclerView
     private lateinit var viewModel: NotesViewModel
@@ -52,8 +50,7 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerNotes = view.findViewById(R.id.recycler_view_notes)
         ivNotePopupMenu = view.findViewById(R.id.iv_note_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            svSearchNotes = view.findViewById(R.id.sv_search_database)
+        svSearchNotes = view.findViewById(R.id.sv_search_database)
 
         return view
     }
@@ -61,7 +58,8 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = NotesViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(NotesViewModel::class.java)
         preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         ivNotePopupMenu.setOnClickListener(this::showPopupMenu)
 
@@ -73,8 +71,8 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun init() {
-        val noteLayoutManager = LinearLayoutManager(requireContext())
-        val noteRecyclerAdapter = NoteRecyclerAdapter(requireContext())
+//        val noteLayoutManager = LinearLayoutManager(requireContext())
+        val noteRecyclerAdapter by lazy { NoteRecyclerAdapter(requireContext()) }
 
         viewModel.allNotes.observe(viewLifecycleOwner, noteRecyclerAdapter::submitList)
         recyclerNotes.adapter = noteRecyclerAdapter
@@ -97,7 +95,7 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
 
         noteRecyclerAdapter.setOnNoteClickedListener(object :
             NoteRecyclerAdapter.OnNoteClickedListener {
-            override fun onNoteClick(note: Note?) {
+            override fun onNoteClick(note: Note) {
                 val view = layoutInflater.inflate(
                     R.layout.dialog_new_note,
                     ConstraintLayout(requireContext())
@@ -116,10 +114,18 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 spinnerCourses.adapter = adapterCourses
 
                 tvNoteDialogTitle.text = getString(R.string.edit_note)
-                etNoteTitle.setText(note?.title)
-                etNoteContent.setText(note?.content)
-                val coursePosition = if (note?.courseCode != getString(R.string.nil))
-                    adapterCourses.getPosition(note?.courseCode?.let { viewModel.getCourseTitle(it) })
+                etNoteTitle.setText(note.title)
+                etNoteContent.setText(note.content)
+
+//                val coursePosition: Int = if (note.courseCode != getString(R.string.nil)) {
+//                    viewModel.getCourseTitle(note.courseCode.let { it })?.observe(viewLifecycleOwner) {
+//                        adapterCourses.getPosition(it)
+//                    }
+//                }
+//                else 1
+
+                val coursePosition = if (note.courseCode != getString(R.string.nil))
+                    adapterCourses.getPosition(note.courseCode.let { viewModel.getCourseTitle(it) })
                 else 1
 
                 spinnerCourses.setSelection(coursePosition)
@@ -137,9 +143,9 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                         if (courseTitle != getString(R.string.select_a_course)) {
 //                            if (courseTitle != getString(R.string.no_course)) {
-                            if (courseCode != note?.courseCode || noteTitle != note.title || noteContent != note.content) {
+                            if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
                                 val note1 = Note(courseCode, noteTitle, noteContent)
-                                note1.id = note!!.id
+                                note1.id = note.id
                                 viewModel.updateNote(note1)
                                 viewModel.getBookMarkAt(note.id)
                                     ?.observe(viewLifecycleOwner) { bookMarks ->
@@ -222,7 +228,8 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                         builder.setTitle(getString(R.string.delete))
                         builder.setMessage(getString(R.string.note_delete_dialog_message))
                         builder.setPositiveButton(getString(R.string.delete)) { dialog1, _ ->
-                            val note = noteRecyclerAdapter.getNoteAt(viewHolder.adapterPosition)
+                            val note =
+                                noteRecyclerAdapter.getNoteAt(viewHolder.absoluteAdapterPosition)
 
                             note?.let { viewModel.deleteNote(it) }
                             note?.id?.let { viewModel.deleteBookMarkedNote(it) }
@@ -272,13 +279,13 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
 
                     ItemTouchHelper.RIGHT -> {
-                        val note = noteRecyclerAdapter.getNoteAt(viewHolder.adapterPosition)
+                        val note = noteRecyclerAdapter.getNoteAt(viewHolder.absoluteAdapterPosition)
                         if (note != null) {
                             val noteId = note.id
                             val courseCode = note.courseCode
                             val noteTitle = note.title
                             val noteContent = note.content
-                            val bookMark = BookMark(noteId, courseCode!!, noteTitle, noteContent!!)
+                            val bookMark = BookMark(noteId, courseCode, noteTitle, noteContent!!)
 
                             viewModel.getBookMarkAt(noteId)
                                 ?.observe(viewLifecycleOwner) { bookMarks ->
@@ -296,6 +303,29 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }
             }
         }).attachToRecyclerView(recyclerNotes)
+
+        svSearchNotes.isSubmitButtonEnabled
+        svSearchNotes.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    searchNotes(query, noteRecyclerAdapter)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null) {
+                    searchNotes(query, noteRecyclerAdapter)
+                }
+                return true
+            }
+        })
+    }
+
+    private fun searchNotes(query: String, noteRecyclerAdapter: NoteRecyclerAdapter) {
+        val searchQuery = "%$query%"
+        viewModel.searchNotes(searchQuery)
+            ?.observe(viewLifecycleOwner, noteRecyclerAdapter::submitList)
     }
 
     private fun showPopupMenu(view: View) {
@@ -305,16 +335,10 @@ class NotesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         menu.show()
     }
 
-    private fun searchNotes(query: String, noteRecyclerAdapter: NoteRecyclerAdapter) {
-        val searchQuery = "%$query%"
-        viewModel.searchNotes(searchQuery)
-            ?.observe(viewLifecycleOwner, noteRecyclerAdapter::submitList)
-    }
-
     private fun launchDeleteDialog() {
         val builder = MaterialAlertDialogBuilder(requireContext())
         builder.setTitle(getString(R.string.delete))
-        builder.setMessage(getString(R.string.note_delete_dialog_message))
+        builder.setMessage(getString(R.string.all_note_delete_dialog_message))
         builder.setIcon(R.drawable.ic_baseline_delete_24)
         builder.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
             viewModel.deleteAllNotes()

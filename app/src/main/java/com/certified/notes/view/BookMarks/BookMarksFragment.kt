@@ -1,8 +1,7 @@
-package com.certified.notes.ui
+package com.certified.notes.view.BookMarks
 
 import android.content.DialogInterface
 import android.graphics.Canvas
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -15,6 +14,7 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +24,6 @@ import com.certified.notes.adapters.BookMarkRecyclerAdapter
 import com.certified.notes.adapters.BookMarkRecyclerAdapter.OnBookMarkClickedListener
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.certified.notes.util.PreferenceKeys
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -34,7 +33,7 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private lateinit var recyclerBookMarks: RecyclerView
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: BookMarksViewModel
     private lateinit var ivBookMarkPopupMenu: ImageView
     private lateinit var svSearchBookMark: SearchView
 
@@ -48,9 +47,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerBookMarks = view.findViewById(R.id.recycler_view_notes)
         ivBookMarkPopupMenu = view.findViewById(R.id.iv_bookmark_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchBookMark = view.findViewById(R.id.sv_search_database)
-        }
+        svSearchBookMark = view.findViewById(R.id.sv_search_database)
 
         return view
     }
@@ -58,7 +55,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = BookMarksViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(BookMarksViewModel::class.java)
         ivBookMarkPopupMenu.setOnClickListener(this::showPopupMenu)
 
         init()
@@ -66,7 +64,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun init() {
         val bookMarkLayoutManager = LinearLayoutManager(requireContext())
-        val bookMarkRecyclerAdapter = BookMarkRecyclerAdapter()
+        val bookMarkRecyclerAdapter by lazy { BookMarkRecyclerAdapter() }
 
         viewModel.allBookMarks.observe(viewLifecycleOwner, bookMarkRecyclerAdapter::submitList)
         recyclerBookMarks.adapter = bookMarkRecyclerAdapter
@@ -145,7 +143,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             }
                                         }
                                 } else {
-                                    val note = Note("NIL", noteTitle, noteContent)
+                                    val note = Note( "NIL", noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
                                     viewModel.getBookMarkAt(bookmark.noteId)
@@ -153,8 +151,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             if (it != null) {
                                                 for (bookMark in it) {
                                                     val bookMark1 =
-                                                        BookMark(
-                                                            noteId,
+                                                        BookMark( noteId,
                                                             "NIL",
                                                             noteTitle,
                                                             noteContent
@@ -261,25 +258,23 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
         }).attachToRecyclerView(recyclerBookMarks)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchBookMark.isSubmitButtonEnabled
-            svSearchBookMark.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (query != null) {
-                        searchBookmarks(query, bookMarkRecyclerAdapter)
-                    }
-                    return true
+        svSearchBookMark.isSubmitButtonEnabled
+        svSearchBookMark.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    searchBookmarks(query, bookMarkRecyclerAdapter)
                 }
+                return true
+            }
 
-                override fun onQueryTextChange(query: String?): Boolean {
-                    if (query != null) {
-                        searchBookmarks(query, bookMarkRecyclerAdapter)
-                    }
-                    return true
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null) {
+                    searchBookmarks(query, bookMarkRecyclerAdapter)
                 }
+                return true
+            }
 
-            })
-        }
+        })
     }
 
     private fun searchBookmarks(query: String, bookMarkRecyclerAdapter: BookMarkRecyclerAdapter) {
@@ -308,6 +303,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setTitle(getString(R.string.delete))
         builder.setMessage(getString(R.string.all_bookmark_delete_dialog_message))
         builder.setIcon(R.drawable.ic_baseline_delete_24)
+        val alertDialog = builder.create()
+
         builder.setPositiveButton(getString(R.string.yes)) { dialog: DialogInterface, _: Int ->
             viewModel.deleteAllBookMarks()
 
@@ -329,7 +326,6 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
 
         builder.setNegativeButton(getString(R.string.no)) { _, _ ->
-            val alertDialog = builder.create()
             alertDialog.setOnShowListener {
                 if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
                     alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
@@ -359,7 +355,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     )
                 }
             }
-            alertDialog.show()
         }
+        alertDialog.show()
     }
 }

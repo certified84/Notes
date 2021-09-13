@@ -1,6 +1,5 @@
-package com.certified.notes.ui
+package com.certified.notes.view.Courses
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,8 +11,10 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -23,7 +24,6 @@ import com.certified.notes.adapters.HomeNoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
-import com.certified.notes.room.NotesViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,7 +37,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private lateinit var recyclerCourses: RecyclerView
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: CoursesViewModel
     private lateinit var ivCoursePopupMenu: ImageView
     private lateinit var svSearchCourses: SearchView
 
@@ -51,9 +51,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         recyclerCourses = view.findViewById(R.id.recycler_view_courses)
         ivCoursePopupMenu = view.findViewById(R.id.iv_course_popup_menu)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchCourses = view.findViewById(R.id.sv_search_database)
-        }
+        svSearchCourses = view.findViewById(R.id.sv_search_database)
 
         return view
     }
@@ -61,7 +59,8 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = NotesViewModel(requireActivity().application)
+        val viewModelFactory = CoursesViewModelFactory(requireActivity().application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(CoursesViewModel::class.java)
         ivCoursePopupMenu.setOnClickListener(this::showPopupMenu)
 
         init()
@@ -106,27 +105,27 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
         })
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            svSearchCourses.isSubmitButtonEnabled
-            svSearchCourses.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    if (query != null)
-                        searchCourses(query, courseRecyclerAdapter)
-                    return true
-                }
+        svSearchCourses.isSubmitButtonEnabled
+        svSearchCourses.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null)
+                    searchCourses(query, courseRecyclerAdapter)
+                return true
+            }
 
-                override fun onQueryTextChange(query: String?): Boolean {
-                    if (query != null)
-                        searchCourses(query, courseRecyclerAdapter)
-                    return true
-                }
-
-            })
-        }
+            override fun onQueryTextChange(query: String?): Boolean {
+                if (query != null)
+                    searchCourses(query, courseRecyclerAdapter)
+                return true
+            }
+        })
     }
 
     private fun launchRelatedNotesDialog(course: Course) {
-        val view = layoutInflater.inflate(R.layout.dialog_related_notes, null)
+        val view = layoutInflater.inflate(
+            R.layout.dialog_related_notes,
+            ConstraintLayout(requireContext())
+        )
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val recyclerViewRelatedNotes: RecyclerView =
             view.findViewById(R.id.recycler_view_related_notes)
@@ -162,7 +161,10 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             override fun onNoteClicked(note: Note) {
                 bottomSheetDialog.dismiss()
 
-                val view1 = layoutInflater.inflate(R.layout.dialog_new_note, null)
+                val view1 = layoutInflater.inflate(
+                    R.layout.dialog_new_note,
+                    ConstraintLayout(requireContext())
+                )
                 val bottomSheetDialog1 = BottomSheetDialog(
                     requireContext(),
                     R.style.BottomSheetDialogTheme
@@ -224,7 +226,12 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                                         val noteId = note1.id
                                         for (bookMark in bookMarks) {
                                             val bookMark1 =
-                                                BookMark(noteId, courseCode, noteTitle, noteContent)
+                                                BookMark(
+                                                    noteId,
+                                                    courseCode,
+                                                    noteTitle,
+                                                    noteContent
+                                                )
                                             bookMark1.id = bookMark.id
                                             viewModel.updateBookMark(bookMark1)
                                         }
@@ -258,7 +265,8 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     }
 
     private fun launchEditCourseDialog(course: Course) {
-        val view = layoutInflater.inflate(R.layout.dialog_new_course, null)
+        val view =
+            layoutInflater.inflate(R.layout.dialog_new_course, ConstraintLayout(requireContext()))
         val bottomSheetDialog = BottomSheetDialog(requireContext())
 
         val tvCourseDialogTitle: MaterialTextView = view.findViewById(R.id.tv_course_dialog_title)
@@ -304,7 +312,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                             for (note in notes) {
                                 val noteTitle = note.title
                                 val noteContent = note.content
-                                val note1 = Note(courseCode, noteTitle, noteContent)
+                                val note1 = Note( courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
 

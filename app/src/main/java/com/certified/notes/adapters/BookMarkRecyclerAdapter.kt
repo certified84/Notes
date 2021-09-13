@@ -39,19 +39,15 @@ class BookMarkRecyclerAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val noteContent: TextView
-        val noteTitle: TextView
-        val likeButton: LikeButton
-        val ivBookMark: ImageView
+
+        val noteContent: TextView = itemView.findViewById(R.id.tv_note_content)
+        val noteTitle: TextView = itemView.findViewById(R.id.tv_note_title)
+        val likeButton: LikeButton = itemView.findViewById(R.id.likeButton)
+        val ivBookMark: ImageView = itemView.findViewById(R.id.iv_bookmark)
 
         init {
-            noteContent = itemView.findViewById(R.id.tv_note_content)
-            noteTitle = itemView.findViewById(R.id.tv_note_title)
-            likeButton = itemView.findViewById(R.id.likeButton)
-            ivBookMark = itemView.findViewById(R.id.iv_bookmark)
-
             itemView.setOnClickListener {
-                val position = adapterPosition
+                val position = absoluteAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     listener.onBookMarkClick(getItem(position))
                 }
@@ -84,6 +80,7 @@ class BookMarkRecyclerAdapter(
         holder.noteContent.text = currentBookMark.noteContent
         holder.noteTitle.text = currentBookMark.noteTitle
         holder.ivBookMark.visibility = View.VISIBLE
+//        holder.itemView.setOnClickListener{ onBookMarkClicked?.invoke(currentBookMark)}
 //        holder.likeButton.isLiked = true
 //        holder.likeButton.setOnLikeListener(object : OnLikeListener {
 //            override fun liked(likeButton: LikeButton?) {

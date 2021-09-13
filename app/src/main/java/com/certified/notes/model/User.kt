@@ -6,13 +6,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
-class User(
+data class User(
     val name: String,
     val school: String,
     val department: String,
     val level: String,
-    @field:ColumnInfo(name = "profile_image") val profileImage: Bitmap?
+    @ColumnInfo(name = "profile_image") val profileImage: Bitmap?
 ) {
     @PrimaryKey
-    var id = 0
+    var id: Int = 0
 }

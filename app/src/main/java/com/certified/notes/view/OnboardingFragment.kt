@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.view
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,9 +15,7 @@ import com.certified.notes.R
 import com.certified.notes.adapters.ViewPagerAdapter
 import com.certified.notes.model.SliderItem
 import com.certified.notes.util.PreferenceKeys
-import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.rd.PageIndicatorView
 
 class OnboardingFragment : Fragment() {
