@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Home
+package com.certified.notes.view.Home
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

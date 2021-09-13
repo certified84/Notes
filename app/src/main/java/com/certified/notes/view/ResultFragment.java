@@ -1,4 +1,4 @@
-package com.certified.notes.ui;
+package com.certified.notes.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.certified.notes.R;
 import com.certified.notes.adapters.ResultRecyclerAdapter;
-import com.certified.notes.ui.Main.MainActivityViewModel;
+import com.certified.notes.view.Main.MainActivityViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class ResultFragment extends Fragment {

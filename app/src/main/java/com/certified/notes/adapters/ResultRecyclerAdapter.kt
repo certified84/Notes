@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Course
-import com.certified.notes.ui.Main.MainActivityViewModel
+import com.certified.notes.view.Main.MainActivityViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -120,7 +120,6 @@ class ResultRecyclerAdapter(val context: Context, private val viewModel: MainAct
                     if (courseMark in validMark) {
                         if (courseMark != course.courseMark) {
                             val course1 = Course(
-                                course.id,
                                 courseCode,
                                 courseTitle,
                                 courseUnit,
@@ -128,6 +127,7 @@ class ResultRecyclerAdapter(val context: Context, private val viewModel: MainAct
                                 courseGrade,
                                 courseGradePoint
                             )
+                            course1.id = course.id
                             viewModel.updateCourse(course1)
 
                             holder.courseGrade.text = courseGrade

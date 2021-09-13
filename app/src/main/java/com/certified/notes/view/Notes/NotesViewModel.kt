@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Courses
+package com.certified.notes.view.Notes
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -11,21 +11,21 @@ import com.certified.notes.util.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CoursesViewModel(application: Application) : AndroidViewModel(application) {
-
+class NotesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = Repository(application)
 
+    val allNotes: LiveData<List<Note>> = repository.allNotes
     val allCourses: LiveData<List<Course>> = repository.allCourses
+
+    fun insertBookMark(bookMark: BookMark) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertBookMark(bookMark)
+        }
+    }
 
     fun updateNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateNote(note)
-        }
-    }
-
-    fun updateCourse(course: Course) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateCourse(course)
         }
     }
 
@@ -41,24 +41,16 @@ class CoursesViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun deleteCourse(course: Course) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteCourse(course)
-        }
+    fun deleteAllNotes() {
+        repository.deleteAllNotes()
     }
 
-    fun deleteBookMark(bookMark: BookMark) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteBookMark(bookMark)
-        }
+    fun deleteAllBookMarks() {
+        repository.deleteAllBookMarks()
     }
 
-    fun deleteAllCourses() {
-        repository.deleteAllCourses()
-    }
-
-    fun getNotesAt(courseCode: String): LiveData<List<Note>>? {
-        return repository.getNotesAt(courseCode)
+    fun deleteBookMarkedNote(noteId: Int) {
+        repository.deleteBookMarkedNote(noteId)
     }
 
     fun getCourseCode(courseTitle: String): String {
@@ -73,15 +65,7 @@ class CoursesViewModel(application: Application) : AndroidViewModel(application)
         return repository.getBookMarkAt(noteId)
     }
 
-    fun getDeletableNotes(noCourse: String): LiveData<List<Note>>? {
-        return repository.getDeletableNotes(noCourse)
-    }
-
-    fun getDeletableBookmarks(noCourse: String): LiveData<List<BookMark>>? {
-        return repository.getDeletableBookmarks(noCourse)
-    }
-
-    fun searchCourses(searchQuery: String?): LiveData<List<Course?>?>? {
-        return repository.searchCourses(searchQuery)
+    fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>? {
+        return repository.searchNotes(searchQuery)
     }
 }

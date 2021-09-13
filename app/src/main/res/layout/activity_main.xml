@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="?attr/backgroundColor"
-        tools:context=".ui.Main.MainActivity">
+        tools:context=".view.Main.MainActivity">
 
         <fragment
                 android:id="@+id/fragment"

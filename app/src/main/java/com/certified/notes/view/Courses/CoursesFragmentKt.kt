@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Courses
+package com.certified.notes.view.Courses
 
 import android.os.Bundle
 import android.os.Handler
@@ -218,7 +218,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                         if (courseTitle != getString(R.string.select_a_course)) {
                             if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
-                                val note1 = Note(0, courseCode, noteTitle, noteContent)
+                                val note1 = Note(courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
                                 viewModel.getBookMarkAt(note.id)
@@ -227,7 +227,6 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                                         for (bookMark in bookMarks) {
                                             val bookMark1 =
                                                 BookMark(
-                                                    0,
                                                     noteId,
                                                     courseCode,
                                                     noteTitle,
@@ -300,20 +299,20 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                     courseUnit != course.courseUnit
                 ) {
                     val course1 = Course(
-                        course.id, courseCode,
+                        courseCode,
                         courseTitle,
                         courseUnit,
                         courseMark,
                         courseGrade,
                         courseGradePoint
                     )
-//                    course1.id = course.id
+                    course1.id = course.id
                     viewModel.getNotesAt(course.courseCode)?.observe(viewLifecycleOwner) { notes ->
                         if (notes.isNotEmpty()) {
                             for (note in notes) {
                                 val noteTitle = note.title
                                 val noteContent = note.content
-                                val note1 = Note(0, courseCode, noteTitle, noteContent)
+                                val note1 = Note( courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
 
@@ -322,7 +321,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                                         if (bookMarks.isNotEmpty()) {
                                             for (bookMark in bookMarks) {
                                                 val bookMark1 = BookMark(
-                                                    0, note.id,
+                                                    note.id,
                                                     courseCode,
                                                     noteTitle,
                                                     noteContent!!

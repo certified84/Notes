@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Main
+package com.certified.notes.view.Main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val GRADE_POINT_NOT_SET = 0
             if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
                 val course = Course(
-                    0, courseCode,
+                    courseCode,
                     courseTitle,
                     courseUnit,
                     MARK_NOT_SET,
@@ -208,7 +208,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         btnSave.setOnClickListener {
             val todoContent: String = etTodo.text.toString()
             if (todoContent.isNotEmpty()) {
-                val todo = Todo(0, todoContent, false)
+                val todo = Todo(todoContent, false)
                 notesViewModel.insertTodo(todo)
                 bottomSheetDialog.dismiss()
             } else
@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                 if (courseTitle != getString(R.string.select_a_course)) {
-                    val note = Note(0, courseCode, noteTitle, noteContent)
+                    val note = Note(courseCode, noteTitle, noteContent)
                     notesViewModel.insertNote(note)
                     bottomSheetDialog.dismiss()
                     Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()

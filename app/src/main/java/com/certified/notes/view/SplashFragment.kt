@@ -1,4 +1,4 @@
-package com.certified.notes.ui
+package com.certified.notes.view
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.certified.notes.R
-import com.certified.notes.ui.Main.MainActivity
+import com.certified.notes.view.Main.MainActivity
 import com.certified.notes.util.PreferenceKeys
 
 class SplashFragment : Fragment() {

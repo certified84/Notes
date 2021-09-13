@@ -1,4 +1,4 @@
-package com.certified.notes.ui.BookMarks
+package com.certified.notes.view.BookMarks
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

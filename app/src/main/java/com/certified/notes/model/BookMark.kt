@@ -6,8 +6,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "bookmark_table")
 data class BookMark(
-    @PrimaryKey(autoGenerate = true)
-    var id: Int,
     @ColumnInfo(name = "note_id")
     val noteId: Int,
     @ColumnInfo(name = "course_code")
@@ -16,4 +14,7 @@ data class BookMark(
     val noteTitle: String,
     @ColumnInfo(name = "note_content")
     val noteContent: String
-)
+) {
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0;
+}

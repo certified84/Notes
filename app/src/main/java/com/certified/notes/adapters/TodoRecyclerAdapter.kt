@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Todo
-import com.certified.notes.ui.Home.HomeViewModel
+import com.certified.notes.view.Home.HomeViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -97,7 +97,8 @@ class TodoRecyclerAdapter(val context: Context, private val viewModel: HomeViewM
                     dialog.cancel()
                 }
                 builder.setNegativeButton(context.getString(R.string.no)) { dialog, _ ->
-                    val todo1 = Todo(getItem(position).id, todoContent, true)
+                    val todo1 = Todo(todoContent, true)
+                    todo1.id = todo.id
                     viewModel.updateTodo(todo1)
                     dialog.cancel()
                 }

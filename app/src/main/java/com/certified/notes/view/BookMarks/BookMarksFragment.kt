@@ -1,4 +1,4 @@
-package com.certified.notes.ui.BookMarks
+package com.certified.notes.view.BookMarks
 
 import android.content.DialogInterface
 import android.graphics.Canvas
@@ -124,9 +124,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         if (courseTitle != getString(R.string.select_a_course)) {
                             if (courseCode != bookmark.courseCode || noteTitle != bookmark.noteTitle || noteContent != bookmark.noteContent) {
                                 if (courseTitle != getString(R.string.no_course)) {
-                                    val note = Note(
-                                        0, courseCode, noteTitle, noteContent
-                                    )
+                                    val note = Note(courseCode, noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
                                     viewModel.getBookMarkAt(bookmark.noteId)
@@ -134,7 +132,6 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             if (it != null) {
                                                 for (bookMark in it) {
                                                     val bookMark1 = BookMark(
-                                                        0,
                                                         noteId,
                                                         courseCode,
                                                         noteTitle,
@@ -146,7 +143,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             }
                                         }
                                 } else {
-                                    val note = Note(0, "NIL", noteTitle, noteContent)
+                                    val note = Note( "NIL", noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
                                     viewModel.getBookMarkAt(bookmark.noteId)
@@ -154,8 +151,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             if (it != null) {
                                                 for (bookMark in it) {
                                                     val bookMark1 =
-                                                        BookMark(
-                                                            0, noteId,
+                                                        BookMark( noteId,
                                                             "NIL",
                                                             noteTitle,
                                                             noteContent

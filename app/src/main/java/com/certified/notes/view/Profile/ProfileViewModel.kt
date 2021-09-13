@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Profile
+package com.certified.notes.view.Profile
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

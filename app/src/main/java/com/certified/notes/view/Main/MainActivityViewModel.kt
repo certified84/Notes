@@ -1,25 +1,39 @@
-package com.certified.notes.ui.Notes
+package com.certified.notes.view.Main
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.certified.notes.model.BookMark
-import com.certified.notes.model.Course
-import com.certified.notes.model.Note
+import com.certified.notes.model.*
 import com.certified.notes.util.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class NotesViewModel(application: Application) : AndroidViewModel(application) {
+class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+
     private val repository = Repository(application)
 
-    val allNotes: LiveData<List<Note>> = repository.allNotes
     val allCourses: LiveData<List<Course>> = repository.allCourses
+    val allNoteIds: LiveData<List<Int>> = repository.allNoteIds
+    val allCourseUnits: LiveData<List<Int>> = repository.allCourseUnits
+    val allCourseCreditPoints: LiveData<List<Int>> = repository.allCourseCreditPoints
+    val user: LiveData<User> = repository.user
 
-    fun insertBookMark(bookMark: BookMark) {
+    fun insertNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertBookMark(bookMark)
+            repository.insertNote(note)
+        }
+    }
+
+    fun insertCourse(course: Course) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertCourse(course)
+        }
+    }
+
+    fun insertTodo(todo: Todo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertTodo(todo)
         }
     }
 
@@ -29,28 +43,14 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun updateBookMark(bookMark: BookMark) {
+    fun updateCourse(course: Course) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateBookMark(bookMark)
+            repository.updateCourse(course)
         }
     }
 
-    fun deleteNote(note: Note) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteNote(note)
-        }
-    }
-
-    fun deleteAllNotes() {
-        repository.deleteAllNotes()
-    }
-
-    fun deleteAllBookMarks() {
-        repository.deleteAllBookMarks()
-    }
-
-    fun deleteBookMarkedNote(noteId: Int) {
-        repository.deleteBookMarkedNote(noteId)
+    fun deleteAllCourses() {
+        repository.deleteAllCourses()
     }
 
     fun getCourseCode(courseTitle: String): String {
@@ -63,9 +63,5 @@ class NotesViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {
         return repository.getBookMarkAt(noteId)
-    }
-
-    fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>? {
-        return repository.searchNotes(searchQuery)
     }
 }

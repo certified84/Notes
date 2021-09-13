@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Courses
+package com.certified.notes.view.Courses
 
 import android.app.Application
 import androidx.lifecycle.ViewModel

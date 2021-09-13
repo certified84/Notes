@@ -1,4 +1,4 @@
-package com.certified.notes.ui.Notes
+package com.certified.notes.view.Notes
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -116,6 +116,14 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 tvNoteDialogTitle.text = getString(R.string.edit_note)
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
+
+//                val coursePosition: Int = if (note.courseCode != getString(R.string.nil)) {
+//                    viewModel.getCourseTitle(note.courseCode.let { it })?.observe(viewLifecycleOwner) {
+//                        adapterCourses.getPosition(it)
+//                    }
+//                }
+//                else 1
+
                 val coursePosition = if (note.courseCode != getString(R.string.nil))
                     adapterCourses.getPosition(note.courseCode.let { viewModel.getCourseTitle(it) })
                 else 1
@@ -136,7 +144,8 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         if (courseTitle != getString(R.string.select_a_course)) {
 //                            if (courseTitle != getString(R.string.no_course)) {
                             if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
-                                val note1 = Note(note.id, courseCode, noteTitle, noteContent)
+                                val note1 = Note(courseCode, noteTitle, noteContent)
+                                note1.id = note.id
                                 viewModel.updateNote(note1)
                                 viewModel.getBookMarkAt(note.id)
                                     ?.observe(viewLifecycleOwner) { bookMarks ->
@@ -144,12 +153,12 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             val noteId = note1.id
                                             for (bookMark in bookMarks) {
                                                 val bookMark1 = BookMark(
-                                                    bookMark.id,
                                                     noteId,
                                                     courseCode,
                                                     noteTitle,
                                                     noteContent
                                                 )
+                                                bookMark1.id = bookMark.id
                                                 viewModel.updateBookMark(bookMark1)
                                             }
                                         }
@@ -276,7 +285,7 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             val courseCode = note.courseCode
                             val noteTitle = note.title
                             val noteContent = note.content
-                            val bookMark = BookMark(0, noteId, courseCode, noteTitle, noteContent!!)
+                            val bookMark = BookMark(noteId, courseCode, noteTitle, noteContent!!)
 
                             viewModel.getBookMarkAt(noteId)
                                 ?.observe(viewLifecycleOwner) { bookMarks ->

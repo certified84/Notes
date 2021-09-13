@@ -7,11 +7,12 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "user_table")
 data class User(
-    @PrimaryKey
-    val id: Int = 0,
     val name: String,
     val school: String,
     val department: String,
     val level: String,
     @ColumnInfo(name = "profile_image") val profileImage: Bitmap?
-)
+) {
+    @PrimaryKey
+    var id: Int = 0
+}
