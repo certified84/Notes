@@ -1,18 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="16dp"
         android:background="?attr/backgroundColor"
         tools:context=".view.Home.HomeFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <com.google.android.material.textview.MaterialTextView
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.98" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.78" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/splash_logo" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_hi_name"
+                style="@style/TextAppearance.Notes.TitleText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textSize="@dimen/_18ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/materialTextView2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profile_image"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Hi, Samson" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/materialTextView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/welcome_back"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="@+id/tv_hi_name"
+                app:layout_constraintTop_toBottomOf="@+id/tv_hi_name" />
+
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView"
                 style="@style/TextAppearance.Notes.TitleText2"
                 android:layout_width="wrap_content"
@@ -21,9 +75,9 @@
                 android:layout_marginTop="32dp"
                 android:text="@string/notes"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
-        <com.google.android.material.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_show_all_notes"
                 style="@style/Widget.Notes.TextButton"
                 android:layout_width="wrap_content"
@@ -35,56 +89,56 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/btn_show_all_notes"
-                app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="@+id/btn_show_all_notes"
-                android:id="@+id/constraintLayout">
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/btn_show_all_notes">
 
-            <androidx.recyclerview.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_notes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    tools:itemCount="1"
-                    tools:listitem="@layout/list_item_notes"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                    android:text="@string/you_haven_t_added_any_notes_yet_click_the_button_below_to_add_a_new_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_add_note_description"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_add_note"
-                    app:layout_constraintVertical_chainStyle="spread"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/list_item_notes" />
+
+                <TextView
+                    android:id="@+id/tv_add_note_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/you_haven_t_added_any_notes_yet_click_the_button_below_to_add_a_new_note"
                     android:textAlignment="center"
                     android:visibility="gone"
-                    android:layout_marginTop="16dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/btn_add_note"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread" />
 
-            <com.google.android.material.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_note"
-                    android:text="@string/add_note"
+                    style="@style/Widget.Notes.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_add_note_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/add_note"
                     android:visibility="gone"
-                    style="@style/Widget.Notes.Button"
-                    android:layout_marginBottom="16dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_add_note_description" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView3"
                 style="@style/TextAppearance.Notes.TitleText2"
                 android:layout_width="wrap_content"
@@ -94,7 +148,7 @@
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
-        <com.google.android.material.button.MaterialButton
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_show_all_courses"
                 style="@style/Widget.Notes.TextButton"
                 android:layout_width="wrap_content"
@@ -105,7 +159,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/btn_show_all_notes"
                 app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-        <com.google.android.material.textview.MaterialTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/textView5"
                 style="@style/TextAppearance.Notes.TitleText2"
                 android:layout_width="wrap_content"
@@ -115,75 +169,75 @@
                 app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayoutCourses" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutCourses"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/btn_show_all_courses"
-                app:layout_constraintStart_toStartOf="@+id/textView3"
                 app:layout_constraintEnd_toEndOf="@+id/btn_show_all_courses"
-                android:id="@+id/constraintLayoutCourses">
+                app:layout_constraintStart_toStartOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/btn_show_all_courses">
 
-            <androidx.recyclerview.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_courses"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    tools:itemCount="1"
-                    tools:listitem="@layout/list_item_courses"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
-            <TextView
-                    android:text="@string/you_haven_t_added_any_courses_yet_click_the_button_below_to_add_a_new_note"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tv_add_course_description"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_add_course"
-                    app:layout_constraintVertical_chainStyle="spread"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/list_item_courses" />
+
+                <TextView
+                    android:id="@+id/tv_add_course_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/you_haven_t_added_any_courses_yet_click_the_button_below_to_add_a_new_note"
                     android:textAlignment="center"
                     android:visibility="gone"
-                    android:layout_marginTop="16dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/btn_add_course"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread" />
 
-            <com.google.android.material.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_course"
-                    android:text="@string/add_course"
+                    style="@style/Widget.Notes.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_add_course_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/add_course"
                     android:visibility="gone"
-                    style="@style/Widget.Notes.Button"
-                    android:layout_marginBottom="16dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_add_course_description" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_todo_popup_menu"
                 style="@style/Widget.Note.ImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView5"
                 app:layout_constraintEnd_toEndOf="@+id/btn_show_all_courses"
                 app:layout_constraintTop_toTopOf="@+id/textView5"
-                app:srcCompat="@drawable/ic_more_vert"
-                android:layout_marginEnd="16dp" />
+                app:srcCompat="@drawable/ic_more_vert" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutTodos"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/iv_todo_popup_menu"
-                app:layout_constraintStart_toStartOf="@+id/textView5"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="@+id/iv_todo_popup_menu"
-                android:id="@+id/constraintLayoutTodos"
-                android:layout_marginTop="8dp">
+                app:layout_constraintStart_toStartOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/iv_todo_popup_menu">
 
-            <com.google.android.material.card.MaterialCardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/card_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -196,41 +250,42 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.recyclerview.widget.RecyclerView
+                    <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycler_view_todos"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:listitem="@layout/list_item_todos"
-                        tools:itemCount="1" />
-            </com.google.android.material.card.MaterialCardView>
+                        tools:itemCount="1"
+                        tools:listitem="@layout/list_item_todos" />
+                </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                    android:text="@string/you_haven_t_added_any_todos_yet_click_the_button_below_to_add_a_new_note"
+                <TextView
+                    android:id="@+id/tv_add_todo_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_add_todo_description"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/btn_add_todo"
-                    app:layout_constraintVertical_chainStyle="spread"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/you_haven_t_added_any_todos_yet_click_the_button_below_to_add_a_new_note"
                     android:textAlignment="center"
                     android:visibility="gone"
-                    android:layout_marginTop="16dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/btn_add_todo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_chainStyle="spread" />
 
-            <com.google.android.material.button.MaterialButton
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_todo"
-                    android:text="@string/add_todo"
+                    style="@style/Widget.Notes.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_add_todo_description"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginBottom="16dp"
+                    android:text="@string/add_todo"
                     android:visibility="gone"
-                    style="@style/Widget.Notes.Button"
-                    android:layout_marginBottom="16dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_add_todo_description" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

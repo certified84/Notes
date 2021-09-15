@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -34,6 +35,9 @@ android {
     lintOptions {
         abortOnError false
     }
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
@@ -52,6 +56,12 @@ dependencies {
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2-native-mt'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2-native-mt'
+
+//    Firebase
+    implementation platform('com.google.firebase:firebase-bom:28.4.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'com.google.truth:truth:1.1.2'
@@ -95,6 +105,11 @@ dependencies {
     implementation 'it.xabaras.android:recyclerview-swipedecorator:1.2.3'
 
     implementation 'io.sulek.ssml:simpleswipemenulayout:1.0.4'
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+    implementation 'com.github.florent37:expansionpanel:1.2.4'
+    implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.8'
+    implementation 'com.github.yesterselga:password-strength-checker-android:v1.0'
 
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"

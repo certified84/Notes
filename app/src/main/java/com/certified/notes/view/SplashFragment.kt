@@ -22,16 +22,16 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.certified.notes.R
-import com.certified.notes.view.Main.MainActivity
 import com.certified.notes.util.PreferenceKeys
+import com.certified.notes.view.Main.MainActivity
 
 class SplashFragment : Fragment() {
 
     private lateinit var navController: NavController
     private lateinit var preferences: SharedPreferences
+    private lateinit var notifyManager: NotificationManager
 
     private val PRIMARY_CHANNEL_ID = "primary_notification_channel"
-    private lateinit var notifyManager: NotificationManager
     private val NOTES_NOTIFICATION_ID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +56,8 @@ class SplashFragment : Fragment() {
     }
 
     private fun createNotificationChannel() {
-        notifyManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notifyManager =
+            requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 PRIMARY_CHANNEL_ID,
@@ -74,7 +75,10 @@ class SplashFragment : Fragment() {
     private fun getNotificationBuilder(): NotificationCompat.Builder? {
         val notificationIntent = Intent(requireContext(), MainActivity::class.java)
         val notificationPendingIntent = PendingIntent.getActivity(
-            requireContext(), NOTES_NOTIFICATION_ID, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT
+            requireContext(),
+            NOTES_NOTIFICATION_ID,
+            notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
         val message = getString(R.string.notification_message)
         return NotificationCompat.Builder(requireContext(), PRIMARY_CHANNEL_ID)
@@ -95,19 +99,13 @@ class SplashFragment : Fragment() {
     }
 
     private fun isFirstLogin() {
-        val isFirstLogin: Boolean = preferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true)
-        if (isFirstLogin) {
+        val isFirstLogin: Boolean =
+            preferences.getBoolean(PreferenceKeys.FIRST_TIME_LOGIN, true)
+        if (isFirstLogin)
 //            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
             navController.navigate(R.id.onboardingFragment)
-        } else {
+        else
 //            val navOptions = NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
             navController.navigate(R.id.homeFragment)
-//            val context1 = context
-//            if (context1 != null) {
-//                startActivity(Intent(context, MainActivity::class.java))
-//                sendNotification()
-//                requireActivity().finish()
-//            }
-        }
     }
 }

@@ -132,4 +132,25 @@
     <string name="no_related_notes">No related notes</string>
     <string name="note_not_changed">Note not changed</string>
     <string name="todo_not_changed">Todo not changed</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="create_an_account_for_syncing_across_devices">Create an account for syncing across devices</string>
+    <string name="first_name_amp_last_name"><![CDATA[First Name & Last Name]]></string>
+    <string name="email">Email</string>
+    <string name="name_example_etceteria_com">name@example.etceteria.com</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="min_8_characters">Min. 8 Characters</string>
+    <string name="remember_me">Remember me</string>
+    <string name="have_an_account_already">Have an account already?</string>
+    <string name="login_here">Login here</string>
+    <string name="login">Login</string>
+    <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="create_an_account">Create an account</string>
+    <string name="not_registered_yet">Not registered yet?</string>
+    <string name="access_all_your_saved_files_in_the_cloud">Access all your saved files in the cloud</string>
+    <string name="or_sign_in_with_email">or Sign in with Email</string>
+    <string name="not_now">Not now</string>
+    <string name="welcome_back">Welcome Back!</string>
 </resources>

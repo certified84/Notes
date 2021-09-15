@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
+import com.certified.notes.model.User
 import com.certified.notes.util.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val randomNotes: LiveData<List<Note>> = repository.randomNotes
     val randomCourses: LiveData<List<Course>> = repository.randomCourses
     val allTodos: LiveData<List<Todo>> = repository.allTodos
+    val user: LiveData<User> = repository.user
 
     fun updateTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.IO) {

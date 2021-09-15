@@ -6,10 +6,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -17,21 +17,24 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.certified.notes.R
 import com.certified.notes.adapters.HomeCourseRecyclerAdapter
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter
 import com.certified.notes.adapters.TodoRecyclerAdapter
-import com.certified.notes.model.Note
+import com.certified.notes.databinding.FragmentHomeBinding
 import com.certified.notes.model.Todo
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClickListener {
 
@@ -39,44 +42,29 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         private const val ID_NOT_SET = 0
     }
 
-    private lateinit var recyclerCourses: RecyclerView
-    private lateinit var recyclerNotes: RecyclerView
-    private lateinit var recyclerTodos: RecyclerView
-    private lateinit var btnShowAllNotes: MaterialButton
-    private lateinit var btnShowAllCourses: MaterialButton
-    private lateinit var ivTodoPopupMenu: ImageView
+    private lateinit var auth: FirebaseAuth
+    private var currentUser: FirebaseUser? = null
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var navController: NavController
     private lateinit var viewModel: HomeViewModel
-    private lateinit var cardView: MaterialCardView
     private lateinit var todoRecyclerAdapter: TodoRecyclerAdapter
+    private lateinit var noteRecyclerAdapter: HomeNoteRecyclerAdapter
+    private lateinit var courseRecyclerAdapter: HomeCourseRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        binding = FragmentHomeBinding.inflate(layoutInflater)
 
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
-
-        recyclerCourses = view.findViewById(R.id.recycler_view_courses)
-        recyclerNotes = view.findViewById(R.id.recycler_view_notes)
-        recyclerTodos = view.findViewById(R.id.recycler_view_todos)
-
-        btnShowAllCourses = view.findViewById(R.id.btn_show_all_courses)
-        btnShowAllNotes = view.findViewById(R.id.btn_show_all_notes)
-
-        ivTodoPopupMenu = view.findViewById(R.id.iv_todo_popup_menu)
-        cardView = view.findViewById(R.id.card_view)
-
-        btnShowAllNotes.setOnClickListener(this)
-        btnShowAllCourses.setOnClickListener(this)
-        ivTodoPopupMenu.setOnClickListener(this)
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = Firebase.auth
 
         navController = Navigation.findNavController(view)
 
@@ -88,71 +76,51 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
 
         isFirstOpen()
         init()
+
+        currentUser = auth.currentUser
+        if (currentUser != null)
+            loadFromFireBase()
+        else
+            loadFromRoom()
     }
 
-    private fun init() {
-        val noteLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val courseLayoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val todoLayoutManager = LinearLayoutManager(requireContext())
+    private fun loadFromFireBase() {
+        TODO("Not yet implemented")
+    }
 
-        val noteRecyclerAdapter = HomeNoteRecyclerAdapter(ID_NOT_SET)
-        viewModel.randomNotes.observe(viewLifecycleOwner) { notes ->
-            if (notes != null) {
-                noteRecyclerAdapter.submitList(notes)
-                btnShowAllNotes.isClickable = true
-            } else {
-                btnShowAllNotes.isClickable = false
+    private fun loadFromRoom() {
+        binding.apply {
+
+            viewModel.randomNotes.observe(viewLifecycleOwner) { notes ->
+                if (notes != null)
+                    noteRecyclerAdapter.submitList(notes)
+                else
+                    btnShowAllNotes.visibility = View.GONE
+            }
+
+            viewModel.randomCourses.observe(viewLifecycleOwner) { courses ->
+                if (courses != null)
+                    courseRecyclerAdapter.submitList(courses)
+                else
+                    btnShowAllCourses.visibility = View.GONE
+            }
+
+            viewModel.allTodos.observe(viewLifecycleOwner) { todos ->
+                if (todos.isNotEmpty()) {
+                    cardView.visibility = View.VISIBLE
+                    todoRecyclerAdapter.submitList(todos)
+                } else
+                    cardView.visibility = View.GONE
             }
         }
 
-        recyclerNotes.adapter = noteRecyclerAdapter
-        recyclerNotes.layoutManager = noteLayoutManager
-        recyclerNotes.clipToPadding = false
-        recyclerNotes.clipChildren = false
-        noteRecyclerAdapter.setOnNoteClickedListener(object :
-            HomeNoteRecyclerAdapter.OnNoteClickedListener {
-            override fun onNoteClicked(note: Note) {
-                navController.navigate(R.id.notesFragment)
-            }
-        })
-
-        val courseRecyclerAdapter = HomeCourseRecyclerAdapter()
-        viewModel.randomCourses.observe(viewLifecycleOwner) { courses ->
-            if (courses != null) {
-                courseRecyclerAdapter.submitList(courses)
-                btnShowAllCourses.isClickable = true
-            } else {
-                btnShowAllCourses.isClickable = false
-            }
-        }
-
-        recyclerCourses.layoutManager = courseLayoutManager
-        recyclerCourses.adapter = courseRecyclerAdapter
-        recyclerCourses.clipToPadding = false
-        recyclerCourses.clipChildren = false
-        courseRecyclerAdapter.setOnCourseClickedListener(object :
-            HomeCourseRecyclerAdapter.OnCourseClickedListener {
-            override fun onCourseClicked() {
-                navController.navigate(R.id.coursesFragment)
-            }
-        })
-
-        todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), viewModel)
-        viewModel.allTodos.observe(viewLifecycleOwner) { todos ->
-            if (todos.isNotEmpty())
-                todoRecyclerAdapter.submitList(todos)
-            else
-                cardView.visibility = View.GONE
-        }
-
-        recyclerTodos.layoutManager = todoLayoutManager
-        recyclerTodos.adapter = todoRecyclerAdapter
         todoRecyclerAdapter.setOnTodoClickedListener(object :
             TodoRecyclerAdapter.OnTodoClickedListener {
             override fun onTodoClicked(todo: Todo) {
-                val view = layoutInflater.inflate(R.layout.dialog_new_todo, null)
+                val view = layoutInflater.inflate(
+                    R.layout.dialog_new_todo,
+                    ConstraintLayout(requireContext())
+                )
 
                 val bottomSheetDialog = BottomSheetDialog(requireContext())
 
@@ -195,6 +163,61 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         })
     }
 
+    private fun init() {
+        binding.apply {
+
+            ivTodoPopupMenu.setOnClickListener(this@HomeFragment)
+
+            val noteLayoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            val courseLayoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            val todoLayoutManager = LinearLayoutManager(requireContext())
+
+            noteRecyclerAdapter = HomeNoteRecyclerAdapter(ID_NOT_SET)
+            recyclerViewNotes.adapter = noteRecyclerAdapter
+            recyclerViewNotes.layoutManager = noteLayoutManager
+            recyclerViewNotes.clipToPadding = false
+            recyclerViewNotes.clipChildren = false
+            recyclerViewNotes.setOnClickListener { navController.navigate(R.id.notesFragment) }
+
+            courseRecyclerAdapter = HomeCourseRecyclerAdapter()
+            recyclerViewCourses.layoutManager = courseLayoutManager
+            recyclerViewCourses.adapter = courseRecyclerAdapter
+            recyclerViewCourses.clipToPadding = false
+            recyclerViewCourses.clipChildren = false
+            recyclerViewCourses.setOnClickListener { navController.navigate(R.id.coursesFragment) }
+
+            todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), viewModel)
+            recyclerViewTodos.layoutManager = todoLayoutManager
+            recyclerViewTodos.adapter = todoRecyclerAdapter
+
+            if (currentUser == null) {
+                viewModel.user.observe(viewLifecycleOwner) { user ->
+                    if (user != null) {
+                        val profileImageBitmap = user.profileImage
+                        val name = user.name.substringAfter(" ")
+
+                        if (name != "Enter")
+                            tvHiName.text = ("Hi, $name")
+                        else
+                            tvHiName.text = ("Hi, there")
+
+                        if (profileImageBitmap != null) {
+                            Glide.with(requireContext())
+                                .load(profileImageBitmap)
+                                .into(profileImage)
+                        } else {
+                            Glide.with(requireContext())
+                                .load(R.drawable.ic_logo)
+                                .into(profileImage)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun isFirstOpen() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         val isFirstOpen = preferences.getBoolean(PreferenceKeys.FIRST_TIME_OPEN, true)
@@ -210,10 +233,16 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                 editor.putBoolean(PreferenceKeys.FIRST_TIME_OPEN, false)
                 editor.apply()
                 dialog.dismiss()
+                launchSignUpDialog()
             }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
-        }
+        } else
+            launchSignUpDialog()
+    }
+
+    private fun launchSignUpDialog() {
+        TODO("Not yet implemented")
     }
 
     override fun onClick(v: View?) {
@@ -245,14 +274,18 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
             R.id.delete_completed_todos -> {
                 builder.setMessage(getString(R.string.completed_todo_delete_dialog_message))
                 builder.setPositiveButton(getString(R.string.yes)) { dialog1, _ ->
-                    viewModel.deleteCompletedTodos()
+                    if (currentUser == null)
+                        viewModel.deleteCompletedTodos()
+//                    else
+////                        Delete completed todos from Firestore
                     dialog1.dismiss()
                 }
             }
             R.id.delete_all_todos -> {
                 builder.setMessage(getString(R.string.all_todo_delete_dialog_message))
                 builder.setPositiveButton(getString(R.string.yes)) { dialog1, _ ->
-                    viewModel.deleteAllTodos()
+                    if (currentUser == null)
+                        viewModel.deleteAllTodos()
                     dialog1.dismiss()
                 }
             }
