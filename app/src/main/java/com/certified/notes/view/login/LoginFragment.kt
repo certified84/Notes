@@ -10,6 +10,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.certified.notes.R
 import com.certified.notes.databinding.FragmentLoginBinding
+import com.github.captain_miao.optroundcardview.OptRoundCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -41,12 +43,12 @@ class LoginFragment : Fragment() {
         binding.apply {
             btnLogin.setOnClickListener {
 
-                progressBar.visibility = View.VISIBLE
                 val email = etEmail.text.toString().trim()
                 val password = etPassword.text.toString().trim()
 
                 if (currentUser == null) {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
+                        progressBar.visibility = View.VISIBLE
                         auth.signInWithEmailAndPassword(email, password)
                             .addOnCompleteListener(requireActivity()) { task ->
                                 if (task.isSuccessful) {
@@ -54,12 +56,21 @@ class LoginFragment : Fragment() {
                                     progressBar.visibility = View.GONE
                                     uploadFilesToFireStore()
 
-                                    val navOptions = NavOptions.Builder()
-                                        .setPopUpTo(R.id.splashFragment, true).build()
-                                    navController.navigate(R.id.homeFragment, null, navOptions)
+                                    val user = auth.currentUser
+//                                    if (user?.isEmailVerified!!) {
+//                                        val navOptions = NavOptions.Builder()
+//                                            .setPopUpTo(R.id.splashFragment, true).build()
+//                                        navController.navigate(R.id.homeFragment, null, navOptions)
+//                                    } else
+//                                        FancyToast.makeText(
+//                                            requireContext(),
+//                                            "Check your email for verification link",
+//                                            FancyToast.LENGTH_LONG
+//                                        ).show()
                                 } else {
                                     FancyToast.makeText(
-                                        requireContext(), "Authentication failed. ${task.exception}",
+                                        requireContext(),
+                                        "Authentication failed. ${task.exception}",
                                         FancyToast.LENGTH_SHORT
                                     ).show()
                                 }
@@ -88,7 +99,14 @@ class LoginFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
+    }
+
     private fun uploadFilesToFireStore() {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 }

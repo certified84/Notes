@@ -145,12 +145,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_full_name_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
-                app:errorEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_name"
                 app:layout_constraintStart_toStartOf="@+id/tv_name"
                 app:layout_constraintTop_toBottomOf="@id/tv_name">
@@ -160,11 +164,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/first_name_amp_last_name"
-                    android:background="@drawable/edit_text_background"
                     android:inputType="textPersonName"
                     android:outlineProvider="none"
                     android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp" />
+                    android:paddingEnd="@dimen/_15sdp"
+                    style="@style/Widget.Notes.TextInputEditText"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    app:textInputLayoutFocusedRectEnabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -182,11 +189,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_email_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_email"
                 app:layout_constraintStart_toStartOf="@+id/tv_email"
                 app:layout_constraintTop_toBottomOf="@id/tv_email">
@@ -196,12 +208,14 @@
                     android:layout_width="match_parent"
                     android:hint="@string/name_example_etceteria_com"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@drawable/edit_text_background"
                     android:inputType="textEmailAddress"
                     android:outlineProvider="none"
                     android:paddingStart="@dimen/_15sdp"
                     android:paddingEnd="@dimen/_15sdp"
-                    app:cornerRadius="@dimen/_8sdp" />
+                    style="@style/Widget.Notes.TextInputEditText"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    app:textInputLayoutFocusedRectEnabled="false"  />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -220,11 +234,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_password_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_password"
                 app:layout_constraintStart_toStartOf="@+id/tv_email"
                 app:layout_constraintTop_toBottomOf="@+id/tv_password"
@@ -235,10 +254,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/min_8_characters"
-                    android:background="@drawable/edit_text_background"
                     android:inputType="textPassword"
                     android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp" />
+                    android:paddingEnd="@dimen/_15sdp"
+                    android:outlineProvider="none"
+                    style="@style/Widget.Notes.TextInputEditText"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    app:textInputLayoutFocusedRectEnabled="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -258,11 +281,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_confirm_password_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_confirm_password"
                 app:layout_constraintStart_toStartOf="@+id/tv_confirm_password"
                 app:layout_constraintTop_toBottomOf="@+id/tv_confirm_password"
@@ -273,10 +301,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
                     android:hint="@string/min_8_characters"
-                    android:background="@drawable/edit_text_background"
                     android:inputType="textPassword"
                     android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp" />
+                    android:paddingEnd="@dimen/_15sdp"
+                    android:outlineProvider="none"
+                    style="@style/Widget.Notes.TextInputEditText"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
+                    app:textInputLayoutFocusedRectEnabled="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -341,6 +373,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_sign_up"
                 android:layout_width="0dp"
+                style="@style/Widget.Notes.Button"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
@@ -354,7 +387,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_not_now"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Notes.TextButton"
                 app:strokeColor="@color/accent"
                 android:width="@dimen/_1sdp"
                 android:layout_width="0dp"

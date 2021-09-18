@@ -242,11 +242,11 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
                 android:layout_width="0dp"
+                style="@style/Widget.Notes.Button"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:text="@string/login"
                 android:textAllCaps="false"
-                android:textColor="#ffffff"
                 app:cornerRadius="@dimen/_4sdp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_forgot_password"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -255,8 +255,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_not_now"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                app:strokeColor="@color/accent"
+                style="@style/Widget.Notes.TextButton"
                 android:width="@dimen/_1sdp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

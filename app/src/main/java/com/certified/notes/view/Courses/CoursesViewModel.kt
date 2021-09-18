@@ -62,11 +62,13 @@ class CoursesViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getCourseCode(courseTitle: String): String {
-        return repository.getCourseCode(courseTitle)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseCode(courseTitle) }
+            .toString()
     }
 
     fun getCourseTitle(courseCode: String): String {
-        return repository.getCourseTitle(courseCode)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseTitle(courseCode) }
+            .toString()
     }
 
     fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {

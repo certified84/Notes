@@ -54,14 +54,12 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun getCourseCode(courseTitle: String): String {
-        return repository.getCourseCode(courseTitle)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseCode(courseTitle) }
+            .toString()
     }
 
     fun getCourseTitle(courseCode: String): String {
-        return repository.getCourseTitle(courseCode)
-    }
-
-    fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {
-        return repository.getBookMarkAt(noteId)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseTitle(courseCode) }
+            .toString()
     }
 }

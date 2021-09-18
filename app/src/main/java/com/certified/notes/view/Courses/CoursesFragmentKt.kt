@@ -130,7 +130,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         val recyclerViewRelatedNotes: RecyclerView =
             view.findViewById(R.id.recycler_view_related_notes)
         val noteLayoutManager = LinearLayoutManager(requireContext())
-        val noteRecyclerAdapter = HomeNoteRecyclerAdapter(1)
+        val noteRecyclerAdapter = HomeNoteRecyclerAdapter(1, null)
 
         viewModel.getNotesAt(course.courseCode)?.observe(viewLifecycleOwner) { notes ->
             if (notes.isNotEmpty()) {
@@ -201,7 +201,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
                 val coursePosition = if (note.courseCode != getString(R.string.nil)) {
-                    adapterCourses.getPosition(note.courseCode?.let { viewModel.getCourseTitle(it) })
+                    adapterCourses.getPosition(note.courseCode.let { viewModel.getCourseTitle(it) })
                 } else
                     1
 

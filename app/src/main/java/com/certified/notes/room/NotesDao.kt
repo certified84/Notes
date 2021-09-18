@@ -16,7 +16,7 @@ interface NotesDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTodo(todo: Todo)
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBookMark(bookMark: BookMark)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -1,6 +1,7 @@
 package com.certified.notes.view.Notes
 
 import android.content.SharedPreferences
+import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -8,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +28,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
 import io.sulek.ssml.SSMLLinearLayoutManager
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
@@ -247,33 +248,18 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         }
                         val alertDialog = builder.create()
                         alertDialog.setOnShowListener {
-                            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.black
-                                    )
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.red
                                 )
-                                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.black
-                                    )
+                            )
+                            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                                ContextCompat.getColor(
+                                    requireContext(),
+                                    R.color.red
                                 )
-                            } else {
-                                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.red
-                                    )
-                                )
-                                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                                    ContextCompat.getColor(
-                                        requireContext(),
-                                        R.color.red
-                                    )
-                                )
-                            }
+                            )
                         }
                         alertDialog.show()
                     }
@@ -301,6 +287,44 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         noteRecyclerAdapter.notifyDataSetChanged()
                     }
                 }
+            }
+
+            override fun onChildDraw(
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
+            ) {
+                RecyclerViewSwipeDecorator.Builder(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
+                    .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_50)
+                    .addSwipeLeftBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
+                    )
+                    .create()
+                    .decorate()
+                super.onChildDraw(
+                    c,
+                    recyclerView,
+                    viewHolder,
+                    dX,
+                    dY,
+                    actionState,
+                    isCurrentlyActive
+                )
             }
         }).attachToRecyclerView(recyclerNotes)
 
@@ -348,33 +372,18 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.red
                 )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            )
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.red
                 )
-            } else {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-            }
+            )
         }
         alertDialog.show()
     }

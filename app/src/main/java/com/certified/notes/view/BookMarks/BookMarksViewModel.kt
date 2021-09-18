@@ -48,11 +48,13 @@ class BookMarksViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun getCourseCode(courseTitle: String): String {
-        return repository.getCourseCode(courseTitle)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseCode(courseTitle) }
+            .toString()
     }
 
     fun getCourseTitle(courseCode: String): String {
-        return repository.getCourseTitle(courseCode)
+        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseTitle(courseCode) }
+            .toString()
     }
 
     fun searchBookmarks(searchQuery: String?): LiveData<List<BookMark?>?>? {

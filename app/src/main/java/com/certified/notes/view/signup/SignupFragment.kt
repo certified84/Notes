@@ -11,6 +11,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.certified.notes.R
 import com.certified.notes.databinding.FragmentSignupBinding
+import com.github.captain_miao.optroundcardview.OptRoundCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
@@ -43,7 +45,6 @@ class SignupFragment : Fragment() {
         binding.apply {
             btnSignUp.setOnClickListener {
 
-                progressBar.visibility = View.VISIBLE
                 val email = etEmail.text.toString().trim()
                 val password = etPassword.text.toString().trim()
                 val confirmPassword = etConfirmPassword.text.toString().trim()
@@ -51,12 +52,14 @@ class SignupFragment : Fragment() {
                 if (currentUser == null) {
                     if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                         if (password == confirmPassword) {
+                            progressBar.visibility = View.VISIBLE
                             auth.createUserWithEmailAndPassword(email, password)
                                 .addOnCompleteListener(requireActivity()) { task ->
                                     if (task.isSuccessful) {
 
                                         progressBar.visibility = View.GONE
                                         val user = auth.currentUser
+                                        user?.sendEmailVerification()
                                         uploadUserDetails(user!!)
 
                                         FancyToast.makeText(
@@ -110,6 +113,14 @@ class SignupFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
+    }
+
     private fun uploadUserDetails(user: FirebaseUser) {
+
     }
 }

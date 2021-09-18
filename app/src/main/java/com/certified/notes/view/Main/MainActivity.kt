@@ -83,11 +83,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun isDarkModeEnabled() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val isDarkModeEnabled = preferences.getBoolean(PreferenceKeys.DARK_MODE, false)
-        if (isDarkModeEnabled)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        else
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        when (preferences.getInt(PreferenceKeys.DARK_MODE, 0)) {
+            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
     override fun onBackPressed() {

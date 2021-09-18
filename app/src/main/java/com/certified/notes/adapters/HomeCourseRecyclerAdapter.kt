@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Course
 
-class HomeCourseRecyclerAdapter : ListAdapter<Course, HomeCourseRecyclerAdapter.ViewHolder>(
+class HomeCourseRecyclerAdapter(val navController: NavController) : ListAdapter<Course, HomeCourseRecyclerAdapter.ViewHolder>(
     DIFF_CALLBACK
 ) {
 
@@ -25,18 +26,12 @@ class HomeCourseRecyclerAdapter : ListAdapter<Course, HomeCourseRecyclerAdapter.
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val courseCode: TextView
-        val courseTitle: TextView
+        val courseCode: TextView = itemView.findViewById(R.id.tv_course_code)
+        val courseTitle: TextView = itemView.findViewById(R.id.tv_course_title)
 
         init {
-            courseCode = itemView.findViewById(R.id.tv_course_code)
-            courseTitle = itemView.findViewById(R.id.tv_course_title)
 
-            itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                    listener.onCourseClicked()
-            }
+            itemView.setOnClickListener { navController.navigate(R.id.coursesFragment) }
         }
     }
 

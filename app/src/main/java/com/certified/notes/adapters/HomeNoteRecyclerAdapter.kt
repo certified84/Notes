@@ -4,13 +4,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Note
 
-class HomeNoteRecyclerAdapter(val id: Int) :
+class HomeNoteRecyclerAdapter(val id: Int, val navController: NavController?) :
     ListAdapter<Note, HomeNoteRecyclerAdapter.ViewHolder>(
         DIFF_CALLBACK
     ) {
@@ -31,9 +32,13 @@ class HomeNoteRecyclerAdapter(val id: Int) :
 
         init {
             itemView.setOnClickListener {
-                val position = adapterPosition
-                if (position != RecyclerView.NO_POSITION)
-                    listener.onNoteClicked(getItem(position))
+                if (id == 0)
+                    navController?.navigate(R.id.notesFragment)
+                else {
+                    val position = absoluteAdapterPosition
+                    if (position != RecyclerView.NO_POSITION)
+                        listener.onNoteClicked(getItem(position))
+                }
             }
         }
     }
@@ -54,9 +59,8 @@ class HomeNoteRecyclerAdapter(val id: Int) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView: View
         val ID_NOT_SET = 0
-        itemView = if (id == ID_NOT_SET)
+        val itemView = if (id == ID_NOT_SET)
             LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_item_notes_home, parent, false)
         else

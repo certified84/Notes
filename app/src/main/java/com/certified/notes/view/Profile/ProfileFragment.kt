@@ -137,16 +137,16 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         }
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        val nightMode = preferences.getBoolean(PreferenceKeys.DARK_MODE, false)
+        val nightMode = preferences.getInt(PreferenceKeys.DARK_MODE, 0)
         val editor = preferences.edit()
 
-        switchDarkMode.isChecked = nightMode
+        switchDarkMode.isChecked = nightMode == 1
         switchDarkMode.setOnClickListener {
             if (switchDarkMode.isChecked) {
-                editor.putBoolean(PreferenceKeys.DARK_MODE, true)
+                editor.putInt(PreferenceKeys.DARK_MODE, 1)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
-                editor.putBoolean(PreferenceKeys.DARK_MODE, false)
+                editor.putInt(PreferenceKeys.DARK_MODE, 2)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
             editor.apply()
@@ -275,7 +275,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
-            val name = tvName.toString().trim()
+            val name = inputEditText.text.toString().trim()
             val school = tvSchool.text.toString().trim()
             val department = tvDepartment.text.toString().trim()
             val level = tvLevel.text.toString().trim()

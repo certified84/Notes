@@ -85,7 +85,7 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
     }
 
     private fun loadFromFireBase() {
-        TODO("Not yet implemented")
+//        TODO("Not yet implemented")
     }
 
     private fun loadFromRoom() {
@@ -159,7 +159,6 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                 bottomSheetDialog.setContentView(view)
                 bottomSheetDialog.show()
             }
-
         })
     }
 
@@ -174,19 +173,17 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             val todoLayoutManager = LinearLayoutManager(requireContext())
 
-            noteRecyclerAdapter = HomeNoteRecyclerAdapter(ID_NOT_SET)
+            noteRecyclerAdapter = HomeNoteRecyclerAdapter(ID_NOT_SET, navController)
             recyclerViewNotes.adapter = noteRecyclerAdapter
             recyclerViewNotes.layoutManager = noteLayoutManager
             recyclerViewNotes.clipToPadding = false
             recyclerViewNotes.clipChildren = false
-            recyclerViewNotes.setOnClickListener { navController.navigate(R.id.notesFragment) }
 
-            courseRecyclerAdapter = HomeCourseRecyclerAdapter()
+            courseRecyclerAdapter = HomeCourseRecyclerAdapter(navController)
             recyclerViewCourses.layoutManager = courseLayoutManager
             recyclerViewCourses.adapter = courseRecyclerAdapter
             recyclerViewCourses.clipToPadding = false
             recyclerViewCourses.clipChildren = false
-            recyclerViewCourses.setOnClickListener { navController.navigate(R.id.coursesFragment) }
 
             todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), viewModel)
             recyclerViewTodos.layoutManager = todoLayoutManager
@@ -196,7 +193,7 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                 viewModel.user.observe(viewLifecycleOwner) { user ->
                     if (user != null) {
                         val profileImageBitmap = user.profileImage
-                        val name = user.name.substringAfter(" ")
+                        val name = user.name.substringBefore(" ")
 
                         if (name != "Enter")
                             tvHiName.text = ("Hi, $name")
@@ -237,12 +234,14 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
             }
             val alertDialog = alertDialogBuilder.create()
             alertDialog.show()
-        } else
+        }
+        else if (currentUser == null)
             launchSignUpDialog()
     }
 
     private fun launchSignUpDialog() {
-        TODO("Not yet implemented")
+        navController.navigate(R.id.signupFragment)
+//        TODO("Not yet implemented")
     }
 
     override fun onClick(v: View?) {

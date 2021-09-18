@@ -143,7 +143,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             }
                                         }
                                 } else {
-                                    val note = Note( "NIL", noteTitle, noteContent)
+                                    val note = Note("NIL", noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
                                     viewModel.getBookMarkAt(bookmark.noteId)
@@ -151,7 +151,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                             if (it != null) {
                                                 for (bookMark in it) {
                                                     val bookMark1 =
-                                                        BookMark( noteId,
+                                                        BookMark(
+                                                            noteId,
                                                             "NIL",
                                                             noteTitle,
                                                             noteContent
@@ -197,8 +198,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val bookMark = bookMarkRecyclerAdapter.getBookMarkAt(viewHolder.adapterPosition)
-                viewModel.deleteBookMark(bookMark)
+                val bookMark =
+                    bookMarkRecyclerAdapter.getBookMarkAt(viewHolder.absoluteAdapterPosition)
 
                 val preferences =
                     PreferenceManager.getDefaultSharedPreferences(requireActivity().applicationContext)
@@ -208,14 +209,40 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 defValues.add("-1")
                 val noteIds = mutableSetOf<String>()
                 preferences.getStringSet(PreferenceKeys.NOTE_IDS, defValues)?.let {
-                    noteIds.addAll(
-                        it
-                    )
+                    noteIds.addAll(it)
                 }
-                noteIds.remove(bookMark.noteId.toString())
+                val builder = MaterialAlertDialogBuilder(requireContext())
+                builder.setTitle(getString(R.string.delete))
+                builder.setMessage(getString(R.string.bookmark_delete_dialog_message))
+                builder.setPositiveButton(getString(R.string.delete)) { dialog1, _ ->
+                    viewModel.deleteBookMark(bookMark)
+                    noteIds.remove(bookMark.noteId.toString())
 
-                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
-                editor.apply()
+                    editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
+                    editor.apply()
+
+                    dialog1.dismiss()
+                }
+                builder.setNegativeButton(getString(R.string.cancel)) { dialog1, _ ->
+                    bookMarkRecyclerAdapter.notifyDataSetChanged()
+                    dialog1.dismiss()
+                }
+                val alertDialog = builder.create()
+                alertDialog.setOnShowListener {
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.red
+                            )
+                        )
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                R.color.red
+                            )
+                        )
+                }
+                alertDialog.show()
             }
 
             override fun onChildDraw(
@@ -303,8 +330,6 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setTitle(getString(R.string.delete))
         builder.setMessage(getString(R.string.all_bookmark_delete_dialog_message))
         builder.setIcon(R.drawable.ic_baseline_delete_24)
-        val alertDialog = builder.create()
-
         builder.setPositiveButton(getString(R.string.yes)) { dialog: DialogInterface, _: Int ->
             viewModel.deleteAllBookMarks()
 
@@ -324,36 +349,35 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
             dialog.dismiss()
         }
-
-        builder.setNegativeButton(getString(R.string.no)) { _, _ ->
-            alertDialog.setOnShowListener {
-                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.black
-                        )
+        builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
+        val alertDialog = builder.create()
+        alertDialog.setOnShowListener {
+            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black
                     )
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.black
-                        )
+                )
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.black
                     )
-                } else {
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.red
-                        )
+                )
+            } else {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.red
                     )
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                        ContextCompat.getColor(
-                            requireContext(),
-                            R.color.red
-                        )
+                )
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.red
                     )
-                }
+                )
             }
         }
         alertDialog.show()
