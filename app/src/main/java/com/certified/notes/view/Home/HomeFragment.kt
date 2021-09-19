@@ -92,11 +92,50 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
     }
 
     private fun loadFromFireBase() {
+        binding.apply {
+            val profileImageUri = currentUser?.photoUrl
+            val name = currentUser?.displayName?.substringBefore(" ")
+
+            if (profileImageUri != null)
+                Glide.with(requireContext())
+                    .load(profileImageUri)
+                    .into(profileImage)
+            else
+                Glide.with(requireContext())
+                    .load(R.drawable.ic_logo)
+                    .into(profileImage)
+
+            if (name != "")
+                tvHiName.text = ("Hi, $name")
+            else
+                tvHiName.text = ("Hi, there")
+        }
 //        TODO("Not yet implemented")
     }
 
     private fun loadFromRoom() {
         binding.apply {
+
+                viewModel.user.observe(viewLifecycleOwner) { user ->
+                    if (user != null) {
+                        val profileImageBitmap = user.profileImage
+                        val name = user.name.substringBefore(" ")
+
+                        if (name != "Enter")
+                            tvHiName.text = ("Hi, $name")
+                        else
+                            tvHiName.text = ("Hi, there")
+
+                        if (profileImageBitmap != null)
+                            Glide.with(requireContext())
+                                .load(profileImageBitmap)
+                                .into(profileImage)
+                        else
+                            Glide.with(requireContext())
+                                .load(R.drawable.ic_logo)
+                                .into(profileImage)
+                    }
+                }
 
             viewModel.randomNotes.observe(viewLifecycleOwner) { notes ->
                 if (notes != null)
@@ -197,30 +236,6 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
             todoRecyclerAdapter = TodoRecyclerAdapter(requireContext(), viewModel)
             recyclerViewTodos.layoutManager = todoLayoutManager
             recyclerViewTodos.adapter = todoRecyclerAdapter
-
-            if (currentUser == null) {
-                viewModel.user.observe(viewLifecycleOwner) { user ->
-                    if (user != null) {
-                        val profileImageBitmap = user.profileImage
-                        val name = user.name.substringBefore(" ")
-
-                        if (name != "Enter")
-                            tvHiName.text = ("Hi, $name")
-                        else
-                            tvHiName.text = ("Hi, there")
-
-                        if (profileImageBitmap != null) {
-                            Glide.with(requireContext())
-                                .load(profileImageBitmap)
-                                .into(profileImage)
-                        } else {
-                            Glide.with(requireContext())
-                                .load(R.drawable.ic_logo)
-                                .into(profileImage)
-                        }
-                    }
-                }
-            }
         }
     }
 

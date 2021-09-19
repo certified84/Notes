@@ -2,8 +2,10 @@ package com.certified.notes.util
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.room.TypeConverter
 import java.io.ByteArrayOutputStream
+import java.lang.Exception
 
 class Converters {
 
@@ -24,4 +26,28 @@ class Converters {
         } else
             null
     }
+
+    @TypeConverter
+    fun uriToString(uri: Uri?): String? {
+        return try {
+            uri?.toString()
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    @TypeConverter
+    fun stringToUri(string: String?): Uri? {
+        return if (string != null) {
+            try {
+                Uri.parse(string)
+            } catch (e: Exception) {
+                null
+            }
+        } else null
+    }
+
+//    TODO: uriToBitmap()
+
+//    TODO: bitmapToUri()
 }

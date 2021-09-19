@@ -2,10 +2,11 @@ package com.certified.notes.view.Profile
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils.isEmpty
@@ -39,7 +40,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import de.hdodenhof.circleimageview.CircleImageView
+import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 
 class ProfileFragment : Fragment(), View.OnClickListener {
 
@@ -66,7 +69,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     private lateinit var userSchool: String
     private lateinit var userDepartment: String
     private lateinit var userLevel: String
-    private var profileImageBitmap: Bitmap? = null
+    private var profileImageBitmap: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -224,29 +227,35 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             assert(data != null)
             val extras = data?.extras
             val profileImageBitmap = extras!!["data"] as Bitmap?
-            val name = tvName.text.toString()
-            val school = tvSchool.text.toString()
-            val department = tvDepartment.text.toString()
-            val level = tvLevel.text.toString()
+            try {
+                requireContext().openFileOutput("profile_image", Context.MODE_PRIVATE).use {
+                    profileImageBitmap?.compress(Bitmap.CompressFormat.PNG, 100, it)
+                }
+                val file = File(requireContext().filesDir, "profile_image")
+                val uri = Uri.fromFile(file)
+//                requireContext().openFileInput("profile_image").use {
+//                    uri = it
+//                }
 
-            val user = User(name, school, department, level, profileImageBitmap)
-            user.id = USER_ID
-            viewModel.updateUser(user)
+                val user = User(userName, userSchool, userDepartment, userLevel, uri)
+                user.id = USER_ID
+                viewModel.updateUser(user)
 
-            Glide.with(requireContext())
-                .load(profileImageBitmap)
-                .into(profileImage)
+                Glide.with(requireContext())
+                    .load(uri)
+                    .into(profileImage)
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
         } else if (requestCode == PICK_IMAGE_CODE && resultCode == Activity.RESULT_OK) {
             assert(data != null)
             val uri = data?.data
             try {
-                val stream = uri?.let { requireContext().contentResolver.openInputStream(it) }
-                val bitmap = BitmapFactory.decodeStream(stream)
-                val user = User(userName, userSchool, userDepartment, userLevel, bitmap)
+                val user = User(userName, userSchool, userDepartment, userLevel, uri)
                 user.id = USER_ID
                 viewModel.updateUser(user)
                 Glide.with(requireContext())
-                    .load(bitmap)
+                    .load(uri)
                     .into(profileImage)
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()

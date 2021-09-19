@@ -64,7 +64,7 @@ class CoursesViewModel(application: Application) : AndroidViewModel(application)
 
     fun getCourseCode(courseTitle: String): String {
         val courseCode = MutableLiveData<String>()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             courseCode.postValue(repository.getCourseCode(courseTitle))
         }
         return courseCode.value ?: " "

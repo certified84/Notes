@@ -13,10 +13,15 @@ import com.certified.notes.databinding.FragmentSignupBinding
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.shashank.sony.fancytoastlib.FancyToast
+import com.google.firebase.auth.UserProfileChangeRequest
+
+
+
+
 
 class SignupFragment : Fragment() {
 
@@ -62,7 +67,43 @@ class SignupFragment : Fragment() {
                                         progressBar.visibility = View.GONE
                                         val user = auth.currentUser
                                         user?.sendEmailVerification()
-                                        uploadUserDetails(user!!)
+
+                                        val newUser =
+                                            com.certified.notes.model.User(
+                                                etFullName.text.toString(),
+                                                "",
+                                                "",
+                                                "",
+                                                null
+                                            )
+                                        newUser.uid = user!!.uid
+                                        newUser.email = etEmail.text.toString()
+
+                                        val db = Firebase.firestore
+                                        val userRef =
+                                            db.collection("users").document(user.uid)
+                                        userRef.set(newUser).addOnCompleteListener {
+                                            if (it.isSuccessful) {
+                                                val profileChangeRequest =
+                                                    UserProfileChangeRequest.Builder()
+                                                        .setDisplayName(newUser.name)
+                                                        .setPhotoUri(newUser.profileImage)
+                                                        .build()
+                                                user.updateProfile(profileChangeRequest)
+
+                                                Firebase.auth.signOut()
+
+                                                val navOptions = NavOptions.Builder()
+                                                    .setPopUpTo(R.id.splashFragment, true).build()
+                                                navController.navigate(R.id.loginFragment, null, navOptions)
+                                            } else {
+                                                FancyToast.makeText(
+                                                    requireContext(),
+                                                    "An error occurred: ${it.exception}",
+                                                    FancyToast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
 
                                         FancyToast.makeText(
                                             requireContext(),
@@ -70,11 +111,6 @@ class SignupFragment : Fragment() {
                                             FancyToast.LENGTH_SHORT
                                         ).show()
 
-                                        Firebase.auth.signOut()
-
-                                        val navOptions = NavOptions.Builder()
-                                            .setPopUpTo(R.id.splashFragment, true).build()
-                                        navController.navigate(R.id.loginFragment, null, navOptions)
                                     } else {
                                         FancyToast.makeText(
                                             requireContext(),
@@ -91,7 +127,7 @@ class SignupFragment : Fragment() {
                             ).show()
                             etConfirmPassword.requestFocus()
                         }
-                    }  else {
+                    } else {
                         FancyToast.makeText(
                             requireContext(),
                             "All fields are required",
@@ -113,9 +149,5 @@ class SignupFragment : Fragment() {
                 navController.navigate(R.id.homeFragment, null, navOptions)
             }
         }
-    }
-
-    private fun uploadUserDetails(user: FirebaseUser) {
-
     }
 }

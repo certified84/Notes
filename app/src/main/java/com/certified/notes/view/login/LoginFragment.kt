@@ -60,16 +60,16 @@ class LoginFragment : Fragment() {
                                     uploadFilesToFireStore()
 
                                     val user = auth.currentUser
-//                                    if (user?.isEmailVerified!!) {
-//                                        val navOptions = NavOptions.Builder()
-//                                            .setPopUpTo(R.id.splashFragment, true).build()
-//                                        navController.navigate(R.id.homeFragment, null, navOptions)
-//                                    } else
-//                                        FancyToast.makeText(
-//                                            requireContext(),
-//                                            "Check your email for verification link",
-//                                            FancyToast.LENGTH_LONG
-//                                        ).show()
+                                    if (user?.isEmailVerified!!) {
+                                        val navOptions = NavOptions.Builder()
+                                            .setPopUpTo(R.id.splashFragment, true).build()
+                                        navController.navigate(R.id.homeFragment, null, navOptions)
+                                    } else
+                                        FancyToast.makeText(
+                                            requireContext(),
+                                            "Check your email for verification link",
+                                            FancyToast.LENGTH_LONG
+                                        ).show()
                                 } else {
                                     FancyToast.makeText(
                                         requireContext(),

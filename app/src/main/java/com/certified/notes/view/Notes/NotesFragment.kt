@@ -129,13 +129,22 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     coursePosition.let { spinnerCourses.setSelection(it) }
                 }
 
-                btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+                btnCancel.setOnClickListener {
+                    val courseTitle = spinnerCourses.selectedItem.toString()
+                    val courseCode =
+                        if (courseTitle == getString(R.string.no_course)) getString(R.string.nil)
+                        else viewModel.getCourseCode(courseTitle)
+                    FancyToast.makeText(requireContext(),"onNoteClick: courseCode = $courseCode",
+                    FancyToast.LENGTH_LONG).show()
+                    Log.d("NotesFragment", "onNoteClick: courseCode = $courseCode")
+                    bottomSheetDialog.dismiss() }
                 btnSave.text = getString(R.string.update)
                 btnSave.setOnClickListener {
                     val courseTitle = spinnerCourses.selectedItem.toString()
                     val courseCode =
                         if (courseTitle == getString(R.string.no_course)) getString(R.string.nil)
                         else viewModel.getCourseCode(courseTitle)
+
                     val noteTitle = etNoteTitle.text.toString().trim()
                     val noteContent = etNoteContent.text.toString().trim()
 
