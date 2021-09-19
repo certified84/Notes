@@ -98,7 +98,7 @@ interface NotesDao {
     fun getCourseCode(courseTitle: String): String
 
     @Query("SELECT course_title FROM course_table WHERE course_code = :courseCode")
-    fun getCourseTitle(courseCode: String): String
+    fun getCourseTitle(courseCode: String): LiveData<String>
 
     @Query("SELECT note_id FROM bookmark_table")
     fun getNoteIds(): LiveData<List<Int>>

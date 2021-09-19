@@ -14,12 +14,21 @@
         <entry key="app/src/main/res/drawable/edit_text_background.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout-land/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout-sw600dp-land/fragment_home.xml" value="0.22" />
+        <entry key="app/src/main/res/layout-sw600dp/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout-sw600dp/fragment_home.xml" value="0.25" />
+        <entry key="app/src/main/res/layout-sw600dp/fragment_notes.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-sw600dp/list_item_notes.xml" value="0.22" />
+        <entry key="app/src/main/res/layout-v21/fragment_notes.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_edit_profile.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/dialog_new_note.xml" value="0.12771739130434784" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_initial_signup.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_login.xml" value="0.3054003724394786" />
+        <entry key="app/src/main/res/layout/fragment_notes.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.3398963730569948" />
+        <entry key="app/src/main/res/layout/list_item_notes.xml" value="0.22" />
       </map>
     </option>
   </component>

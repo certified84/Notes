@@ -9,15 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.certified.notes.R
 import com.certified.notes.adapters.CourseRecyclerAdapter
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter
@@ -33,7 +32,7 @@ import com.shawnlin.numberpicker.NumberPicker
 class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     companion object {
-        const val GRID_SPAN_COUNT = 2
+        private const val GRID_SPAN_COUNT = 2
     }
 
     private lateinit var recyclerCourses: RecyclerView
@@ -68,7 +67,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun init() {
         val courseLayoutManager =
-            StaggeredGridLayoutManager(GRID_SPAN_COUNT, LinearLayoutManager.VERTICAL)
+            GridLayoutManager(context, GRID_SPAN_COUNT, LinearLayoutManager.VERTICAL, false)
         val courseRecyclerAdapter = CourseRecyclerAdapter()
         viewModel.allCourses.observe(viewLifecycleOwner, courseRecyclerAdapter::submitList)
         recyclerCourses.adapter = courseRecyclerAdapter
@@ -200,12 +199,15 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 tvNoteDialogTitle.text = getString(R.string.edit_note)
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
-                val coursePosition = if (note.courseCode != getString(R.string.nil)) {
-                    adapterCourses.getPosition(note.courseCode.let { viewModel.getCourseTitle(it) })
-                } else
-                    1
 
-                spinnerCourses.setSelection(coursePosition)
+                viewModel.getCourseTitle(note.courseCode)?.observe(viewLifecycleOwner) { courseTitle ->
+                    val coursePosition = if (note.courseCode != getString(R.string.nil))
+                        adapterCourses.getPosition(courseTitle)
+                    else 1
+
+                    coursePosition.let { spinnerCourses.setSelection(it) }
+                }
+
                 btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
                 btnSave.setOnClickListener {
                     val courseTitle = spinnerCourses.selectedItem.toString()
@@ -312,7 +314,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                             for (note in notes) {
                                 val noteTitle = note.title
                                 val noteContent = note.content
-                                val note1 = Note( courseCode, noteTitle, noteContent)
+                                val note1 = Note(courseCode, noteTitle, noteContent)
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
 
@@ -394,33 +396,18 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setNegativeButton(getString(R.string.no)) { dialog1, _ -> dialog1.dismiss() }
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            )
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
-            } else {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-            }
+            )
         }
         alertDialog.show()
     }
@@ -450,33 +437,18 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
-            if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.black
-                    )
+            )
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
-            } else {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.red
-                    )
-                )
-            }
+            )
         }
         alertDialog.show()
     }

@@ -21,7 +21,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="textStart"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/likeButton"
+                app:layout_constraintEnd_toStartOf="@+id/iv_bookmark"
                 app:layout_constraintStart_toStartOf="@+id/tv_note_title"
                 app:layout_constraintTop_toBottomOf="@+id/tv_note_title"
                 tools:text="TextView" />
@@ -34,9 +34,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginBottom="8dp"
             android:textAlignment="textStart"
-            android:textSize="18sp"
+            android:textSize="@dimen/_18ssp"
             app:layout_constraintBottom_toTopOf="@+id/tv_note_content"
-            app:layout_constraintEnd_toStartOf="@+id/likeButton"
+            app:layout_constraintEnd_toStartOf="@+id/iv_bookmark"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
@@ -53,21 +53,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_notes" />
-
-        <com.like.LikeButton
-                android:id="@+id/likeButton"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/tv_note_content"
-                android:clickable="false"
-                android:longClickable="false"
-                app:is_enabled="false"
-                android:visibility="gone" />
 
         <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"

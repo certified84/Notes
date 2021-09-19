@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.signup.SignupFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_20sdp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_hi_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@drawable/ic_logo" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_hi_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_20sdp"
+            android:text="@string/sign_up"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="@dimen/_20sdp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/materialTextView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/create_an_account_for_syncing_across_devices"
+            android:textSize="@dimen/_11ssp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_facebook"
+            app:layout_constraintEnd_toEndOf="@+id/tv_hi_name"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/tv_hi_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hi_name" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_facebook"
+            style="@style/Widget.Notes.LoginTextButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="@string/sign_up_with_facebook"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_11ssp"
+            app:cornerRadius="@dimen/_4sdp"
+            app:icon="@drawable/facebook_logo"
+            app:iconGravity="textStart"
+            app:iconTint="@null"
+            app:layout_constraintBottom_toTopOf="@+id/btn_google"
+            app:layout_constraintEnd_toEndOf="@+id/materialTextView2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/materialTextView2"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView2"
+            app:strokeWidth="@dimen/_1sdp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_google"
+            style="@style/Widget.Notes.LoginTextButton"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/sign_up_with_google"
+            android:textAllCaps="false"
+            android:textSize="@dimen/_11ssp"
+            app:cornerRadius="@dimen/_4sdp"
+            app:icon="@drawable/google_logo"
+            app:iconGravity="textStart"
+            app:iconTint="@null"
+            app:layout_constraintBottom_toTopOf="@+id/btn_sign_up_with_email"
+            app:layout_constraintEnd_toEndOf="@+id/btn_facebook"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/btn_facebook"
+            app:layout_constraintTop_toBottomOf="@+id/btn_facebook"
+            app:strokeWidth="@dimen/_1sdp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_sign_up_with_email"
+            style="@style/Widget.Notes.Button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            android:text="@string/sign_up_with_email"
+            android:textAllCaps="false"
+            app:cornerRadius="@dimen/_4sdp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_not_now"
+            app:layout_constraintEnd_toEndOf="@+id/btn_google"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/btn_google"
+            app:layout_constraintTop_toBottomOf="@+id/btn_google" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_not_now"
+            style="@style/Widget.Notes.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:width="@dimen/_1sdp"
+            android:text="@string/not_now"
+            android:textAllCaps="false"
+            app:cornerRadius="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/btn_sign_up_with_email"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/btn_sign_up_with_email"
+            app:layout_constraintTop_toBottomOf="@+id/btn_sign_up_with_email"
+            app:strokeColor="@color/accent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

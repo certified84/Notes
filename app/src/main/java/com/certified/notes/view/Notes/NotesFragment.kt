@@ -3,6 +3,7 @@ package com.certified.notes.view.Notes
 import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -27,8 +28,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
+import com.shashank.sony.fancytoastlib.FancyToast
 import io.sulek.ssml.SSMLLinearLayoutManager
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
+import kotlin.properties.Delegates
 
 class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
@@ -118,18 +121,13 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
 
-//                val coursePosition: Int = if (note.courseCode != getString(R.string.nil)) {
-//                    viewModel.getCourseTitle(note.courseCode.let { it })?.observe(viewLifecycleOwner) {
-//                        adapterCourses.getPosition(it)
-//                    }
-//                }
-//                else 1
+                viewModel.getCourseTitle(note.courseCode)?.observe(viewLifecycleOwner) { courseTitle ->
+                    val coursePosition = if (note.courseCode != getString(R.string.nil))
+                        adapterCourses.getPosition(courseTitle)
+                    else 1
 
-                val coursePosition = if (note.courseCode != getString(R.string.nil))
-                    adapterCourses.getPosition(note.courseCode.let { viewModel.getCourseTitle(it) })
-                else 1
-
-                spinnerCourses.setSelection(coursePosition)
+                    coursePosition.let { spinnerCourses.setSelection(it) }
+                }
 
                 btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
                 btnSave.text = getString(R.string.update)
@@ -251,13 +249,13 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
                                 ContextCompat.getColor(
                                     requireContext(),
-                                    R.color.red
+                                    R.color.accent
                                 )
                             )
                             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
                                 ContextCompat.getColor(
                                     requireContext(),
-                                    R.color.red
+                                    R.color.accent
                                 )
                             )
                         }
@@ -375,13 +373,13 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
             alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.red
+                    R.color.accent
                 )
             )
             alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
                 ContextCompat.getColor(
                     requireContext(),
-                    R.color.red
+                    R.color.accent
                 )
             )
         }

@@ -60,13 +60,12 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_facebook"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Notes.LoginTextButton"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:text="@string/sign_in_with_facebook"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:cornerRadius="@dimen/_4sdp"
                 app:icon="@drawable/facebook_logo"
@@ -75,18 +74,16 @@
                 app:layout_constraintEnd_toEndOf="@+id/materialTextView2"
                 app:layout_constraintStart_toStartOf="@+id/materialTextView2"
                 app:layout_constraintTop_toBottomOf="@+id/materialTextView2"
-                app:strokeColor="@color/accent"
                 app:strokeWidth="@dimen/_1sdp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_google"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Notes.LoginTextButton"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_16sdp"
                 android:text="@string/sign_in_with_google"
                 android:textAllCaps="false"
-                android:textColor="@color/black"
                 android:textSize="@dimen/_11ssp"
                 app:cornerRadius="@dimen/_4sdp"
                 app:icon="@drawable/google_logo"
@@ -95,7 +92,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/btn_facebook"
                 app:layout_constraintStart_toStartOf="@+id/btn_facebook"
                 app:layout_constraintTop_toBottomOf="@+id/btn_facebook"
-                app:strokeColor="@color/accent"
                 app:strokeWidth="@dimen/_1sdp" />
 
             <View
@@ -149,25 +145,33 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_email_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_email"
                 app:layout_constraintStart_toStartOf="@+id/tv_email"
                 app:layout_constraintTop_toBottomOf="@id/tv_email">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_email"
+                    style="@style/Widget.Notes.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:layout_marginTop="@dimen/_8sdp"
-                    android:background="@drawable/edit_text_background"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
                     android:hint="@string/name_example_etceteria_com"
                     android:inputType="textEmailAddress"
+                    android:outlineProvider="none"
                     android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp" />
+                    android:paddingEnd="@dimen/_15sdp"
+                    app:textInputLayoutFocusedRectEnabled="false" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -186,11 +190,16 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_password_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                style="@style/Widgets.Notes.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                app:hintEnabled="false"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:boxCollapsedPaddingTop="4dp"
+                app:boxCornerRadiusBottomEnd="5dp"
+                app:boxCornerRadiusBottomStart="5dp"
+                app:boxCornerRadiusTopEnd="5dp"
+                app:boxCornerRadiusTopStart="5dp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_password"
                 app:layout_constraintStart_toStartOf="@+id/tv_email"
                 app:layout_constraintTop_toBottomOf="@+id/tv_password"
@@ -198,13 +207,17 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_password"
+                    style="@style/Widget.Notes.TextInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_35sdp"
-                    android:background="@drawable/edit_text_background"
+                    android:layout_marginTop="8dp"
+                    android:ems="10"
                     android:hint="@string/min_8_characters"
                     android:inputType="textPassword"
+                    android:outlineProvider="none"
                     android:paddingStart="@dimen/_15sdp"
-                    android:paddingEnd="@dimen/_15sdp" />
+                    android:paddingEnd="@dimen/_15sdp"
+                    app:textInputLayoutFocusedRectEnabled="false" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -212,27 +225,17 @@
                 android:id="@+id/checkBox_remember_me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="@color/accent"
+                android:buttonTint="?attr/colorPrimary"
+                android:text="@string/remember_me"
                 app:layout_constraintStart_toStartOf="@+id/et_password_layout"
                 app:layout_constraintTop_toBottomOf="@+id/et_password_layout" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/materialTextView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/remember_me"
-                android:textSize="@dimen/_12ssp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/checkBox_remember_me"
-                app:layout_constraintStart_toEndOf="@+id/checkBox_remember_me"
-                app:layout_constraintTop_toTopOf="@+id/checkBox_remember_me" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_forgot_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/forgot_password"
-                android:textColor="@color/accent"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/checkBox_remember_me"
@@ -241,12 +244,13 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
-                android:layout_width="0dp"
                 style="@style/Widget.Notes.Button"
-                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_30sdp"
                 android:text="@string/login"
                 android:textAllCaps="false"
+                android:textSize="@dimen/_11ssp"
                 app:cornerRadius="@dimen/_4sdp"
                 app:layout_constraintEnd_toEndOf="@+id/tv_forgot_password"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -256,17 +260,19 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_not_now"
                 style="@style/Widget.Notes.TextButton"
-                android:width="@dimen/_1sdp"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
+                android:width="@dimen/_1sdp"
                 android:text="@string/not_now"
                 android:textAllCaps="false"
+                android:textSize="@dimen/_11ssp"
                 app:cornerRadius="@dimen/_4sdp"
                 app:layout_constraintEnd_toEndOf="@+id/btn_login"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="@+id/btn_login"
-                app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_login"
+                app:strokeColor="@color/accent" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/materialTextView4"
@@ -297,17 +303,6 @@
                 app:layout_constraintStart_toEndOf="@+id/materialTextView4"
                 app:layout_constraintTop_toTopOf="@+id/materialTextView4" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/group_remember_me"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:constraint_referenced_ids="materialTextView6,checkBox_remember_me"
-                app:layout_constraintBottom_toBottomOf="@+id/checkBox_remember_me"
-                app:layout_constraintEnd_toEndOf="@+id/materialTextView6"
-                app:layout_constraintStart_toStartOf="@+id/checkBox_remember_me"
-                app:layout_constraintTop_toTopOf="@+id/checkBox_remember_me" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </layout>

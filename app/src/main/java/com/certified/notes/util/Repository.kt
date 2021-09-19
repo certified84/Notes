@@ -136,6 +136,16 @@ class Repository(application: Application) {
         noteDao.deleteCompletedTodos()
     }
 
+    fun deleteBookMarkedNote(noteId: Int) {
+        try {
+            noteDao.deleteBookMarkedNote(noteId)
+        } catch (e: ExecutionException) {
+            e.printStackTrace()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+    }
+
     fun getCourseCode(courseTitle: String): String {
         return try {
             noteDao.getCourseCode(courseTitle)
@@ -148,25 +158,15 @@ class Repository(application: Application) {
         }
     }
 
-    fun getCourseTitle(courseCode: String): String {
+    fun getCourseTitle(courseCode: String): LiveData<String>? {
         return try {
             noteDao.getCourseTitle(courseCode)
         } catch (e: ExecutionException) {
             e.printStackTrace()
-            ""
+            null
         } catch (e: InterruptedException) {
             e.printStackTrace()
-            ""
-        }
-    }
-
-    fun deleteBookMarkedNote(noteId: Int) {
-        try {
-            noteDao.deleteBookMarkedNote(noteId)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
+            null
         }
     }
 

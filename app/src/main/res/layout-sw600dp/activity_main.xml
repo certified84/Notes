@@ -53,6 +53,7 @@
                 app:elevation="0dp"
                 app:iconSize="32dp"
                 app:itemIconSize="30dp"
+                app:itemTextColor="?attr/colorAccent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"

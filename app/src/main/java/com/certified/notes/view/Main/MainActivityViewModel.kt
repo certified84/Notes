@@ -3,8 +3,12 @@ package com.certified.notes.view.Main
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.certified.notes.model.*
+import com.certified.notes.model.Course
+import com.certified.notes.model.Note
+import com.certified.notes.model.Todo
+import com.certified.notes.model.User
 import com.certified.notes.util.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,12 +58,14 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     fun getCourseCode(courseTitle: String): String {
-        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseCode(courseTitle) }
-            .toString()
+        val courseCode = MutableLiveData<String>()
+        viewModelScope.launch {
+            courseCode.postValue(repository.getCourseCode(courseTitle))
+        }
+        return courseCode.value ?: " "
     }
 
-    fun getCourseTitle(courseCode: String): String {
-        return viewModelScope.launch(Dispatchers.IO) { repository.getCourseTitle(courseCode) }
-            .toString()
+    fun getCourseTitle(courseCode: String): LiveData<String>? {
+        return repository.getCourseTitle(courseCode)
     }
 }

@@ -1,7 +1,6 @@
 package com.certified.notes.view.signup
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +37,9 @@ class SignupFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.GONE
+        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
         navController = Navigation.findNavController(view)
         val currentUser = auth.currentUser
@@ -111,13 +113,6 @@ class SignupFragment : Fragment() {
                 navController.navigate(R.id.homeFragment, null, navOptions)
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
     }
 
     private fun uploadUserDetails(user: FirebaseUser) {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -65,6 +66,13 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         super.onViewCreated(view, savedInstanceState)
 
         auth = Firebase.auth
+        currentUser = auth.currentUser
+
+        val isFirstOpen = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            .getBoolean(PreferenceKeys.FIRST_TIME_OPEN, true)
+        if (!isFirstOpen)
+            if (currentUser == null)
+                launchSignUpDialog()
 
         navController = Navigation.findNavController(view)
 
@@ -77,7 +85,6 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         isFirstOpen()
         init()
 
-        currentUser = auth.currentUser
         if (currentUser != null)
             loadFromFireBase()
         else
@@ -166,6 +173,8 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         binding.apply {
 
             ivTodoPopupMenu.setOnClickListener(this@HomeFragment)
+            btnShowAllCourses.setOnClickListener(this@HomeFragment)
+            btnShowAllNotes.setOnClickListener(this@HomeFragment)
 
             val noteLayoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -217,6 +226,7 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
 
     private fun isFirstOpen() {
         val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+        val editor = preferences.edit()
         val isFirstOpen = preferences.getBoolean(PreferenceKeys.FIRST_TIME_OPEN, true)
         if (isFirstOpen) {
             val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
@@ -226,22 +236,54 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                         "\nMake sure to add your semester courses in other to link your notes to them"
             )
             alertDialogBuilder.setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                val editor = preferences.edit()
                 editor.putBoolean(PreferenceKeys.FIRST_TIME_OPEN, false)
                 editor.apply()
                 dialog.dismiss()
-                launchSignUpDialog()
             }
             val alertDialog = alertDialogBuilder.create()
+            alertDialog.setOnShowListener {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.accent
+                    )
+                )
+            }
+            alertDialog.setOnDismissListener {
+                editor.putBoolean(PreferenceKeys.FIRST_TIME_OPEN, false)
+                editor.apply()
+                if (currentUser == null)
+                    launchSignUpDialog()
+            }
             alertDialog.show()
         }
-        else if (currentUser == null)
-            launchSignUpDialog()
     }
 
     private fun launchSignUpDialog() {
-        navController.navigate(R.id.signupFragment)
-//        TODO("Not yet implemented")
+        val alertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        alertDialogBuilder.setTitle("One more thing!")
+        alertDialogBuilder.setMessage(
+            "Did you know that you can create an account with us and have your files saved on the cloud?" +
+                    "\nDoing this will enable you have your files synced across all devices for easy access"
+        )
+        alertDialogBuilder.setNegativeButton("Later") { dialog, _ -> dialog.dismiss() }
+        alertDialogBuilder.setPositiveButton("Sign up") { _, _ -> navController.navigate(R.id.signupFragment) }
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.setOnShowListener {
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
+                )
+            )
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
+                )
+            )
+        }
+        alertDialog.show()
     }
 
     override fun onClick(v: View?) {
@@ -293,14 +335,14 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
             if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     .setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
                             R.color.black
                         )
                     )
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
                     .setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
@@ -308,14 +350,14 @@ class HomeFragment : Fragment(), View.OnClickListener, PopupMenu.OnMenuItemClick
                         )
                     )
             } else {
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     .setTextColor(
                         ContextCompat.getColor(
                             requireContext(),
                             R.color.red
                         )
                     )
-                alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
                     .setTextColor(
                         ContextCompat.getColor(
                             requireContext(),

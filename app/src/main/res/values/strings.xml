@@ -146,7 +146,9 @@
     <string name="login_here">Login here</string>
     <string name="login">Login</string>
     <string name="sign_in_with_facebook">Sign in with Facebook</string>
+    <string name="sign_up_with_facebook">Sign up with Facebook</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="create_an_account">Create an account</string>
     <string name="not_registered_yet">Not registered yet?</string>
@@ -154,4 +156,5 @@
     <string name="or_sign_in_with_email">or Sign in with Email</string>
     <string name="not_now">Not now</string>
     <string name="welcome_back">Welcome Back!</string>
+    <string name="sign_up_with_email">Sign up with Email</string>
 </resources>

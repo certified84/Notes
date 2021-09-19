@@ -84,7 +84,6 @@ class NoteRecyclerAdapter(context: Context) :
         RecyclerView.ViewHolder(itemView) {
         val mNoteContent: TextView = itemView.findViewById(R.id.tv_note_content)
         val mNoteTitle: TextView = itemView.findViewById(R.id.tv_note_title)
-        private val mLikeButton: LikeButton = itemView.findViewById(R.id.likeButton)
         val ivBookMark: ImageView = itemView.findViewById(R.id.iv_bookmark)
 
         fun checkIfBookMarked(noteId: Int, imageView: ImageView) {

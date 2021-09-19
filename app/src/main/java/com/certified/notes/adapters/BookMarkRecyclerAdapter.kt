@@ -42,7 +42,6 @@ class BookMarkRecyclerAdapter(
 
         val noteContent: TextView = itemView.findViewById(R.id.tv_note_content)
         val noteTitle: TextView = itemView.findViewById(R.id.tv_note_title)
-        val likeButton: LikeButton = itemView.findViewById(R.id.likeButton)
         val ivBookMark: ImageView = itemView.findViewById(R.id.iv_bookmark)
 
         init {
