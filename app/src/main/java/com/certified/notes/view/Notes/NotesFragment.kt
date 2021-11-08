@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -24,10 +25,14 @@ import com.certified.notes.adapters.NoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
 import com.certified.notes.util.PreferenceKeys
+import com.certified.notes.view.EditNoteFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.shashank.sony.fancytoastlib.FancyToast
 import io.sulek.ssml.SSMLLinearLayoutManager
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
@@ -100,6 +105,7 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         noteRecyclerAdapter.setOnNoteClickedListener(object :
             NoteRecyclerAdapter.OnNoteClickedListener {
             override fun onNoteClick(note: Note) {
+                launchNoteDialog(note, Firebase.auth.currentUser)
                 val view = layoutInflater.inflate(
                     R.layout.dialog_new_note,
                     ConstraintLayout(requireContext())
@@ -213,7 +219,7 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         ).show()
                 }
                 bottomSheetDialog.setContentView(view)
-                bottomSheetDialog.show()
+//                bottomSheetDialog.show()
             }
         })
 
@@ -351,6 +357,16 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 return true
             }
         })
+    }
+
+    private fun launchNoteDialog(note: Note, currentUser: FirebaseUser?) {
+        val fragmentManager = requireActivity().supportFragmentManager
+        val completeOrderFragment = EditNoteFragment(note, currentUser)
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .add(android.R.id.content, completeOrderFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun searchNotes(query: String, noteRecyclerAdapter: NoteRecyclerAdapter) {

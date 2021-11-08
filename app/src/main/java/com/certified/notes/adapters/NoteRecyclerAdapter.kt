@@ -37,33 +37,6 @@ class NoteRecyclerAdapter(context: Context) :
         val currentNote = getItem(position)
         holder.mNoteContent.text = currentNote!!.content
         holder.mNoteTitle.text = currentNote.title
-//        holder.mLikeButton.setOnLikeListener(object : OnLikeListener {
-//            override fun liked(likeButton: LikeButton) {
-//                val noteId = currentNote.id
-//                val courseCode = currentNote.courseCode
-//                val noteTitle = currentNote.title
-//                val noteContent = currentNote.content
-//
-//                val bookMark = BookMark(noteId, courseCode, noteTitle, noteContent!!)
-//                mViewModel.insertBookMark(bookMark)
-//
-//                noteIds.add(noteId.toString())
-//                editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
-//                editor.apply()
-//            }
-//
-//            override fun unLiked(likeButton: LikeButton) {
-//                mViewModel.getBookMarkAt(currentNote.id).observe(mOwner, Observer { bookMark :BookMark? ->
-//                        if (bookMark != null) {
-//                            mViewModel.deleteBookMark(bookMark)
-//                        }
-//                        noteIds.remove((currentNote.id).toString())
-//                        editor.putStringSet(PreferenceKeys.NOTE_IDS, noteIds)
-//                        editor.apply()
-//                    }
-//                )
-//            }
-//        })
         holder.checkIfBookMarked(currentNote.id, holder.ivBookMark)
     }
 
@@ -93,8 +66,6 @@ class NoteRecyclerAdapter(context: Context) :
                 ?.let { noteIds.addAll(it) }
             if (noteId.toString() in noteIds)
                 imageView.visibility = View.VISIBLE
-            else
-                imageView.visibility = View.INVISIBLE
         }
 
         init {

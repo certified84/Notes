@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.certified.notes.R
 import com.certified.notes.databinding.FragmentLoginBinding
+import com.certified.notes.util.Extensions.showToast
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -36,8 +38,8 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.GONE
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
+        requireActivity().findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.GONE
+        requireActivity().findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.GONE
 
         navController = Navigation.findNavController(view)
         auth = Firebase.auth
@@ -52,39 +54,9 @@ class LoginFragment : Fragment() {
                 if (currentUser == null) {
                     if (email.isNotEmpty() && password.isNotEmpty()) {
                         progressBar.visibility = View.VISIBLE
-                        auth.signInWithEmailAndPassword(email, password)
-                            .addOnCompleteListener(requireActivity()) { task ->
-                                if (task.isSuccessful) {
-
-                                    progressBar.visibility = View.GONE
-                                    uploadFilesToFireStore()
-
-                                    val user = auth.currentUser
-                                    if (user?.isEmailVerified!!) {
-                                        val navOptions = NavOptions.Builder()
-                                            .setPopUpTo(R.id.splashFragment, true).build()
-                                        navController.navigate(R.id.homeFragment, null, navOptions)
-                                    } else
-                                        FancyToast.makeText(
-                                            requireContext(),
-                                            "Check your email for verification link",
-                                            FancyToast.LENGTH_LONG
-                                        ).show()
-                                } else {
-                                    FancyToast.makeText(
-                                        requireContext(),
-                                        "Authentication failed. ${task.exception}",
-                                        FancyToast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                    } else {
-                        FancyToast.makeText(
-                            requireContext(),
-                            "All fields are required",
-                            FancyToast.LENGTH_LONG
-                        ).show()
-                    }
+                        signIn(email, password, progressBar)
+                    } else
+                        showToast("All fields are required")
                 }
             }
 
@@ -100,6 +72,28 @@ class LoginFragment : Fragment() {
                 navController.navigate(R.id.homeFragment, null, navOptions)
             }
         }
+    }
+
+    private fun signIn(email: String, password: String, progressBar: ProgressBar) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+
+                    progressBar.visibility = View.GONE
+                    uploadFilesToFireStore()
+
+                    val user = auth.currentUser
+                    if (user?.isEmailVerified!!) {
+                        val navOptions = NavOptions.Builder()
+                            .setPopUpTo(R.id.splashFragment, true).build()
+                        navController.navigate(R.id.homeFragment, null, navOptions)
+                    } else
+                        showToast("Check your email for verification link")
+                } else {
+                    showToast("Authentication failed. ${task.exception}")
+                    progressBar.visibility = View.GONE
+                }
+            }
     }
 
     private fun uploadFilesToFireStore() {

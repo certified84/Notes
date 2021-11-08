@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
@@ -17,6 +18,7 @@ import com.certified.notes.model.Course
 import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
 import com.certified.notes.util.PreferenceKeys
+import com.certified.notes.view.EditNoteFragment
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -130,7 +132,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
             R.id.fab_add_note -> {
                 hideViews()
-                launchNoteDialog()
+                launchNoteDialog(Firebase.auth.currentUser)
             }
             R.id.view -> {
                 hideViews()
@@ -224,57 +226,67 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         bottomSheetDialog.show()
     }
 
-    private fun launchNoteDialog() {
-        val inflater = layoutInflater
-        val view = inflater.inflate(R.layout.dialog_new_note, ConstraintLayout(this))
-        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
-
-        val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
-        val etNoteTitle: EditText = view.findViewById(R.id.et_note_title)
-        val etNoteContent: EditText = view.findViewById(R.id.et_note_content)
-        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
-        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
-        val tvNoteDialogTitle: TextView = view.findViewById(R.id.tv_note_dialog_title)
-
-        val courseList = arrayListOf<String>()
-        val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
-        notesViewModel.allCourses.observe(this, { courses: List<Course> ->
-            courseList.add(getString(R.string.select_a_course))
-            courseList.add(getString(R.string.no_course))
-            for (course in courses) {
-                courseList.add(course.courseTitle)
-            }
-            adapterCourses.notifyDataSetChanged()
-        })
-
-        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCourses.adapter = adapterCourses
-        tvNoteDialogTitle.text = getString(R.string.add_note)
-
-        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-        btnSave.setOnClickListener {
-            val courseTitle = spinnerCourses.selectedItem.toString()
-            val courseCode =
-                if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(
-                    courseTitle
-                )
-            val noteTitle = etNoteTitle.text.toString()
-            val noteContent = etNoteContent.text.toString()
-
-            if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
-                if (courseTitle != getString(R.string.select_a_course)) {
-                    val note = Note(courseCode, noteTitle, noteContent)
-                    notesViewModel.insertNote(note)
-                    bottomSheetDialog.dismiss()
-                    Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
-                } else
-                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG)
-                        .show()
-            } else
-                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
-                    .show()
-        }
-        bottomSheetDialog.setContentView(view)
-        bottomSheetDialog.show()
+    private fun launchNoteDialog(currentUser: FirebaseUser?) {
+        val fragmentManager = this.supportFragmentManager
+        val completeOrderFragment = EditNoteFragment(null, currentUser)
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .add(android.R.id.content, completeOrderFragment)
+            .addToBackStack(null)
+            .commit()
     }
+
+//    private fun launchNoteDialog() {
+//        val inflater = layoutInflater
+//        val view = inflater.inflate(R.layout.dialog_new_note, ConstraintLayout(this))
+//        val bottomSheetDialog = BottomSheetDialog(this, R.style.BottomSheetDialogTheme)
+//
+//        val spinnerCourses: Spinner = view.findViewById(R.id.spinner_courses)
+//        val etNoteTitle: EditText = view.findViewById(R.id.et_note_title)
+//        val etNoteContent: EditText = view.findViewById(R.id.et_note_content)
+//        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
+//        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
+//        val tvNoteDialogTitle: TextView = view.findViewById(R.id.tv_note_dialog_title)
+//
+//        val courseList = arrayListOf<String>()
+//        val adapterCourses = ArrayAdapter(this, android.R.layout.simple_spinner_item, courseList)
+//        notesViewModel.allCourses.observe(this, { courses: List<Course> ->
+//            courseList.add(getString(R.string.select_a_course))
+//            courseList.add(getString(R.string.no_course))
+//            for (course in courses) {
+//                courseList.add(course.courseTitle)
+//            }
+//            adapterCourses.notifyDataSetChanged()
+//        })
+//
+//        adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        spinnerCourses.adapter = adapterCourses
+//        tvNoteDialogTitle.text = getString(R.string.add_note)
+//
+//        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+//        btnSave.setOnClickListener {
+//            val courseTitle = spinnerCourses.selectedItem.toString()
+//            val courseCode =
+//                if (courseTitle == getString(R.string.no_course)) "NIL" else notesViewModel.getCourseCode(
+//                    courseTitle
+//                )
+//            val noteTitle = etNoteTitle.text.toString()
+//            val noteContent = etNoteContent.text.toString()
+//
+//            if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
+//                if (courseTitle != getString(R.string.select_a_course)) {
+//                    val note = Note(courseCode, noteTitle, noteContent)
+//                    notesViewModel.insertNote(note)
+//                    bottomSheetDialog.dismiss()
+//                    Toast.makeText(this, getString(R.string.note_saved), Toast.LENGTH_LONG).show()
+//                } else
+//                    Toast.makeText(this, getString(R.string.select_a_course), Toast.LENGTH_LONG)
+//                        .show()
+//            } else
+//                Toast.makeText(this, getString(R.string.all_fields_are_required), Toast.LENGTH_LONG)
+//                    .show()
+//        }
+//        bottomSheetDialog.setContentView(view)
+//        bottomSheetDialog.show()
+//    }
 }

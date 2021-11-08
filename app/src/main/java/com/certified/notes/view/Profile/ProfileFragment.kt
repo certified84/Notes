@@ -15,12 +15,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -28,6 +26,7 @@ import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.certified.notes.R
+import com.certified.notes.databinding.FragmentProfileBinding
 import com.certified.notes.model.User
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
@@ -35,15 +34,15 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.IOException
@@ -53,22 +52,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var viewModel: ProfileViewModel
     private lateinit var mNavController: NavController
-
-    private lateinit var groupName: Group
-    private lateinit var groupSchool: Group
-    private lateinit var groupDepartment: Group
-    private lateinit var groupLevel: Group
-
-    private lateinit var tvName: TextView
-    private lateinit var tvSchool: TextView
-    private lateinit var tvDepartment: TextView
-    private lateinit var tvLevel: TextView
-
-    private lateinit var profileImage: CircleImageView
-    private lateinit var switchDarkMode: SwitchMaterial
-
-    private lateinit var fabChangeProfilePicture: FloatingActionButton
-    private lateinit var fabSettings: FloatingActionButton
+    private lateinit var binding: FragmentProfileBinding
 
     private lateinit var userName: String
     private lateinit var userSchool: String
@@ -79,29 +63,12 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+    ): View {
+        binding = FragmentProfileBinding.inflate(layoutInflater)
 
         auth = Firebase.auth
 
-        groupName = view.findViewById(R.id.group_edit_name)
-        groupSchool = view.findViewById(R.id.group_edit_school)
-        groupDepartment = view.findViewById(R.id.group_edit_department)
-        groupLevel = view.findViewById(R.id.group_edit_level)
-
-        tvName = view.findViewById(R.id.tv_name)
-        tvSchool = view.findViewById(R.id.tv_school)
-        tvDepartment = view.findViewById(R.id.tv_department)
-        tvLevel = view.findViewById(R.id.tv_level)
-
-        profileImage = view.findViewById(R.id.profile_image)
-
-        fabChangeProfilePicture = view.findViewById(R.id.fab_change_profile_picture)
-        fabSettings = view.findViewById(R.id.fab_settings)
-
-        switchDarkMode = view.findViewById(R.id.switch_dark_mode)
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -111,18 +78,72 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         viewModel = ViewModelProvider(this, viewModelFactory).get(ProfileViewModel::class.java)
         mNavController = Navigation.findNavController(view)
 
-        groupName.setOnClickListener(this)
-        groupSchool.setOnClickListener(this)
-        groupDepartment.setOnClickListener(this)
-        groupLevel.setOnClickListener(this)
+        binding.apply {
+            val currentUser = auth.currentUser
+            if (currentUser == null)
+                loadFromRoom()
+            else
+                loadFromFirestore(currentUser)
 
-        profileImage.setOnClickListener(this)
+            groupEditName.setOnClickListener(this@ProfileFragment)
+            groupEditSchool.setOnClickListener(this@ProfileFragment)
+            groupEditDepartment.setOnClickListener(this@ProfileFragment)
+            groupEditLevel.setOnClickListener(this@ProfileFragment)
 
-        fabChangeProfilePicture.setOnClickListener(this)
-        fabSettings.setOnClickListener(this)
+            profileImage.setOnClickListener(this@ProfileFragment)
+            fabChangeProfilePicture.setOnClickListener(this@ProfileFragment)
+            fabSettings.setOnClickListener(this@ProfileFragment)
 
-        val currentUser = auth.currentUser
-        if (currentUser == null)
+            val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
+            val nightMode = preferences.getInt(PreferenceKeys.DARK_MODE, 0)
+            val editor = preferences.edit()
+
+            switchDarkMode.isChecked = nightMode == 1
+            switchDarkMode.setOnClickListener {
+                if (switchDarkMode.isChecked) {
+                    editor.putInt(PreferenceKeys.DARK_MODE, 1)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    editor.putInt(PreferenceKeys.DARK_MODE, 2)
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+                editor.apply()
+            }
+        }
+    }
+
+    private fun loadFromFirestore(currentUser: FirebaseUser) {
+        binding.apply {
+            val db = Firebase.firestore
+            val userRef =
+                db.collection("users").document(currentUser.uid)
+            userRef.get().addOnSuccessListener {
+                userName = currentUser.displayName!!
+                profileImageBitmap = currentUser.photoUrl
+                userSchool = it.getString("school")!!
+                userDepartment = it.getString("department")!!
+                userLevel = it.getString("level")!!
+
+                tvName.text = currentUser.displayName!!
+                tvSchool.text = it.getString("school")!!
+                tvDepartment.text = it.getString("department")!!
+                tvLevel.text = it.getString("level")!!
+            }
+
+            if (profileImageBitmap != null) {
+                Glide.with(requireContext())
+                    .load(profileImageBitmap)
+                    .into(profileImage)
+            } else {
+                Glide.with(requireContext())
+                    .load(R.drawable.ic_logo)
+                    .into(profileImage)
+            }
+        }
+    }
+
+    private fun loadFromRoom() {
+        binding.apply {
             viewModel.user.observe(viewLifecycleOwner) { user ->
                 if (user != null) {
                     userName = user.name
@@ -131,10 +152,10 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     userLevel = user.level
                     profileImageBitmap = user.profileImage
 
-                    tvName.text = userName
-                    tvSchool.text = userSchool
-                    tvDepartment.text = userDepartment
-                    tvLevel.text = userLevel
+                    tvName.text = user.name
+                    tvSchool.text = user.school
+                    tvDepartment.text = user.department
+                    tvLevel.text = user.level
 
                     if (profileImageBitmap != null) {
                         Glide.with(requireContext())
@@ -147,51 +168,26 @@ class ProfileFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
-        else {
-            tvName.text = currentUser.displayName
-            val db = Firebase.firestore
-            val userRef =
-                db.collection("users").document(currentUser.uid)
-            userRef.get().addOnSuccessListener {
-                tvDepartment.text = it.getString("department")
-                tvSchool.text = it.getString("school")
-                tvLevel.text = it.getString("level")
-            }
-        }
-
-        val preferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        val nightMode = preferences.getInt(PreferenceKeys.DARK_MODE, 0)
-        val editor = preferences.edit()
-
-        switchDarkMode.isChecked = nightMode == 1
-        switchDarkMode.setOnClickListener {
-            if (switchDarkMode.isChecked) {
-                editor.putInt(PreferenceKeys.DARK_MODE, 1)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                editor.putInt(PreferenceKeys.DARK_MODE, 2)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            editor.apply()
         }
     }
 
     override fun onResume() {
         super.onResume()
-
-        activity?.findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
-        activity?.findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
+        requireActivity().findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        requireActivity().findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
     }
 
     override fun onClick(v: View) {
-        when (v.id) {
-            R.id.group_edit_name -> launchNameDialog()
-            R.id.group_edit_school -> launchSchoolDialog()
-            R.id.group_edit_department -> launchDepartmentDialog()
-            R.id.group_edit_level -> launchLevelDialog()
-//            R.id.fab_settings -> mNavController.navigate(R.id.settingsFragment)
-            R.id.profile_image -> launchProfileImageDialog()
-            R.id.fab_change_profile_picture -> launchProfileImageDialog()
+        binding.apply {
+            when (v) {
+                groupEditName -> launchNameDialog()
+                groupEditSchool -> launchSchoolDialog()
+                groupEditDepartment -> launchDepartmentDialog()
+                groupEditLevel -> launchLevelDialog()
+                profileImage -> launchProfileImageDialog()
+                fabChangeProfilePicture -> launchProfileImageDialog()
+//                fabSettings -> mNavController.navigate(R.id.settings_fragment)
+            }
         }
     }
 
@@ -218,7 +214,19 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     private fun deleteProfilePicture() {
         val user = User(userName, userSchool, userDepartment, userLevel, null)
         user.id = USER_ID
-        viewModel.updateUser(user)
+        if (auth.currentUser == null)
+            viewModel.updateUser(user)
+        else
+            updateUser(user)
+    }
+
+    private fun updateUser(user: User) {
+        val db = Firebase.firestore
+        val userRef =
+            db.collection("users").document(auth.currentUser!!.uid)
+        userRef.set(user).addOnCompleteListener {
+
+        }
     }
 
     private fun launchCamera() {
@@ -259,11 +267,19 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
                 val user = User(userName, userSchool, userDepartment, userLevel, uri)
                 user.id = USER_ID
-                viewModel.updateUser(user)
-
+                if (auth.currentUser == null)
+                    viewModel.updateUser(user)
+                else {
+                    updateUser(user)
+                    val profileChangeRequest =
+                        UserProfileChangeRequest.Builder()
+                            .setPhotoUri(uri)
+                            .build()
+                    auth.currentUser!!.updateProfile(profileChangeRequest)
+                }
                 Glide.with(requireContext())
                     .load(uri)
-                    .into(profileImage)
+                    .into(binding.profileImage)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -273,10 +289,19 @@ class ProfileFragment : Fragment(), View.OnClickListener {
             try {
                 val user = User(userName, userSchool, userDepartment, userLevel, uri)
                 user.id = USER_ID
-                viewModel.updateUser(user)
+                if (auth.currentUser == null)
+                    viewModel.updateUser(user)
+                else {
+                    updateUser(user)
+                    val profileChangeRequest =
+                        UserProfileChangeRequest.Builder()
+                            .setPhotoUri(uri)
+                            .build()
+                    auth.currentUser!!.updateProfile(profileChangeRequest)
+                }
                 Glide.with(requireContext())
                     .load(uri)
-                    .into(profileImage)
+                    .into(binding.profileImage)
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
             }
@@ -304,19 +329,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
-            val name = inputEditText.text.toString().trim()
-            val school = tvSchool.text.toString().trim()
-            val department = tvDepartment.text.toString().trim()
-            val level = tvLevel.text.toString().trim()
-            if (!isEmpty(name)) {
-                if (name != userName) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
-                    viewModel.updateUser(user)
-                    tvName.text = name
-                } else Toast.makeText(context, "Name not changed", Toast.LENGTH_SHORT).show()
-                bottomSheetDialog.dismiss()
-            } else Toast.makeText(context, "Please Enter a name", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                val name = inputEditText.text.toString().trim()
+                val school = tvSchool.text.toString().trim()
+                val department = tvDepartment.text.toString().trim()
+                val level = tvLevel.text.toString().trim()
+                if (!isEmpty(name)) {
+                    if (name != userName) {
+                        val user = User(name, school, department, level, profileImageBitmap)
+                        user.id = USER_ID
+                        viewModel.updateUser(user)
+                        tvName.text = name
+                    } else Toast.makeText(context, "Name not changed", Toast.LENGTH_SHORT).show()
+                    bottomSheetDialog.dismiss()
+                } else Toast.makeText(context, "Please Enter a name", Toast.LENGTH_SHORT).show()
+            }
         }
 
         bottomSheetDialog.setContentView(view)
@@ -344,19 +371,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
-            val name = tvName.text.toString().trim()
-            val school = inputEditText.text.toString().trim()
-            val department = tvDepartment.text.toString().trim()
-            val level = tvLevel.text.toString().trim()
-            if (!isEmpty(school)) {
-                if (school != userSchool) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
-                    viewModel.updateUser(user)
-                    tvSchool.text = school
-                } else Toast.makeText(context, "School not changed", Toast.LENGTH_SHORT).show()
-                bottomSheetDialog.dismiss()
-            } else Toast.makeText(context, "Please Enter a school", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                val name = tvName.text.toString().trim()
+                val school = inputEditText.text.toString().trim()
+                val department = tvDepartment.text.toString().trim()
+                val level = tvLevel.text.toString().trim()
+                if (!isEmpty(school)) {
+                    if (school != userSchool) {
+                        val user = User(name, school, department, level, profileImageBitmap)
+                        user.id = USER_ID
+                        viewModel.updateUser(user)
+                        tvSchool.text = school
+                    } else Toast.makeText(context, "School not changed", Toast.LENGTH_SHORT).show()
+                    bottomSheetDialog.dismiss()
+                } else Toast.makeText(context, "Please Enter a school", Toast.LENGTH_SHORT).show()
+            }
         }
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
@@ -383,19 +412,23 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
         btnSave.setOnClickListener {
-            val name = tvName.text.toString().trim()
-            val school = tvSchool.text.toString().trim()
-            val department = inputEditText.text.toString().trim()
-            val level = tvLevel.text.toString().trim()
-            if (!isEmpty(department)) {
-                if (department != userDepartment) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
-                    viewModel.updateUser(user)
-                    tvDepartment.text = department
-                } else Toast.makeText(context, "Department not changed", Toast.LENGTH_SHORT).show()
-                bottomSheetDialog.dismiss()
-            } else Toast.makeText(context, "Please Enter a department", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                val name = tvName.text.toString().trim()
+                val school = tvSchool.text.toString().trim()
+                val department = inputEditText.text.toString().trim()
+                val level = tvLevel.text.toString().trim()
+                if (!isEmpty(department)) {
+                    if (department != userDepartment) {
+                        val user = User(name, school, department, level, profileImageBitmap)
+                        user.id = USER_ID
+                        viewModel.updateUser(user)
+                        tvDepartment.text = department
+                    } else Toast.makeText(context, "Department not changed", Toast.LENGTH_SHORT)
+                        .show()
+                    bottomSheetDialog.dismiss()
+                } else Toast.makeText(context, "Please Enter a department", Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
@@ -429,19 +462,21 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         spinnerLevel.setSelection(selection)
         btnCancel.setOnClickListener { alertDialog.dismiss() }
         btnSave.setOnClickListener {
-            val name = tvName.text.toString().trim()
-            val school = tvSchool.text.toString().trim()
-            val department = tvDepartment.text.toString().trim()
-            val level = spinnerLevel.selectedItem.toString()
-            if (level != getString(R.string.select_level)) {
-                if (level != userLevel) {
-                    val user = User(name, school, department, level, profileImageBitmap)
-                    user.id = USER_ID
-                    viewModel.updateUser(user)
-                    tvLevel.text = level
-                } else Toast.makeText(context, "Level not changed", Toast.LENGTH_SHORT).show()
-                alertDialog.dismiss()
-            } else Toast.makeText(context, "Please select a level", Toast.LENGTH_SHORT).show()
+            binding.apply {
+                val name = tvName.text.toString().trim()
+                val school = tvSchool.text.toString().trim()
+                val department = tvDepartment.text.toString().trim()
+                val level = spinnerLevel.selectedItem.toString()
+                if (level != getString(R.string.select_level)) {
+                    if (level != userLevel) {
+                        val user = User(name, school, department, level, profileImageBitmap)
+                        user.id = USER_ID
+                        viewModel.updateUser(user)
+                        tvLevel.text = level
+                    } else Toast.makeText(context, "Level not changed", Toast.LENGTH_SHORT).show()
+                    alertDialog.dismiss()
+                } else Toast.makeText(context, "Please select a level", Toast.LENGTH_SHORT).show()
+            }
         }
         alertDialog.show()
     }
