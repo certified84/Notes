@@ -4,23 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import androidx.navigation.Navigation
 import com.certified.notes.R
 import com.certified.notes.databinding.FragmentSignupBinding
+import com.certified.notes.model.User
+import com.certified.notes.util.Extensions.showToast
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.shashank.sony.fancytoastlib.FancyToast
-import com.google.firebase.auth.UserProfileChangeRequest
-
-
-
 
 
 class SignupFragment : Fragment() {
@@ -51,7 +51,7 @@ class SignupFragment : Fragment() {
 
         binding.apply {
             btnSignUp.setOnClickListener {
-
+                val name = etFullName.text.toString()
                 val email = etEmail.text.toString().trim()
                 val password = etPassword.text.toString().trim()
                 val confirmPassword = etConfirmPassword.text.toString().trim()
@@ -60,94 +60,76 @@ class SignupFragment : Fragment() {
                     if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()) {
                         if (password == confirmPassword) {
                             progressBar.visibility = View.VISIBLE
-                            auth.createUserWithEmailAndPassword(email, password)
-                                .addOnCompleteListener(requireActivity()) { task ->
-                                    if (task.isSuccessful) {
-
-                                        progressBar.visibility = View.GONE
-                                        val user = auth.currentUser
-                                        user?.sendEmailVerification()
-
-                                        val newUser =
-                                            com.certified.notes.model.User(
-                                                etFullName.text.toString(),
-                                                "",
-                                                "",
-                                                "",
-                                                null
-                                            )
-                                        newUser.uid = user!!.uid
-                                        newUser.email = etEmail.text.toString()
-
-                                        val db = Firebase.firestore
-                                        val userRef =
-                                            db.collection("users").document(user.uid)
-                                        userRef.set(newUser).addOnCompleteListener {
-                                            if (it.isSuccessful) {
-                                                val profileChangeRequest =
-                                                    UserProfileChangeRequest.Builder()
-                                                        .setDisplayName(newUser.name)
-                                                        .setPhotoUri(newUser.profileImage)
-                                                        .build()
-                                                user.updateProfile(profileChangeRequest)
-
-                                                Firebase.auth.signOut()
-
-                                                val navOptions = NavOptions.Builder()
-                                                    .setPopUpTo(R.id.splashFragment, true).build()
-                                                navController.navigate(R.id.loginFragment, null, navOptions)
-                                            } else {
-                                                FancyToast.makeText(
-                                                    requireContext(),
-                                                    "An error occurred: ${it.exception}",
-                                                    FancyToast.LENGTH_LONG
-                                                ).show()
-                                            }
-                                        }
-
-                                        FancyToast.makeText(
-                                            requireContext(),
-                                            "Success. Check email for confirmation link",
-                                            FancyToast.LENGTH_SHORT
-                                        ).show()
-
-                                    } else {
-                                        FancyToast.makeText(
-                                            requireContext(),
-                                            "Authentication failed ${task.exception}",
-                                            FancyToast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
+                            createAccount(name, email, password, progressBar)
                         } else {
-                            FancyToast.makeText(
-                                requireContext(),
-                                "Passwords do not match",
-                                FancyToast.LENGTH_LONG
-                            ).show()
+                            showToast("Passwords do not match")
                             etConfirmPassword.requestFocus()
                         }
-                    } else {
-                        FancyToast.makeText(
-                            requireContext(),
-                            "All fields are required",
-                            FancyToast.LENGTH_LONG
-                        ).show()
-                    }
+                    } else
+                        showToast("All fields are required")
                 }
             }
 
-            tvLoginHere.setOnClickListener {
-                val navOptions = NavOptions.Builder()
-                    .setPopUpTo(R.id.signupFragment, true).build()
-                navController.navigate(R.id.loginFragment, null, navOptions)
-            }
-
-            btnNotNow.setOnClickListener {
-                val navOptions = NavOptions.Builder()
-                    .setPopUpTo(R.id.splashFragment, true).build()
-                navController.navigate(R.id.homeFragment, null, navOptions)
-            }
+            tvLoginHere.setOnClickListener { navigateTo(R.id.loginFragment) }
+            btnNotNow.setOnClickListener { navigateTo(R.id.homeFragment) }
         }
+    }
+
+    private fun createAccount(
+        name: String,
+        email: String,
+        password: String,
+        progressBar: ProgressBar
+    ) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    progressBar.visibility = View.GONE
+                    val user = auth.currentUser
+                    user?.sendEmailVerification()
+                    saveInFirestore(name, email, user!!)
+                    showToast("Account created successfully. Check email for confirmation link")
+                } else {
+                    showToast("Unable to create account: ${task.exception}")
+                    progressBar.visibility = View.GONE
+                }
+            }
+    }
+
+    private fun saveInFirestore(name: String, email: String, user: FirebaseUser) {
+        val newUser =
+            User(name, "Enter school", "Enter department", "Enter level", null)
+        newUser.uid = user.uid
+        newUser.email = email
+
+        val db = Firebase.firestore
+        val userRef =
+            db.collection("users").document(user.uid)
+        userRef.set(newUser).addOnCompleteListener {
+            if (it.isSuccessful) {
+                updateProfile(user, newUser)
+                Firebase.auth.signOut()
+                navigateTo(R.id.loginFragment)
+            } else
+                showToast("An error occurred: ${it.exception}")
+        }
+    }
+
+    private fun navigateTo(id: Int) {
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(R.id.splashFragment, true).build()
+        when (id) {
+            R.id.loginFragment -> navController.navigate(R.id.loginFragment, null, navOptions)
+            R.id.homeFragment -> navController.navigate(R.id.homeFragment, null, navOptions)
+        }
+    }
+
+    private fun updateProfile(fUser: FirebaseUser, nUser: User) {
+        val profileChangeRequest =
+            UserProfileChangeRequest.Builder()
+                .setDisplayName(nUser.name)
+                .setPhotoUri(nUser.profileImage)
+                .build()
+        fUser.updateProfile(profileChangeRequest)
     }
 }

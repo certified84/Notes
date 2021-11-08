@@ -10,13 +10,15 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="true"
         android:icon="@drawable/ic_logo"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Notes"
         tools:replace="android:theme">
-        <activity android:name=".view.Main.MainActivity"
+        <activity
+            android:name=".view.Main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

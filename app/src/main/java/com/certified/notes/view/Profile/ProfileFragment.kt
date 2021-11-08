@@ -39,6 +39,10 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 import java.io.FileNotFoundException
@@ -46,6 +50,7 @@ import java.io.IOException
 
 class ProfileFragment : Fragment(), View.OnClickListener {
 
+    private lateinit var auth: FirebaseAuth
     private lateinit var viewModel: ProfileViewModel
     private lateinit var mNavController: NavController
 
@@ -76,6 +81,8 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        auth = Firebase.auth
 
         groupName = view.findViewById(R.id.group_edit_name)
         groupSchool = view.findViewById(R.id.group_edit_school)
@@ -114,28 +121,41 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         fabChangeProfilePicture.setOnClickListener(this)
         fabSettings.setOnClickListener(this)
 
-        viewModel.user.observe(viewLifecycleOwner) { user ->
-            if (user != null) {
-                userName = user.name
-                userSchool = user.school
-                userDepartment = user.department
-                userLevel = user.level
-                profileImageBitmap = user.profileImage
+        val currentUser = auth.currentUser
+        if (currentUser == null)
+            viewModel.user.observe(viewLifecycleOwner) { user ->
+                if (user != null) {
+                    userName = user.name
+                    userSchool = user.school
+                    userDepartment = user.department
+                    userLevel = user.level
+                    profileImageBitmap = user.profileImage
 
-                tvName.text = userName
-                tvSchool.text = userSchool
-                tvDepartment.text = userDepartment
-                tvLevel.text = userLevel
+                    tvName.text = userName
+                    tvSchool.text = userSchool
+                    tvDepartment.text = userDepartment
+                    tvLevel.text = userLevel
 
-                if (profileImageBitmap != null) {
-                    Glide.with(requireContext())
-                        .load(profileImageBitmap)
-                        .into(profileImage)
-                } else {
-                    Glide.with(requireContext())
-                        .load(R.drawable.ic_logo)
-                        .into(profileImage)
+                    if (profileImageBitmap != null) {
+                        Glide.with(requireContext())
+                            .load(profileImageBitmap)
+                            .into(profileImage)
+                    } else {
+                        Glide.with(requireContext())
+                            .load(R.drawable.ic_logo)
+                            .into(profileImage)
+                    }
                 }
+            }
+        else {
+            tvName.text = currentUser.displayName
+            val db = Firebase.firestore
+            val userRef =
+                db.collection("users").document(currentUser.uid)
+            userRef.get().addOnSuccessListener {
+                tvDepartment.text = it.getString("department")
+                tvSchool.text = it.getString("school")
+                tvLevel.text = it.getString("level")
             }
         }
 

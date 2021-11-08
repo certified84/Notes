@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Note
 import com.certified.notes.util.PreferenceKeys
-import com.like.LikeButton
 
 class NoteRecyclerAdapter(context: Context) :
     ListAdapter<Note, NoteRecyclerAdapter.ViewHolder>(
@@ -100,7 +99,8 @@ class NoteRecyclerAdapter(context: Context) :
 
         init {
             itemView.setOnClickListener {
-                val position = adapterPosition
+                val position = bindingAdapterPosition
+//                val position = adapterPosition
                 if (listener != null && position != RecyclerView.NO_POSITION) {
                     listener!!.onNoteClick(getItem(position))
                 }

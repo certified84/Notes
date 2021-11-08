@@ -11,7 +11,9 @@
         <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/activity_main.xml" value="0.21" />
         <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_book_marks.xml" value="0.13949275362318841" />
         <entry key="..\:/Users/Samson Achiaga/AndroidStudioProjects/Notes/app/src/main/res/layout/fragment_notes.xml" value="0.10055724417426545" />
+        <entry key="app/src/main/res/drawable-anydpi/ic_todo.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/edit_text_background.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_baseline_dark_mode_24.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/layout-land/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout-land/fragment_profile.xml" value="0.14462081128747795" />
         <entry key="app/src/main/res/layout-sw600dp-land/fragment_home.xml" value="0.22" />
@@ -21,15 +23,19 @@
         <entry key="app/src/main/res/layout-sw600dp/list_item_notes.xml" value="0.22" />
         <entry key="app/src/main/res/layout-v21/fragment_notes.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/bottom_sheet_dialog_edit_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/dialog_edit_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_new_note.xml" value="0.12771739130434784" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_initial_signup.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.3054003724394786" />
         <entry key="app/src/main/res/layout/fragment_notes.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_onboarding.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_signup.xml" value="0.3398963730569948" />
+        <entry key="app/src/main/res/layout/item_view_pager.xml" value="0.1" />
         <entry key="app/src/main/res/layout/list_item_notes.xml" value="0.22" />
+        <entry key="app/src/main/res/menu/menu_main.xml" value="0.17083333333333334" />
       </map>
     </option>
   </component>
@@ -80,7 +86,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_15" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
