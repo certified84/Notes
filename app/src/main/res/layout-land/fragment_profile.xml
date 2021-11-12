@@ -321,6 +321,20 @@
                     app:layout_constraintTop_toTopOf="@+id/switch_dark_mode"
                     app:srcCompat="@drawable/ic_baseline_wb_sunny_24" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_sign_out"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_height="wrap_content"
+                    android:text="Sign Out"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/group_edit_level" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

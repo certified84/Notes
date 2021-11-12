@@ -48,7 +48,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:text="@string/name"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_name"
                     app:layout_constraintStart_toEndOf="@+id/imageView4"
                     app:layout_constraintTop_toTopOf="@+id/imageView4" />
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/school"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_school"
                     app:layout_constraintStart_toStartOf="@+id/tv_name"
                     app:layout_constraintTop_toTopOf="@+id/imageView5" />
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="2"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                     app:layout_constraintEnd_toEndOf="@+id/group_edit_school"
@@ -162,7 +162,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/department"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_department"
                     app:layout_constraintStart_toStartOf="@+id/tv_school"
                     app:layout_constraintTop_toTopOf="@+id/imageView7" />
@@ -174,7 +174,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -221,7 +221,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/level"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/_12ssp"
                     app:layout_constraintBottom_toTopOf="@+id/tv_level"
                     app:layout_constraintStart_toStartOf="@+id/tv_department"
                     app:layout_constraintTop_toTopOf="@+id/imageView8" />
@@ -231,7 +231,7 @@
                     style="@style/TextAppearance.Notes.TitleText2.Profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/_14ssp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                     app:layout_constraintStart_toStartOf="@+id/tv_summary_level"
@@ -327,6 +327,21 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/imageView6"
                     app:srcCompat="@drawable/ic_baseline_wb_sunny_50" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_sign_out"
+                    android:layout_width="0dp"
+                    android:textSize="@dimen/_14ssp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_height="wrap_content"
+                    android:text="Sign Out"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/group_edit_level" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

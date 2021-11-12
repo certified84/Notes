@@ -146,23 +146,11 @@ class Repository(application: Application) {
         }
     }
 
-    fun getCourseCode(courseTitle: String): String {
+    fun getCourseCode(courseTitle: String): LiveData<String>? {
         return try {
             noteDao.getCourseCode(courseTitle)
         } catch (e: ExecutionException) {
             e.printStackTrace()
-            ""
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            ""
-        }
-    }
-
-    fun getCourseTitle(courseCode: String): LiveData<String>? {
-        return try {
-            noteDao.getCourseTitle(courseCode)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
             null
         } catch (e: InterruptedException) {
             e.printStackTrace()
@@ -170,87 +158,99 @@ class Repository(application: Application) {
         }
     }
 
-    fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {
-        return try {
-            noteDao.getBookMarkAt(noteId)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun getCourseTitle(courseCode: String): LiveData<String>? {
+            return try {
+                noteDao.getCourseTitle(courseCode)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun getNotesAt(courseCode: String): LiveData<List<Note>>? {
-        return try {
-            noteDao.getNotesAt(courseCode)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun getBookMarkWith(noteId: Int): LiveData<BookMark>? {
+            return try {
+                noteDao.getBookMarkWith(noteId)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun getDeletableNotes(noCourse: String): LiveData<List<Note>>? {
-        return try {
-            noteDao.getDeletableNotes(noCourse)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun getNotesAt(courseCode: String): LiveData<List<Note>>? {
+            return try {
+                noteDao.getNotesAt(courseCode)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun getDeletableBookmarks(noCourse: String): LiveData<List<BookMark>>? {
-        return try {
-            noteDao.getDeletableBookmarks(noCourse)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun getDeletableNotes(noCourse: String): LiveData<List<Note>>? {
+            return try {
+                noteDao.getDeletableNotes(noCourse)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>? {
-        return try {
-            noteDao.searchNotes(searchQuery)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun getDeletableBookmarks(noCourse: String): LiveData<List<BookMark>>? {
+            return try {
+                noteDao.getDeletableBookmarks(noCourse)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun searchCourses(searchQuery: String?): LiveData<List<Course?>?>? {
-        return try {
-            noteDao.searchCourses(searchQuery)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun searchNotes(searchQuery: String?): LiveData<List<Note?>?>? {
+            return try {
+                noteDao.searchNotes(searchQuery)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
-    }
 
-    fun searchBookmarks(searchQuery: String?): LiveData<List<BookMark?>?>? {
-        return try {
-            noteDao.searchBookmarks(searchQuery)
-        } catch (e: ExecutionException) {
-            e.printStackTrace()
-            null
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-            null
+        fun searchCourses(searchQuery: String?): LiveData<List<Course?>?>? {
+            return try {
+                noteDao.searchCourses(searchQuery)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
+        }
+
+        fun searchBookmarks(searchQuery: String?): LiveData<List<BookMark?>?>? {
+            return try {
+                noteDao.searchBookmarks(searchQuery)
+            } catch (e: ExecutionException) {
+                e.printStackTrace()
+                null
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+                null
+            }
         }
     }
-}

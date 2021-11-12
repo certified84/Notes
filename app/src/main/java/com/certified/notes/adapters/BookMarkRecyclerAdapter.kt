@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.BookMark
-import com.like.LikeButton
 
 class BookMarkRecyclerAdapter(
 //    private val context: Context,
@@ -57,14 +56,11 @@ class BookMarkRecyclerAdapter(
     companion object {
         private val DIFF_CALLBACK: DiffUtil.ItemCallback<BookMark> =
             object : DiffUtil.ItemCallback<BookMark>() {
-                override fun areItemsTheSame(oldItem: BookMark, newItem: BookMark): Boolean {
-                    return oldItem.id == newItem.id
-                }
+                override fun areItemsTheSame(oldItem: BookMark, newItem: BookMark) =
+                    oldItem.noteId == newItem.noteId
 
-                override fun areContentsTheSame(oldItem: BookMark, newItem: BookMark): Boolean {
-                    return (oldItem.noteId == newItem.noteId || oldItem.noteContent == newItem.noteContent ||
-                            oldItem.courseCode == newItem.courseCode || oldItem.noteTitle == newItem.noteTitle)
-                }
+                override fun areContentsTheSame(oldItem: BookMark, newItem: BookMark) =
+                    oldItem == newItem
             }
     }
 

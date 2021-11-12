@@ -3,7 +3,6 @@ package com.certified.notes.view.Courses
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Course
@@ -62,20 +61,14 @@ class CoursesViewModel(application: Application) : AndroidViewModel(application)
         return repository.getNotesAt(courseCode)
     }
 
-    fun getCourseCode(courseTitle: String): String {
-        val courseCode = MutableLiveData<String>()
-        viewModelScope.launch(Dispatchers.IO) {
-            courseCode.postValue(repository.getCourseCode(courseTitle))
-        }
-        return courseCode.value ?: " "
-    }
+    fun getCourseCode(courseTitle: String) = repository.getCourseCode(courseTitle)
 
     fun getCourseTitle(courseCode: String): LiveData<String>? {
         return repository.getCourseTitle(courseCode)
     }
 
-    fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>? {
-        return repository.getBookMarkAt(noteId)
+    fun getBookMarkWith(noteId: Int): LiveData<BookMark>? {
+        return repository.getBookMarkWith(noteId)
     }
 
     fun getDeletableNotes(noCourse: String): LiveData<List<Note>>? {

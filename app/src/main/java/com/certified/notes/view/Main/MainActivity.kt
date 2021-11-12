@@ -3,8 +3,9 @@ package com.certified.notes.view.Main
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
-import androidx.appcompat.app.AlertDialog
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +16,6 @@ import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
 import com.certified.notes.R
 import com.certified.notes.model.Course
-import com.certified.notes.model.Note
 import com.certified.notes.model.Todo
 import com.certified.notes.util.PreferenceKeys
 import com.certified.notes.view.EditNoteFragment
@@ -23,10 +23,8 @@ import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textview.MaterialTextView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -228,7 +226,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun launchNoteDialog(currentUser: FirebaseUser?) {
         val fragmentManager = this.supportFragmentManager
-        val completeOrderFragment = EditNoteFragment(null, currentUser)
+        val completeOrderFragment = EditNoteFragment(null, which = "note", user = currentUser)
         val transaction = fragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .add(android.R.id.content, completeOrderFragment)

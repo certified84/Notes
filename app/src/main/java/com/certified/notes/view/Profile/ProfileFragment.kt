@@ -14,11 +14,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -26,17 +23,16 @@ import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.bumptech.glide.Glide
 import com.certified.notes.R
+import com.certified.notes.databinding.DialogEditLevelBinding
+import com.certified.notes.databinding.DialogEditProfileBinding
 import com.certified.notes.databinding.FragmentProfileBinding
 import com.certified.notes.model.User
+import com.certified.notes.util.Extensions.showToast
 import com.certified.notes.util.PreferenceKeys
 import com.github.captain_miao.optroundcardview.OptRoundCardView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -80,10 +76,19 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
         binding.apply {
             val currentUser = auth.currentUser
-            if (currentUser == null)
+            if (currentUser == null) {
+                btnSignOut.visibility = View.GONE
                 loadFromRoom()
-            else
+            } else {
                 loadFromFirestore(currentUser)
+                btnSignOut.visibility = View.VISIBLE
+            }
+
+            btnSignOut.setOnClickListener {
+                auth.signOut()
+                btnSignOut.visibility = View.GONE
+                loadFromRoom()
+            }
 
             groupEditName.setOnClickListener(this@ProfileFragment)
             groupEditSchool.setOnClickListener(this@ProfileFragment)
@@ -173,7 +178,8 @@ class ProfileFragment : Fragment(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        requireActivity().findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility = View.VISIBLE
+        requireActivity().findViewById<OptRoundCardView>(R.id.optRoundCardView2)?.visibility =
+            View.VISIBLE
         requireActivity().findViewById<FloatingActionButton>(R.id.fab)?.visibility = View.VISIBLE
     }
 
@@ -234,7 +240,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
+            showToast("An error occurred: ${e.message}")
         }
     }
 
@@ -245,7 +251,7 @@ class ProfileFragment : Fragment(), View.OnClickListener {
         try {
             startActivityForResult(Intent.createChooser(intent, "Select image"), PICK_IMAGE_CODE)
         } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, "An error occurred: ${e.message}", Toast.LENGTH_LONG).show()
+            showToast("An error occurred: ${e.message}")
         }
     }
 
@@ -309,173 +315,136 @@ class ProfileFragment : Fragment(), View.OnClickListener {
     }
 
     private fun launchNameDialog() {
-        val inflater = this.layoutInflater
-        val view =
-            inflater.inflate(R.layout.dialog_edit_profile, ConstraintLayout(requireContext()))
-
+        val view = DialogEditProfileBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val tvEditProfileDialogTitle: MaterialTextView =
-            view.findViewById(R.id.tv_edit_profile_dialog_title)
+        view.apply {
+            tvEditProfileDialogTitle.setText(R.string.edit_name)
+            etEditProfileLayout.hint = getString(R.string.name)
+            etEditProfile.setText(userName)
 
-        val inputLayout: TextInputLayout = view.findViewById(R.id.et_edit_profile_layout)
-        val inputEditText: TextInputEditText = view.findViewById(R.id.et_edit_profile)
-
-        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
-        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
-
-        tvEditProfileDialogTitle.setText(R.string.edit_name)
-        inputLayout.hint = getString(R.string.name)
-        inputEditText.setText(userName)
-
-        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-        btnSave.setOnClickListener {
-            binding.apply {
-                val name = inputEditText.text.toString().trim()
-                val school = tvSchool.text.toString().trim()
-                val department = tvDepartment.text.toString().trim()
-                val level = tvLevel.text.toString().trim()
-                if (!isEmpty(name)) {
-                    if (name != userName) {
-                        val user = User(name, school, department, level, profileImageBitmap)
-                        user.id = USER_ID
-                        viewModel.updateUser(user)
-                        tvName.text = name
-                    } else Toast.makeText(context, "Name not changed", Toast.LENGTH_SHORT).show()
-                    bottomSheetDialog.dismiss()
-                } else Toast.makeText(context, "Please Enter a name", Toast.LENGTH_SHORT).show()
+            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+            btnSave.setOnClickListener {
+                binding.apply {
+                    val name = etEditProfile.text.toString().trim()
+                    val school = tvSchool.text.toString().trim()
+                    val department = tvDepartment.text.toString().trim()
+                    val level = tvLevel.text.toString().trim()
+                    if (!isEmpty(name)) {
+                        if (name != userName) {
+                            val user = User(name, school, department, level, profileImageBitmap)
+                            user.id = USER_ID
+                            viewModel.updateUser(user)
+                            tvName.text = name
+                        } else showToast("Name not changed")
+                        bottomSheetDialog.dismiss()
+                    } else showToast("Please Enter a name")
+                }
             }
         }
-
-        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.setContentView(view.root)
         bottomSheetDialog.show()
     }
 
     private fun launchSchoolDialog() {
-        val inflater = this.layoutInflater
-        val view =
-            inflater.inflate(R.layout.dialog_edit_profile, ConstraintLayout(requireContext()))
-
+        val view = DialogEditProfileBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val tvEditProfileDialogTitle: MaterialTextView =
-            view.findViewById(R.id.tv_edit_profile_dialog_title)
+        view.apply {
+            tvEditProfileDialogTitle.setText(R.string.edit_school)
+            etEditProfileLayout.hint = getString(R.string.school)
+            etEditProfile.setText(userSchool)
 
-        val inputLayout: TextInputLayout = view.findViewById(R.id.et_edit_profile_layout)
-        val inputEditText: TextInputEditText = view.findViewById(R.id.et_edit_profile)
-
-        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
-        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
-
-        tvEditProfileDialogTitle.setText(R.string.edit_school)
-        inputLayout.hint = getString(R.string.school)
-        inputEditText.setText(userSchool)
-
-        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-        btnSave.setOnClickListener {
-            binding.apply {
-                val name = tvName.text.toString().trim()
-                val school = inputEditText.text.toString().trim()
-                val department = tvDepartment.text.toString().trim()
-                val level = tvLevel.text.toString().trim()
-                if (!isEmpty(school)) {
-                    if (school != userSchool) {
-                        val user = User(name, school, department, level, profileImageBitmap)
-                        user.id = USER_ID
-                        viewModel.updateUser(user)
-                        tvSchool.text = school
-                    } else Toast.makeText(context, "School not changed", Toast.LENGTH_SHORT).show()
-                    bottomSheetDialog.dismiss()
-                } else Toast.makeText(context, "Please Enter a school", Toast.LENGTH_SHORT).show()
+            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+            btnSave.setOnClickListener {
+                binding.apply {
+                    val name = tvName.text.toString().trim()
+                    val school = etEditProfile.text.toString().trim()
+                    val department = tvDepartment.text.toString().trim()
+                    val level = tvLevel.text.toString().trim()
+                    if (school.isNotBlank()) {
+                        if (school != userSchool) {
+                            val user = User(name, school, department, level, profileImageBitmap)
+                            user.id = USER_ID
+                            viewModel.updateUser(user)
+                            tvSchool.text = school
+                        } else showToast("School not changed")
+                        bottomSheetDialog.dismiss()
+                    } else showToast("Please Enter a school")
+                }
             }
         }
-        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.setContentView(view.root)
         bottomSheetDialog.show()
     }
 
     private fun launchDepartmentDialog() {
-        val inflater = this.layoutInflater
-        val view =
-            inflater.inflate(R.layout.dialog_edit_profile, ConstraintLayout(requireContext()))
-
+        val view = DialogEditProfileBinding.inflate(layoutInflater)
         val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-        val tvEditProfileDialogTitle: MaterialTextView =
-            view.findViewById(R.id.tv_edit_profile_dialog_title)
+        view.apply {
+            tvEditProfileDialogTitle.setText(R.string.edit_department)
+            etEditProfileLayout.hint = getString(R.string.department)
+            etEditProfile.setText(userDepartment)
 
-        val inputLayout: TextInputLayout = view.findViewById(R.id.et_edit_profile_layout)
-        val inputEditText: TextInputEditText = view.findViewById(R.id.et_edit_profile)
-
-        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
-        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
-
-        tvEditProfileDialogTitle.setText(R.string.edit_department)
-        inputLayout.hint = getString(R.string.department)
-        inputEditText.setText(userDepartment)
-
-        btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
-        btnSave.setOnClickListener {
-            binding.apply {
-                val name = tvName.text.toString().trim()
-                val school = tvSchool.text.toString().trim()
-                val department = inputEditText.text.toString().trim()
-                val level = tvLevel.text.toString().trim()
-                if (!isEmpty(department)) {
-                    if (department != userDepartment) {
-                        val user = User(name, school, department, level, profileImageBitmap)
-                        user.id = USER_ID
-                        viewModel.updateUser(user)
-                        tvDepartment.text = department
-                    } else Toast.makeText(context, "Department not changed", Toast.LENGTH_SHORT)
-                        .show()
-                    bottomSheetDialog.dismiss()
-                } else Toast.makeText(context, "Please Enter a department", Toast.LENGTH_SHORT)
-                    .show()
+            btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
+            btnSave.setOnClickListener {
+                binding.apply {
+                    val name = tvName.text.toString().trim()
+                    val school = tvSchool.text.toString().trim()
+                    val department = etEditProfile.text.toString().trim()
+                    val level = tvLevel.text.toString().trim()
+                    if (department.isNotBlank()) {
+                        if (department != userDepartment) {
+                            val user = User(name, school, department, level, profileImageBitmap)
+                            user.id = USER_ID
+                            viewModel.updateUser(user)
+                            tvDepartment.text = department
+                        } else showToast("Department not changed")
+                        bottomSheetDialog.dismiss()
+                    } else showToast("Please Enter a department")
+                }
             }
         }
-        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.setContentView(view.root)
         bottomSheetDialog.show()
     }
 
     private fun launchLevelDialog() {
-        val inflater = this.layoutInflater
-        val view = inflater.inflate(R.layout.dialog_edit_level, null)
+        val view = DialogEditLevelBinding.inflate(layoutInflater)
         val builder = MaterialAlertDialogBuilder(requireContext())
-
         builder.background =
             AppCompatResources.getDrawable(requireContext(), R.drawable.alert_dialog_bg)
         builder.setTitle(getString(R.string.select_level))
 
         val alertDialog = builder.create()
-        alertDialog.setView(view)
-
-        val spinnerLevel = view.findViewById<Spinner>(R.id.spinner_level)
-        val btnCancel: MaterialButton = view.findViewById(R.id.btn_cancel)
-        val btnSave: MaterialButton = view.findViewById(R.id.btn_save)
+        alertDialog.setView(view.root)
 
         val levels =
             arrayOf(getString(R.string.select_level), "100L", "200L", "300L", "400L", "500L")
         val adapterLevels =
             ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, levels)
 
-        adapterLevels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerLevel.adapter = adapterLevels
+        view.apply {
+            adapterLevels.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerLevel.adapter = adapterLevels
 
-        val selection = adapterLevels.getPosition(userLevel)
-        spinnerLevel.setSelection(selection)
-        btnCancel.setOnClickListener { alertDialog.dismiss() }
-        btnSave.setOnClickListener {
-            binding.apply {
-                val name = tvName.text.toString().trim()
-                val school = tvSchool.text.toString().trim()
-                val department = tvDepartment.text.toString().trim()
-                val level = spinnerLevel.selectedItem.toString()
-                if (level != getString(R.string.select_level)) {
-                    if (level != userLevel) {
-                        val user = User(name, school, department, level, profileImageBitmap)
-                        user.id = USER_ID
-                        viewModel.updateUser(user)
-                        tvLevel.text = level
-                    } else Toast.makeText(context, "Level not changed", Toast.LENGTH_SHORT).show()
-                    alertDialog.dismiss()
-                } else Toast.makeText(context, "Please select a level", Toast.LENGTH_SHORT).show()
+            val selection = adapterLevels.getPosition(userLevel)
+            spinnerLevel.setSelection(selection)
+            btnCancel.setOnClickListener { alertDialog.dismiss() }
+            btnSave.setOnClickListener {
+                binding.apply {
+                    val name = tvName.text.toString().trim()
+                    val school = tvSchool.text.toString().trim()
+                    val department = tvDepartment.text.toString().trim()
+                    val level = spinnerLevel.selectedItem.toString()
+                    if (level != getString(R.string.select_level)) {
+                        if (level != userLevel) {
+                            val user = User(name, school, department, level, profileImageBitmap)
+                            user.id = USER_ID
+                            viewModel.updateUser(user)
+                            tvLevel.text = level
+                        } else showToast("Level not changed")
+                        alertDialog.dismiss()
+                    } else showToast("Please select a level")
+                }
             }
         }
         alertDialog.show()

@@ -2,13 +2,17 @@ package com.certified.notes.view.Notes
 
 import android.content.SharedPreferences
 import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
@@ -24,6 +28,7 @@ import com.certified.notes.R
 import com.certified.notes.adapters.NoteRecyclerAdapter
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
+import com.certified.notes.util.Extensions.showToast
 import com.certified.notes.util.PreferenceKeys
 import com.certified.notes.view.EditNoteFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,7 +41,6 @@ import com.google.firebase.ktx.Firebase
 import com.shashank.sony.fancytoastlib.FancyToast
 import io.sulek.ssml.SSMLLinearLayoutManager
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
-import kotlin.properties.Delegates
 
 class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
@@ -48,6 +52,7 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var defValues: MutableSet<String>
     private lateinit var noteIds: MutableSet<String>
     private lateinit var svSearchNotes: SearchView
+    private lateinit var courseCode: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,30 +132,36 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
 
-                viewModel.getCourseTitle(note.courseCode)?.observe(viewLifecycleOwner) { courseTitle ->
-                    val coursePosition = if (note.courseCode != getString(R.string.nil))
-                        adapterCourses.getPosition(courseTitle)
-                    else 1
+                viewModel.getCourseTitle(note.courseCode)
+                    ?.observe(viewLifecycleOwner) { courseTitle ->
+                        val coursePosition = if (note.courseCode != getString(R.string.nil))
+                            adapterCourses.getPosition(courseTitle)
+                        else 1
 
-                    coursePosition.let { spinnerCourses.setSelection(it) }
-                }
+                        coursePosition.let { spinnerCourses.setSelection(it) }
+                    }
 
                 btnCancel.setOnClickListener {
                     val courseTitle = spinnerCourses.selectedItem.toString()
                     val courseCode =
                         if (courseTitle == getString(R.string.no_course)) getString(R.string.nil)
                         else viewModel.getCourseCode(courseTitle)
-                    FancyToast.makeText(requireContext(),"onNoteClick: courseCode = $courseCode",
-                    FancyToast.LENGTH_LONG).show()
+                    FancyToast.makeText(
+                        requireContext(), "onNoteClick: courseCode = $courseCode",
+                        FancyToast.LENGTH_LONG
+                    ).show()
                     Log.d("NotesFragment", "onNoteClick: courseCode = $courseCode")
-                    bottomSheetDialog.dismiss() }
+                    bottomSheetDialog.dismiss()
+                }
                 btnSave.text = getString(R.string.update)
                 btnSave.setOnClickListener {
                     val courseTitle = spinnerCourses.selectedItem.toString()
-                    val courseCode =
-                        if (courseTitle == getString(R.string.no_course)) getString(R.string.nil)
-                        else viewModel.getCourseCode(courseTitle)
-
+                    if (spinnerCourses.selectedItemPosition == 1)
+                        courseCode = getString(R.string.nil)
+                    else
+                        viewModel.getCourseCode(courseTitle)?.observe(viewLifecycleOwner) {
+                            courseCode = it
+                        }
                     val noteTitle = etNoteTitle.text.toString().trim()
                     val noteContent = etNoteContent.text.toString().trim()
 
@@ -158,24 +169,23 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                         if (courseTitle != getString(R.string.select_a_course)) {
 //                            if (courseTitle != getString(R.string.no_course)) {
                             if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
-                                val note1 = Note(courseCode, noteTitle, noteContent)
-                                note1.id = note.id
-                                viewModel.updateNote(note1)
-                                viewModel.getBookMarkAt(note.id)
-                                    ?.observe(viewLifecycleOwner) { bookMarks ->
-                                        if (bookMarks != null) {
-                                            val noteId = note1.id
-                                            for (bookMark in bookMarks) {
-                                                val bookMark1 = BookMark(
-                                                    noteId,
-                                                    courseCode,
-                                                    noteTitle,
-                                                    noteContent
-                                                )
-                                                bookMark1.id = bookMark.id
-                                                viewModel.updateBookMark(bookMark1)
-                                            }
-                                        }
+                                viewModel.updateNote(
+                                    note.copy(
+                                        courseCode = courseCode,
+                                        title = noteTitle,
+                                        content = noteContent
+                                    )
+                                )
+                                viewModel.getBookMarkWith(note.id)
+                                    ?.observe(viewLifecycleOwner) {
+                                        viewModel.updateBookMark(
+                                            it.copy(
+                                                noteId = note.id,
+                                                courseCode = courseCode,
+                                                noteTitle = noteTitle,
+                                                noteContent = noteContent
+                                            )
+                                        )
                                     }
                                 noteRecyclerAdapter.notifyDataSetChanged()
                                 bottomSheetDialog.dismiss()
@@ -205,18 +215,8 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 //                                        ).show()
 //                                }
 //                            }
-                        } else
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.select_a_course),
-                                Toast.LENGTH_LONG
-                            ).show()
-                    } else
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.all_fields_are_required),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        } else showToast(getString(R.string.select_a_course))
+                    } else showToast(getString(R.string.all_fields_are_required))
                 }
                 bottomSheetDialog.setContentView(view)
 //                bottomSheetDialog.show()
@@ -286,9 +286,9 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             val noteContent = note.content
                             val bookMark = BookMark(noteId, courseCode, noteTitle, noteContent!!)
 
-                            viewModel.getBookMarkAt(noteId)
+                            viewModel.getBookMarkWith(noteId)
                                 ?.observe(viewLifecycleOwner) { bookMarks ->
-                                    if (bookMarks != null) {
+                                    if (bookMarks == null) {
                                         viewModel.insertBookMark(bookMark)
                                         noteIds.add(noteId.toString())
                                         editor = preferences.edit()
@@ -327,6 +327,13 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                             R.color.red
                         )
                     )
+                    .addSwipeRightActionIcon(R.drawable.ic_baseline_bookmark_50)
+                    .addSwipeRightBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.teal_700
+                        )
+                    )
                     .create()
                     .decorate()
                 super.onChildDraw(
@@ -361,7 +368,8 @@ class NotesFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
 
     private fun launchNoteDialog(note: Note, currentUser: FirebaseUser?) {
         val fragmentManager = requireActivity().supportFragmentManager
-        val completeOrderFragment = EditNoteFragment(note, currentUser)
+        val completeOrderFragment =
+            EditNoteFragment(note = note, which = "note", user = currentUser)
         val transaction = fragmentManager.beginTransaction()
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .add(android.R.id.content, completeOrderFragment)

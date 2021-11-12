@@ -14,9 +14,13 @@
         <entry key="app/src/main/res/drawable-anydpi/ic_todo.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/bottom_sheet_bg.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/edit_text_background.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bookmark_24.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bookmark_50.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_baseline_bookmarks_24.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_baseline_check_26.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_close_26.xml" value="0.18697916666666667" />
         <entry key="app/src/main/res/drawable/ic_baseline_dark_mode_24.xml" value="0.18697916666666667" />
+        <entry key="app/src/main/res/drawable/ic_baseline_delete_50.xml" value="0.1" />
         <entry key="app/src/main/res/layout-land/fragment_edit_note.xml" value="0.14462081128747795" />
         <entry key="app/src/main/res/layout-land/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout-land/fragment_profile.xml" value="0.14462081128747795" />
@@ -24,11 +28,12 @@
         <entry key="app/src/main/res/layout-sw600dp/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout-sw600dp/fragment_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout-sw600dp/fragment_notes.xml" value="0.1" />
-        <entry key="app/src/main/res/layout-sw600dp/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout-sw600dp/fragment_profile.xml" value="0.25" />
         <entry key="app/src/main/res/layout-sw600dp/list_item_notes.xml" value="0.22" />
         <entry key="app/src/main/res/layout-v21/fragment_notes.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/bottom_sheet_dialog_edit_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/dialog_edit_level.xml" value="0.17083333333333334" />
         <entry key="app/src/main/res/layout/dialog_edit_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/dialog_new_note.xml" value="0.12771739130434784" />
         <entry key="app/src/main/res/layout/fragment_edit_note.xml" value="0.25" />

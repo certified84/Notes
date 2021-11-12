@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.adapters.CourseRecyclerAdapter
 import com.certified.notes.adapters.HomeNoteRecyclerAdapter
-import com.certified.notes.model.BookMark
 import com.certified.notes.model.Course
 import com.certified.notes.model.Note
+import com.certified.notes.util.Extensions.showToast
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -39,6 +39,7 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var viewModel: CoursesViewModel
     private lateinit var ivCoursePopupMenu: ImageView
     private lateinit var svSearchCourses: SearchView
+    private lateinit var courseCode: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -137,18 +138,10 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             } else {
                 val handler = Handler(Looper.myLooper()!!)
                 handler.postDelayed({
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.no_related_notes),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToast(getString(R.string.no_related_notes))
                     bottomSheetDialog.dismiss()
                 }, 500)
-//                Toast.makeText(
-//                    requireContext(),
-//                    getString(R.string.no_related_notes),
-//                    Toast.LENGTH_LONG
-//                ).show()
+//                showToast(getString(R.string.no_related_notes))
 //                bottomSheetDialog.dismiss()
             }
         }
@@ -200,63 +193,56 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 etNoteTitle.setText(note.title)
                 etNoteContent.setText(note.content)
 
-                viewModel.getCourseTitle(note.courseCode)?.observe(viewLifecycleOwner) { courseTitle ->
-                    val coursePosition = if (note.courseCode != getString(R.string.nil))
-                        adapterCourses.getPosition(courseTitle)
-                    else 1
+                viewModel.getCourseTitle(note.courseCode)
+                    ?.observe(viewLifecycleOwner) { courseTitle ->
+                        val coursePosition = if (note.courseCode != getString(R.string.nil))
+                            adapterCourses.getPosition(courseTitle)
+                        else 1
 
-                    coursePosition.let { spinnerCourses.setSelection(it) }
-                }
+                        coursePosition.let { spinnerCourses.setSelection(it) }
+                    }
 
                 btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
                 btnSave.setOnClickListener {
                     val courseTitle = spinnerCourses.selectedItem.toString()
-                    val courseCode = if (courseTitle == getString(R.string.no_course))
-                        getString(R.string.nil)
-                    else
-                        viewModel.getCourseCode(courseTitle)
                     val noteTitle = etNoteTitle.text.toString()
                     val noteContent = etNoteContent.text.toString()
+
+
+                    if (spinnerCourses.selectedItemPosition == 1)
+                        courseCode = getString(R.string.nil)
+                    else
+                        viewModel.getCourseCode(spinnerCourses.selectedItem.toString())
+                            ?.observe(viewLifecycleOwner) { courseCode = it }
+
                     if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                         if (courseTitle != getString(R.string.select_a_course)) {
                             if (courseCode != note.courseCode || noteTitle != note.title || noteContent != note.content) {
-                                val note1 = Note(courseCode, noteTitle, noteContent)
-                                note1.id = note.id
-                                viewModel.updateNote(note1)
-                                viewModel.getBookMarkAt(note.id)
-                                    ?.observe(viewLifecycleOwner) { bookMarks ->
-                                        val noteId = note1.id
-                                        for (bookMark in bookMarks) {
-                                            val bookMark1 =
-                                                BookMark(
-                                                    noteId,
-                                                    courseCode,
-                                                    noteTitle,
-                                                    noteContent
-                                                )
-                                            bookMark1.id = bookMark.id
-                                            viewModel.updateBookMark(bookMark1)
-                                        }
+                                viewModel.updateNote(
+                                    note.copy(
+                                        courseCode = courseCode,
+                                        title = noteTitle,
+                                        content = noteContent
+                                    )
+                                )
+                                viewModel.getBookMarkWith(note.id)
+                                    ?.observe(viewLifecycleOwner) {
+                                        viewModel.updateBookMark(
+                                            it.copy(
+                                                noteId = note.id,
+                                                courseCode = courseCode,
+                                                noteTitle = noteTitle,
+                                                noteContent = noteContent
+                                            )
+                                        )
                                     }
                                 bottomSheetDialog1.dismiss()
                             } else
-                                Toast.makeText(
-                                    requireContext(),
-                                    getString(R.string.note_not_changed),
-                                    Toast.LENGTH_LONG
-                                ).show()
+                                showToast(getString(R.string.note_not_changed))
                         } else
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.select_a_course),
-                                Toast.LENGTH_LONG
-                            ).show()
+                            showToast(getString(R.string.select_a_course))
                     } else
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.all_fields_are_required),
-                            Toast.LENGTH_LONG
-                        ).show()
+                        showToast(getString(R.string.all_fields_are_required))
                 }
                 bottomSheetDialog1.setContentView(view1)
                 bottomSheetDialog1.show()
@@ -292,64 +278,52 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
             val courseCode = etCourseCode.text.toString()
             val courseTitle = etCourseTitle.text.toString()
             val courseUnit = numberPickerCourseUnit.value
-            val courseMark = course.courseMark
-            val courseGrade = course.courseGrade
-            val courseGradePoint = course.courseGradePoint
             if (courseCode.isNotEmpty() && courseTitle.isNotEmpty()) {
                 if (courseCode != course.courseCode ||
                     courseTitle != course.courseTitle ||
                     courseUnit != course.courseUnit
                 ) {
-                    val course1 = Course(
-                        courseCode,
-                        courseTitle,
-                        courseUnit,
-                        courseMark,
-                        courseGrade,
-                        courseGradePoint
-                    )
-                    course1.id = course.id
                     viewModel.getNotesAt(course.courseCode)?.observe(viewLifecycleOwner) { notes ->
                         if (notes.isNotEmpty()) {
                             for (note in notes) {
                                 val noteTitle = note.title
                                 val noteContent = note.content
-                                val note1 = Note(courseCode, noteTitle, noteContent)
+                                val note1 = note.copy(
+                                    courseCode = courseCode,
+                                    title = noteTitle,
+                                    content = noteContent
+                                )
                                 note1.id = note.id
                                 viewModel.updateNote(note1)
 
-                                viewModel.getBookMarkAt(note.id)
-                                    ?.observe(viewLifecycleOwner) { bookMarks ->
-                                        if (bookMarks.isNotEmpty()) {
-                                            for (bookMark in bookMarks) {
-                                                val bookMark1 = BookMark(
-                                                    note.id,
-                                                    courseCode,
-                                                    noteTitle,
-                                                    noteContent!!
-                                                )
-                                                bookMark1.id = bookMark.id
-                                                viewModel.updateBookMark(bookMark1)
-                                            }
+                                viewModel.getBookMarkWith(note.id)
+                                    ?.observe(viewLifecycleOwner) {
+                                        if (it != null) {
+                                            val bookMark = it.copy(
+                                                noteId = note.id,
+                                                courseCode = courseCode,
+                                                noteTitle = noteTitle,
+                                                noteContent = noteContent!!
+                                            )
+                                            bookMark.id = it.id
+                                            viewModel.updateBookMark(bookMark)
                                         }
                                     }
                             }
                         }
                     }
+                    val course1 = course.copy(
+                        courseCode = courseCode,
+                        courseTitle = courseTitle,
+                        courseUnit = courseUnit
+                    )
+                    course1.id = course.id
                     viewModel.updateCourse(course1)
                     bottomSheetDialog.dismiss()
                 } else
-                    Toast.makeText(
-                        context,
-                        getString(R.string.course_not_changed),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showToast(getString(R.string.course_not_changed))
             } else
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.all_fields_are_required),
-                    Toast.LENGTH_LONG
-                ).show()
+                showToast(getString(R.string.all_fields_are_required))
         }
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
@@ -423,12 +397,11 @@ class CoursesFragmentKt : Fragment(), PopupMenu.OnMenuItemClickListener {
                 if (notes != null) {
                     for (note in notes) {
                         viewModel.deleteNote(note)
-                        viewModel.getBookMarkAt(note.id)?.observe(viewLifecycleOwner) { bookMarks ->
-                            if (bookMarks != null) {
-                                for (bookMark in bookMarks)
-                                    viewModel.deleteBookMark(bookMark)
+                        viewModel.getBookMarkWith(note.id)
+                            ?.observe(viewLifecycleOwner) {
+                                if (it != null)
+                                    viewModel.deleteBookMark(it)
                             }
-                        }
                     }
                 }
             }

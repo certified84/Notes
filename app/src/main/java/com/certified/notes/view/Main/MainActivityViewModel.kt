@@ -57,13 +57,7 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
         repository.deleteAllCourses()
     }
 
-    fun getCourseCode(courseTitle: String): String {
-        val courseCode = MutableLiveData<String>()
-        viewModelScope.launch(Dispatchers.IO) {
-            courseCode.postValue(repository.getCourseCode(courseTitle))
-        }
-        return courseCode.value ?: " "
-    }
+    fun getCourseCode(courseTitle: String) = repository.getCourseCode(courseTitle)
 
     fun getCourseTitle(courseCode: String): LiveData<String>? {
         return repository.getCourseTitle(courseCode)

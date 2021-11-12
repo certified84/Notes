@@ -9,12 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.SearchView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,9 +26,13 @@ import com.certified.notes.adapters.BookMarkRecyclerAdapter.OnBookMarkClickedLis
 import com.certified.notes.model.BookMark
 import com.certified.notes.model.Note
 import com.certified.notes.util.PreferenceKeys
+import com.certified.notes.view.EditNoteFragment
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
@@ -37,6 +41,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
     private lateinit var viewModel: BookMarksViewModel
     private lateinit var ivBookMarkPopupMenu: ImageView
     private lateinit var svSearchBookMark: SearchView
+    private lateinit var courseCode: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +94,8 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         }
         bookMarkRecyclerAdapter.setOnBookMarkClickedListener(object : OnBookMarkClickedListener {
             override fun onBookMarkClick(bookmark: BookMark) {
+                launchNoteDialog(bookmark, Firebase.auth.currentUser)
+
                 val view = layoutInflater.inflate(
                     R.layout.dialog_new_note,
                     ConstraintLayout(requireContext())
@@ -109,23 +116,26 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 etNoteTitle.setText(bookmark.noteTitle)
                 etNoteContent.setText(bookmark.noteContent)
 
-                viewModel.getCourseTitle(bookmark.courseCode)?.observe(viewLifecycleOwner) { courseTitle ->
-                    val coursePosition = if (bookmark.courseCode != getString(R.string.nil))
-                        adapterCourses.getPosition(courseTitle)
-                    else 1
+                viewModel.getCourseTitle(bookmark.courseCode)
+                    ?.observe(viewLifecycleOwner) { courseTitle ->
+                        val coursePosition = if (bookmark.courseCode != getString(R.string.nil))
+                            adapterCourses.getPosition(courseTitle)
+                        else 1
 
-                    coursePosition.let { spinnerCourses.setSelection(it) }
-                }
+                        coursePosition.let { spinnerCourses.setSelection(it) }
+                    }
 
                 btnCancel.setOnClickListener { bottomSheetDialog.dismiss() }
                 btnSave.text = getString(R.string.update)
                 btnSave.setOnClickListener {
                     val noteId = bookmark.noteId
                     val courseTitle = spinnerCourses.selectedItem.toString()
-                    val courseCode = when (courseTitle) {
-                        getString(R.string.no_course) -> "NIL"
-                        else -> viewModel.getCourseCode(courseTitle)
-                    }
+                    if (spinnerCourses.selectedItemPosition == 1)
+                        courseCode = getString(R.string.nil)
+                    else
+                        viewModel.getCourseCode(courseTitle)?.observe(viewLifecycleOwner) {
+                            courseCode = it
+                        }
                     val noteTitle = etNoteTitle.text.toString()
                     val noteContent = etNoteContent.text.toString()
                     if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
@@ -135,40 +145,31 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                                     val note = Note(courseCode, noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
-                                    viewModel.getBookMarkAt(bookmark.noteId)
+                                    viewModel.getBookMarkWith(bookmark.noteId)
                                         ?.observe(viewLifecycleOwner) {
-                                            if (it != null) {
-                                                for (bookMark in it) {
-                                                    val bookMark1 = BookMark(
-                                                        noteId,
-                                                        courseCode,
-                                                        noteTitle,
-                                                        noteContent
-                                                    )
-                                                    bookMark1.id = bookMark.id
-                                                    viewModel.updateBookMark(bookMark1)
-                                                }
-                                            }
+                                            viewModel.updateBookMark(
+                                                it.copy(
+                                                    noteId = noteId,
+                                                    courseCode = courseCode,
+                                                    noteTitle = noteTitle,
+                                                    noteContent = noteContent
+                                                )
+                                            )
                                         }
                                 } else {
                                     val note = Note("NIL", noteTitle, noteContent)
                                     note.id = bookmark.noteId
                                     viewModel.updateNote(note)
-                                    viewModel.getBookMarkAt(bookmark.noteId)
+                                    viewModel.getBookMarkWith(bookmark.noteId)
                                         ?.observe(viewLifecycleOwner) {
-                                            if (it != null) {
-                                                for (bookMark in it) {
-                                                    val bookMark1 =
-                                                        BookMark(
-                                                            noteId,
-                                                            "NIL",
-                                                            noteTitle,
-                                                            noteContent
-                                                        )
-                                                    bookMark1.id = bookMark.id
-                                                    viewModel.updateBookMark(bookMark1)
-                                                }
-                                            }
+                                            viewModel.updateBookMark(
+                                                it.copy(
+                                                    noteId = noteId,
+                                                    courseCode = "NIL",
+                                                    noteTitle = noteTitle,
+                                                    noteContent = noteContent
+                                                )
+                                            )
                                         }
                                 }
                                 bottomSheetDialog.dismissWithAnimation
@@ -192,7 +193,7 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                     }
                 }
                 bottomSheetDialog.setContentView(view)
-                bottomSheetDialog.show()
+//                bottomSheetDialog.show()
             }
         })
 
@@ -237,18 +238,18 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
                 }
                 val alertDialog = builder.create()
                 alertDialog.setOnShowListener {
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.accent
-                            )
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.accent
                         )
-                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.accent
-                            )
+                    )
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.accent
                         )
+                    )
                 }
                 alertDialog.show()
             }
@@ -312,6 +313,17 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         })
     }
 
+    private fun launchNoteDialog(bookMark: BookMark, currentUser: FirebaseUser?) {
+        val fragmentManager = requireActivity().supportFragmentManager
+        val completeOrderFragment =
+            EditNoteFragment(bookMark = bookMark, which = "bookMark", user = currentUser)
+        val transaction = fragmentManager.beginTransaction()
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            .add(android.R.id.content, completeOrderFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun searchBookmarks(query: String, bookMarkRecyclerAdapter: BookMarkRecyclerAdapter) {
         val searchQuery = "%$query%"
         viewModel.searchBookmarks(searchQuery)?.observe(
@@ -360,18 +372,18 @@ class BookMarksFragment : Fragment(), PopupMenu.OnMenuItemClickListener {
         builder.setNegativeButton(getString(R.string.no)) { dialog, _ -> dialog.dismiss() }
         val alertDialog = builder.create()
         alertDialog.setOnShowListener {
-                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.accent
-                    )
+            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
-                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.accent
-                    )
+            )
+            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    R.color.accent
                 )
+            )
         }
         alertDialog.show()
     }

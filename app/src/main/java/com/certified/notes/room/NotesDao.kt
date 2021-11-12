@@ -89,13 +89,13 @@ interface NotesDao {
     fun deleteCompletedTodos()
 
     @Query("SELECT * FROM bookmark_table WHERE note_id = :noteId")
-    fun getBookMarkAt(noteId: Int): LiveData<List<BookMark>>
+    fun getBookMarkWith(noteId: Int): LiveData<BookMark>?
 
     @Query("SELECT * FROM note_table WHERE course_code = :course_code")
     fun getNotesAt(course_code: String): LiveData<List<Note>>
 
     @Query("SELECT course_code FROM course_table WHERE course_title = :courseTitle")
-    fun getCourseCode(courseTitle: String): String
+    fun getCourseCode(courseTitle: String): LiveData<String>
 
     @Query("SELECT course_title FROM course_table WHERE course_code = :courseCode")
     fun getCourseTitle(courseCode: String): LiveData<String>
