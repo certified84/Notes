@@ -11,7 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/backgroundColor"
-            tools:context=".view.Home.HomeFragment">
+            tools:context=".ui.home.HomeFragment">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline8"

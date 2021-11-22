@@ -10,6 +10,7 @@
         <!-- Customize your theme here. -->
 
         <item name="cardBackgroundColor">@color/cardBackgroundColorDarkTheme</item>
+        <item name="tabTextColor">@color/white</item>
         <item name="backgroundColor">@color/backgroundColorDarkTheme</item>
         <item name="iconTint">@color/iconTintDarkTheme</item>
         <item name="tabIconTint">@color/customAlertDialogBackgroundColorDarkTheme</item>

@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Notes"
         tools:replace="android:theme">
         <activity
-            android:name=".view.Main.MainActivity"
+            android:name=".ui.Main.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

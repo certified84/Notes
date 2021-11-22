@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.certified.notes.R
 import com.certified.notes.model.Todo
-import com.certified.notes.view.Home.HomeViewModel
+import com.certified.notes.ui.home.HomeViewModel
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 

@@ -6,52 +6,52 @@
         app:startDestination="@id/splashFragment">
     <fragment
             android:id="@+id/homeFragment"
-            android:name="com.certified.notes.view.Home.HomeFragment"
+            android:name="com.certified.notes.ui.home.HomeFragment"
             android:label="fragment_home"
             tools:layout="@layout/fragment_home" />
     <fragment
             android:id="@+id/notesFragment"
-            android:name="com.certified.notes.view.Notes.NotesFragment"
+            android:name="com.certified.notes.ui.notes.NotesFragment"
             android:label="fragment_notes"
             tools:layout="@layout/fragment_notes" />
     <fragment
             android:id="@+id/coursesFragment"
-            android:name="com.certified.notes.view.Courses.CoursesFragmentKt"
+            android:name="com.certified.notes.ui.courses.CoursesFragmentKt"
             android:label="fragment_courses"
             tools:layout="@layout/fragment_courses" />
     <fragment
             android:id="@+id/bookMarksFragment"
-            android:name="com.certified.notes.view.BookMarks.BookMarksFragment"
+            android:name="com.certified.notes.ui.bookMarks.BookMarksFragment"
             android:label="BookMarksFragment"
             tools:layout="@layout/fragment_book_marks" />
     <fragment
             android:id="@+id/resultFragment"
-            android:name="com.certified.notes.view.ResultFragment"
+            android:name="com.certified.notes.ui.ResultFragment"
             android:label="fragment_result"
             tools:layout="@layout/fragment_result" />
     <fragment
             android:id="@+id/profileFragment"
-            android:name="com.certified.notes.view.Profile.ProfileFragment"
+            android:name="com.certified.notes.ui.profile.ProfileFragment"
             android:label="fragment_profile"
             tools:layout="@layout/fragment_profile" />
     <fragment
             android:id="@+id/splashFragment"
-            android:name="com.certified.notes.view.SplashFragment"
+            android:name="com.certified.notes.ui.SplashFragment"
             android:label="fragment_splash"
             tools:layout="@layout/fragment_splash" />
     <fragment
             android:id="@+id/onboardingFragment"
-            android:name="com.certified.notes.view.OnboardingFragment"
+            android:name="com.certified.notes.ui.OnboardingFragment"
             android:label="fragment_onboarding"
             tools:layout="@layout/fragment_onboarding" />
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.certified.notes.view.login.LoginFragment"
+        android:name="com.certified.notes.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" />
     <fragment
         android:id="@+id/signupFragment"
-        android:name="com.certified.notes.view.signup.SignupFragment"
+        android:name="com.certified.notes.ui.signup.SignupFragment"
         android:label="fragment_signup"
         tools:layout="@layout/fragment_signup" />
 </navigation>
